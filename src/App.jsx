@@ -1,12 +1,22 @@
-import './App.scss'
+import { Box, Button, ButtonGroup, Typography } from "@mui/material";
+import "./App.scss";
+import {Route, Routes} from 'react-router-dom';
+import Home from "./pages/Home";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
 
 function App() {
-
   return (
     <>
-      <h3>Initiated</h3>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+      
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/register" element={<Register/>}/>
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
