@@ -10,19 +10,19 @@ export const navigations = [
     },
     {
         name:'Library',
-        path: '/Library'
+        path: 'Library/'
     },
     {
         name:'Utilities',
-        path: '/Utilities'
+        path: 'Utilities/'
     },
     {
         name:'Manage Access',
-        path: '/access-control'
+        path: 'access-control/'
     },
     {
         name:'Feedback',
-        path: '/Feedback'
+        path: 'Feedback/'
     },
 ]
 
