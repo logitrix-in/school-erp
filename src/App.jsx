@@ -1,6 +1,12 @@
 import { AppBar, Box, Button, ButtonGroup, Typography } from "@mui/material";
 import "./App.scss";
-import { Outlet, Route, Routes } from "react-router-dom";
+import {
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Home from "./pages/Dashboard";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -10,7 +16,8 @@ import { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
-import Admission from "./pages/admission/Admission";
+import Admission from "./pages/admission/AdmissionApplication";
+import AdmissionApplication from "./pages/admission/AdmissionApplication";
 
 const NavLayout = () => {
   return (
@@ -34,8 +41,12 @@ const NavLayout = () => {
 
 function App() {
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
+  const currentRoute = location.pathname;
   useEffect(() => {
+    if (currentRoute == ("" || "/")) navigate("dashboard/");
     setTimeout(() => {
       setLoading(false);
     }, 3000);
@@ -48,8 +59,14 @@ function App() {
       ) : (
         <Routes>
           <Route path="/" element={<NavLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="admission/" element={<Admission />} />
+            <Route path="dashboard/" element={<Dashboard />} />
+
+            {/* Admission Routes */}
+            <Route
+              path="admission/application"
+              element={<AdmissionApplication />}
+            />
+
             <Route path="*" element={<_404 />} />
           </Route>
           <Route path="/login" element={<Login />} />

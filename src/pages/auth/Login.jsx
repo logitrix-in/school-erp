@@ -81,12 +81,12 @@ const Login = () => {
                 Forgot password?
               </Link>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               Don't have an account?{" "}
               <Link to={"/register"} variant="body2">
                 {"Register"}
               </Link>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Box>
       </Box>
