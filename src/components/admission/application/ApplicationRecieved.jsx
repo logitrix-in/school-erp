@@ -10,6 +10,8 @@ import {
 import Chart from "react-apexcharts";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import OfflineApplicationForm from "./OfflineApplicationForm";
+import { useState } from "react";
 
 const ApplicationRecieved = () => {
   const series = [490, 400, 250, 103];
@@ -33,6 +35,12 @@ const ApplicationRecieved = () => {
       },
     },
   };
+
+  const [applocationPopupOpen,setApplocationPopupOpen] = useState(false);
+
+  const onApplicationClose = () => {
+    setApplocationPopupOpen(false);
+  }
   return (
     <>
       <Box
@@ -87,9 +95,10 @@ const ApplicationRecieved = () => {
           </FormControl>
         </Box>
         <Box flex={3} p={3} pb={0}>
+          <OfflineApplicationForm open={applocationPopupOpen} close={onApplicationClose}/>
           <Chart options={options} series={series} type="donut" height={350} />
           <Box display={"flex"} justifyContent={"center"} gap={"1rem"} mt={5}>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={()=> setApplocationPopupOpen(true)}>
               Apply Offline
             </Button>
             <Button variant="contained" color="primary">

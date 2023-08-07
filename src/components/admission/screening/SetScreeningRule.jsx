@@ -1,12 +1,11 @@
-import { Box, MenuItem, Select, Typography } from '@mui/material'
-import React from 'react'
-import ManageTable from './components/ManageTable'
+import { Box, Typography } from "@mui/material";
+import React from "react";
 
-const ManageApplications = () => {
+const SetScreeningRule = () => {
   return (
     <>
       <Box
-        my={2}
+        mt={3}
         bgcolor={"white"}
         py={2}
         px={2}
@@ -16,15 +15,11 @@ const ManageApplications = () => {
         alignItems={"center"}
       >
         <Typography fontWeight={"500"} borderRadius={1}>
-          Manage Application
+          Set Screening Rule
         </Typography>
-
       </Box>
-
-      <ManageTable/>
-
     </>
-  )
-}
+  );
+};
 
-export default ManageApplications
+export default SetScreeningRule;

@@ -18,6 +18,7 @@ import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Admission from "./pages/admission/AdmissionApplication";
 import AdmissionApplication from "./pages/admission/AdmissionApplication";
+import AdmissionScreening from "./pages/admission/AdmissionScreening";
 
 const NavLayout = () => {
   return (
@@ -63,8 +64,12 @@ function App() {
 
             {/* Admission Routes */}
             <Route
-              path="admission/application"
+              path="admission/application/"
               element={<AdmissionApplication />}
+            />
+            <Route
+              path="admission/screening/"
+              element={<AdmissionScreening />}
             />
 
             <Route path="*" element={<_404 />} />

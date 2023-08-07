@@ -13,12 +13,12 @@ export const navigations = [
         subMenu: [
             {
                 name:'Application',
-                path: 'admission/application',
+                path: 'admission/application/',
                 icon: 'mdi:application'
             },
             {
                 name:'Screening',
-                path: 'admission/Screening',
+                path: 'admission/screening/',
                 icon: 'carbon:chart-evaluation'
             },
             {
