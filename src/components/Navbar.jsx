@@ -29,7 +29,7 @@ const Navbar = () => {
           color={"secondary.dark"}
           fontWeight={"500"}
         >
-          SchoolERP
+          SociolinQ
         </Typography>
       </Box>
 

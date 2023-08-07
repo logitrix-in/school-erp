@@ -47,9 +47,9 @@ function OfflineApplicationForm({ open, close }) {
         <Grid container px={4} spacing={1} flex={2}>
           <Grid item xs={12}>
             <Typography
-              fontSize={"1.2rem"}
+              fontSize={"1rem"}
               p={1}
-              px={2}
+              px={1}
               bgcolor={"secondary.light"}
               borderRadius={1}
               color={"black"}
@@ -79,6 +79,24 @@ function OfflineApplicationForm({ open, close }) {
           <Grid item xs={4}>
             <TextField fullWidth label="Last" />
           </Grid>
+          <Grid item xs={12}>
+            <Typography fontWeight={600} mt={2}>
+              Contact Details
+            </Typography>
+          </Grid>
+
+          <Grid item xs={4}>
+            <TextField fullWidth label="Contact Number" />
+          </Grid>
+          <Grid item xs={8}>
+            <TextField fullWidth label="Email" />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Typography fontWeight={600} mt={2}>
+              Other Details
+            </Typography>
+          </Grid>
           <Grid item xs={4}>
             <TextField fullWidth label="Nationality" />
           </Grid>
@@ -88,16 +106,30 @@ function OfflineApplicationForm({ open, close }) {
           <Grid item xs={4}>
             <TextField fullWidth label="Category" />
           </Grid>
+          <Grid item xs={4}>
+            <TextField fullWidth label="Date of Birth" />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField fullWidth label="Gender" />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              fullWidth
+              label="Critical Medical
+Ailment(if any)"
+            />
+          </Grid>
           <Grid item xs={12}>
             <Typography
-              fontSize={"1.2rem"}
+              fontSize={"1rem"}
               p={1}
-              px={2}
+              px={1}
               bgcolor={"secondary.light"}
               borderRadius={1}
               color={"black"}
               fontWeight={500}
               mb={1}
+              mt={2}
             >
               Application Details
             </Typography>
@@ -107,9 +139,9 @@ function OfflineApplicationForm({ open, close }) {
         <Grid container px={4} spacing={1} flex={2}>
           <Grid item xs={12}>
             <Typography
-              fontSize={"1.2rem"}
+              fontSize={"1rem"}
               p={1}
-              px={2}
+              px={1}
               bgcolor={"secondary.light"}
               borderRadius={1}
               color={"black"}
@@ -121,9 +153,9 @@ function OfflineApplicationForm({ open, close }) {
           </Grid>
           <Grid item xs={12}>
             <Typography
-              fontSize={"1.2rem"}
+              fontSize={"1rem"}
               p={1}
-              px={2}
+              px={1}
               bgcolor={"secondary.light"}
               borderRadius={1}
               color={"black"}
@@ -135,9 +167,9 @@ function OfflineApplicationForm({ open, close }) {
           </Grid>
           <Grid item xs={12}>
             <Typography
-              fontSize={"1.2rem"}
+              fontSize={"1rem"}
               p={1}
-              px={2}
+              px={1}
               bgcolor={"secondary.light"}
               borderRadius={1}
               color={"black"}
