@@ -102,8 +102,9 @@ const Sidebar = () => {
                 gap={1}
                 alignItems={"center"}
                 className="navs"
+                color={"#4d4d4d"}
               >
-                <Icon icon={nav.icon} color="secondary.main" />
+                <Icon icon={nav.icon} />
                 <Typography
                   textTransform={"capitalize"}
                   lineHeight={"1ch"}
@@ -138,6 +139,7 @@ const Sidebar = () => {
                         ml={1}
                         alignItems={"center"}
                         gap={1}
+                        color={"#4d4d4d"}s
                         className={`${
                           isPathActive(submenu.path) ? "active" : ""
                         }`}

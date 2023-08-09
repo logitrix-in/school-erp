@@ -8,42 +8,75 @@ import {
   Typography,
 } from "@mui/material";
 import Chart from "react-apexcharts";
-import { DatePicker } from "@mui/x-date-pickers";
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import dayjs from "dayjs";
-import OfflineApplicationForm from "./OfflineApplicationForm";
+import OfflineApplicationForm from "./popups/OfflineApplicationForm";
 import { useState } from "react";
+import Notify from "./popups/Notify";
+import Bbox from "../../UiComponents/Bbox";
 
 const ApplicationRecieved = () => {
-  const series = [490, 400, 250, 103];
+  const series = [200, 55, 145, 90];
 
   const options = {
     labels: ["Website ", "Offline", "Advertisement", "others"],
-    colors: ["#FF4560", "#008FFB", "#FEB019", "#775DD0"],
+    colors: ["#FF5630", "#00A76F", "#FFAB00", "#00B8D9"],
     legend: {
       show: true,
       position: "bottom",
+      fontSize: "14px",
+      itemMargin: {
+        horizontal: 10,
+        vertical: 0,
+      },
+    },
+    chart: {
+      toolbar: {
+        show: true,
+      },
+      dropShadow: {
+        enabled: true,
+        top: 0,
+        left: 0,
+        blur: 10,
+        color: "#000000",
+        opacity: 0.1,
+      },
+    },
+    dataLabels: {
+      enabled: false,
     },
     plotOptions: {
       pie: {
         donut: {
-          size: "65%",
+          size: "88%",
           labels: {
             show: true,
-            label: "hello",
+            total: {
+              show: true,
+              showAlways: false,
+              label: "Total",
+              color: "#673AB7",
+              fontWeight: "600",
+            },
+            value: {
+              offsetY: 0,
+            },
           },
         },
       },
     },
   };
 
-  const [applocationPopupOpen,setApplocationPopupOpen] = useState(false);
+  const [applocationPopupOpen, setApplocationPopupOpen] = useState(false);
+  const [notifyPopup, setNotifyPopup] = useState(false);
 
   const onApplicationClose = () => {
     setApplocationPopupOpen(false);
-  }
+  };
   return (
     <>
-      <Box
+      <Bbox
         bgcolor={"white"}
         py={1.3}
         px={2}
@@ -61,11 +94,17 @@ const ApplicationRecieved = () => {
           <MenuItem value={20}>Screened</MenuItem>
           <MenuItem value={30}>All</MenuItem>
         </Select>
-      </Box>
+      </Bbox>
 
-      <Box display={"flex"} flexDirection={{ xs: "column", md: "row" }}>
-        <Box
-          mt={2}
+      <Box
+        mt={1}
+        display={"flex"}
+        gap={2}
+        flexDirection={{ xs: "column", md: "row" }}
+        alignItems={"flex-start"}
+      >
+        <Bbox
+          ox
           p={3}
           flex={1}
           display={"flex"}
@@ -83,7 +122,7 @@ const ApplicationRecieved = () => {
             </Select>
           </FormControl>
 
-          <DatePicker label="Date" defaultValue={dayjs()} />
+          <DateRangePicker label="Date" defaultValue={[dayjs('2022-04-17'), dayjs('2022-04-21')]} />
           <FormControl fullWidth>
             <InputLabel>Class</InputLabel>
             <Select defaultValue={0} label="class">
@@ -93,25 +132,60 @@ const ApplicationRecieved = () => {
               <MenuItem value={30}>3</MenuItem>
             </Select>
           </FormControl>
-        </Box>
-        <Box flex={3} p={3} pb={0}>
-          <OfflineApplicationForm open={applocationPopupOpen} close={onApplicationClose}/>
+        </Bbox>
+        <Bbox
+          p={3}
+          flex={2}
+          display={"flex"}
+          flexDirection={"column"}
+          gap={"2rem"}
+          borderRadius={2}
+          bgcolor={"white"}
+        >
+          <OfflineApplicationForm
+            open={applocationPopupOpen}
+            close={onApplicationClose}
+          />
+          <Notify open={notifyPopup} close={() => setNotifyPopup(false)} />
+
           <Chart options={options} series={series} type="donut" height={350} />
           <Box display={"flex"} justifyContent={"center"} gap={"1rem"} mt={5}>
-            <Button variant="contained" color="primary" onClick={()=> setApplocationPopupOpen(true)}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setApplocationPopupOpen(true)}
+            >
               Apply Offline
             </Button>
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setNotifyPopup(true)}
+            >
               Notify
             </Button>
           </Box>
-        </Box>
-        <Box display={'flex'} flexDirection={'column'} gap={1} pt={3}>
-            <Button variant="contained" size="small" color="secondary" >View</Button>
-            <Button variant="contained" size="small" color="secondary" >Excel</Button>
-            <Button variant="contained" size="small" color="secondary" >CSV</Button>
-            <Button variant="contained" size="small" color="secondary" >Print</Button>
-        </Box>
+        </Bbox>
+        <Bbox
+          display={"flex"}
+          flexDirection={"column"}
+          gap={1}
+          p={3}
+          borderRadius={2}
+        >
+          <Button variant="contained" size="small" color="secondary">
+            View
+          </Button>
+          <Button variant="contained" size="small" color="secondary">
+            Excel
+          </Button>
+          <Button variant="contained" size="small" color="secondary">
+            CSV
+          </Button>
+          <Button variant="contained" size="small" color="secondary">
+            Print
+          </Button>
+        </Bbox>
       </Box>
     </>
   );

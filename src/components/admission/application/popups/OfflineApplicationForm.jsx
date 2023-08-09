@@ -50,7 +50,7 @@ function OfflineApplicationForm({ open, close }) {
               fontSize={"1rem"}
               p={1}
               px={1}
-              bgcolor={"secondary.light"}
+              bgcolor={"#ececec"}
               borderRadius={1}
               color={"black"}
               fontWeight={500}
@@ -124,7 +124,7 @@ Ailment(if any)"
               fontSize={"1rem"}
               p={1}
               px={1}
-              bgcolor={"secondary.light"}
+              bgcolor={"#ececec"}
               borderRadius={1}
               color={"black"}
               fontWeight={500}
@@ -142,7 +142,7 @@ Ailment(if any)"
               fontSize={"1rem"}
               p={1}
               px={1}
-              bgcolor={"secondary.light"}
+              bgcolor={"#ececec"}
               borderRadius={1}
               color={"black"}
               fontWeight={500}
@@ -156,7 +156,7 @@ Ailment(if any)"
               fontSize={"1rem"}
               p={1}
               px={1}
-              bgcolor={"secondary.light"}
+              bgcolor={"#ececec"}
               borderRadius={1}
               color={"black"}
               fontWeight={500}
@@ -170,7 +170,7 @@ Ailment(if any)"
               fontSize={"1rem"}
               p={1}
               px={1}
-              bgcolor={"secondary.light"}
+              bgcolor={"#ececec"}
               borderRadius={1}
               color={"black"}
               fontWeight={500}

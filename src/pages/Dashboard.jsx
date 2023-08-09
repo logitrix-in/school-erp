@@ -1,12 +1,12 @@
 import { Box, Button, ButtonGroup, Typography } from "@mui/material";
-import React, { useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import React, { useContext, useEffect, useRef } from "react";
 
 const Dashboard = () => {
+  const editorRef = useRef(null);
+
   return (
     <>
-      Dashboard
+
     </>
   );
 };

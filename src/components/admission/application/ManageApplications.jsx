@@ -1,12 +1,14 @@
 import { Box, MenuItem, Select, Typography } from '@mui/material'
 import React from 'react'
 import ManageTable from './components/ManageTable'
+import Bbox from '../../UiComponents/Bbox'
 
 const ManageApplications = () => {
   return (
     <>
-      <Box
-        my={2}
+      <Bbox
+        mt={3}
+        mb={1}
         bgcolor={"white"}
         py={2}
         px={2}
@@ -19,7 +21,7 @@ const ManageApplications = () => {
           Manage Application
         </Typography>
 
-      </Box>
+      </Bbox>
 
       <ManageTable/>
 

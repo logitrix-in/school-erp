@@ -61,9 +61,9 @@ const Navbar = () => {
       </Box>
       <Button
         variant="contained"
-        size="medium"
         LinkComponent={Link}
         to="/login"
+        size="small"
       >
         Login
       </Button>

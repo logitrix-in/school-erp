@@ -23,12 +23,12 @@ export const navigations = [
             },
             {
                 name:'Test Center',
-                path: 'admission/Test_Center',
+                path: 'admission/testCenter/',
                 icon: 'ic:round-place'
             },
             {
                 name:'Onboarding',
-                path: 'admission/Onboarding',
+                path: 'admission/Onboarding/',
                 icon: 'material-symbols:other-admission'
             },
         ]
@@ -41,12 +41,12 @@ export const navigations = [
         subMenu: [
             {
                 name:'menu 1',
-                path: 'library/menu1',
+                path: 'library/menu1/',
                 icon: 'material-symbols:folder'
             },
             {
                 name:'menu 2',
-                path: 'library/menu2',
+                path: 'library/menu2/',
                 icon: 'material-symbols:folder'
             }
         ]
