@@ -23,7 +23,7 @@ const Navbar = () => {
       height={"4.5rem"}
       alignItems={"center"}
     >
-      <Box width={"18rem"} pl={3}>
+      <Box width={"17rem"} pl={3}>
         <Typography
           fontSize={"1.2rem"}
           color={"secondary.dark"}

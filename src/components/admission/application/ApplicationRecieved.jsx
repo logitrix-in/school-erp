@@ -27,7 +27,7 @@ const ApplicationRecieved = () => {
       fontSize: "14px",
       itemMargin: {
         horizontal: 10,
-        vertical: 0,
+        vertical: 20,
       },
     },
     chart: {
@@ -100,8 +100,8 @@ const ApplicationRecieved = () => {
         mt={1}
         display={"flex"}
         gap={2}
-        flexDirection={{ xs: "column", md: "row" }}
-        alignItems={"flex-start"}
+        flexDirection={{ xs: "column", lg: "row" }}
+        alignItems={{xs: "strech",lg: 'flex-start'}}
       >
         <Bbox
           ox
@@ -148,8 +148,8 @@ const ApplicationRecieved = () => {
           />
           <Notify open={notifyPopup} close={() => setNotifyPopup(false)} />
 
-          <Chart options={options} series={series} type="donut" height={350} />
-          <Box display={"flex"} justifyContent={"center"} gap={"1rem"} mt={5}>
+          <Chart options={options} series={series} type="donut" height={400} />
+          <Box display={"flex"} justifyContent={"center"} gap={"1rem"}>
             <Button
               variant="contained"
               color="primary"

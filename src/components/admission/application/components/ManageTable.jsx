@@ -47,7 +47,7 @@ const ManageTable = () => {
 
   return (
     <Bbox borderRadius={10} >
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} >
         <Table>
           <TableHead>
             <TableRow>

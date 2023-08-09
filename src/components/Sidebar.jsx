@@ -30,7 +30,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <Box px={3} width={"18rem"}>
+      <Box px={3} width={"17rem"}>
         <Box
           display={"flex"}
           p={2}

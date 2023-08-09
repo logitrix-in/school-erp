@@ -4,6 +4,7 @@ import {
   Breadcrumbs,
   Button,
   ButtonGroup,
+  Divider,
   IconButton,
   Tooltip,
   Typography,
@@ -47,25 +48,29 @@ const NavLayout = () => {
           flex={1}
           bgcolor={"#f6f6f6"}
           padding={2}
-          sx={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }}
+          sx={{ borderRadius: 2 }}
           minHeight={"100vh"}
         >
           <Bbox
             px={1}
             py={1}
-            mb={1}  
+            mb={0.5}
             borderRadius={2}
             display="flex"
             gap={1}
             alignItems="center"
           >
-            <Button color="secondary" size="small" variant="contained">Application</Button>
-            <Button color="secondary" size="small" variant="contained">Library</Button>
+            <Button color="secondary" size="small" variant="contained">
+              Application
+            </Button>
+            <Button color="secondary" size="small" variant="contained">
+              Library
+            </Button>
           </Bbox>
           <Bbox
             px={2}
             py={1}
-            mb={1}
+            mb={2}
             borderRadius={2}
             display="flex"
             justifyContent="space-between"
@@ -78,7 +83,7 @@ const NavLayout = () => {
                 </Typography>
               ))}
             </Breadcrumbs>
-            <Tooltip title={bookmarked ? "Remove Bookmark" : "Bookmark"} >
+            <Tooltip title={bookmarked ? "Remove Bookmark" : "Bookmark"}>
               <IconButton
                 title="bookmark"
                 size="small"
@@ -93,6 +98,30 @@ const NavLayout = () => {
           </Bbox>
           <Outlet />
         </Box>
+      </Box>
+      <Divider sx={{mt:2}}/>
+      <Box
+        p={2}
+        px={3}
+        display={"flex"}
+        gap={4}
+        color={"#B0A9FF"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+      >
+        <Typography
+          color={"gray"}
+          variant="caption"
+          fontWeight={600}
+          mr={"auto"}
+        >
+          Last Logged In on 4th-june-2023 4:50 pm
+        </Typography>
+        <Box display={'flex'} alignItems={'center'} gap={0.4}>
+          <Icon icon="fa:group" fontSize={'1.2rem'}/>
+          <Typography fontSize={10} lineHeight={'1ch'}>1000</Typography>
+        </Box>
+        <Icon icon="mingcute:signal-fill" fontSize={'1.4rem'}/>
       </Box>
     </>
   );
