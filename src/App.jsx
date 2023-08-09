@@ -51,6 +51,18 @@ const NavLayout = () => {
           minHeight={"100vh"}
         >
           <Bbox
+            px={1}
+            py={1}
+            mb={1}  
+            borderRadius={2}
+            display="flex"
+            gap={1}
+            alignItems="center"
+          >
+            <Button color="secondary" size="small" variant="contained">Application</Button>
+            <Button color="secondary" size="small" variant="contained">Library</Button>
+          </Bbox>
+          <Bbox
             px={2}
             py={1}
             mb={1}
