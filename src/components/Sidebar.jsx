@@ -11,6 +11,7 @@ import {
 import React, { useState } from "react";
 import { navigations } from "../navigation/navigations";
 import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 const Sidebar = () => {
   const location = useLocation();
 
@@ -69,7 +70,14 @@ const Sidebar = () => {
         />
 
         {navigations.map((nav, idx) => (
-          <Box mt={1} key={idx}>
+          <Box
+            component={motion.div}
+            mt={1}
+            key={idx}
+            initial={{ opacity: 0, x: -20}}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: idx * 0.2 }}
+          >
             <Box
               component={Link}
               to={nav.dropdown ? null : nav?.path}
@@ -139,7 +147,7 @@ const Sidebar = () => {
                         ml={1}
                         alignItems={"center"}
                         gap={1}
-                        color={"#4d4d4d"}s
+                        color={"#4d4d4d"}
                         className={`${
                           isPathActive(submenu.path) ? "active" : ""
                         }`}
