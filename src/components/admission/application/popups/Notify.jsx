@@ -1,19 +1,20 @@
-import { Box, Dialog, Divider, Tab, Tabs, Typography } from "@mui/material";
 import React from "react";
 import Sms from "./widgets/Sms";
 import Email from "./widgets/Email";
-import Whatsapp from "./widgets/whatsapp";
+import Whatsapp from "./widgets/Whatsapp";
+import { Box, Dialog, Divider, Tab, Tabs, Typography } from "@mui/material";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
+    <Box
+      sx={{ height: "100%", overflow: "hidden" }}
       hidden={value !== index}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
+      {value === index && <Box p={3} sx={{height:'70vh',overflowY:'scroll'}}>{children}</Box>}
+    </Box>
   );
 }
 
@@ -29,13 +30,17 @@ const Notify = ({ open, close }) => {
   return (
     <Dialog
       fullWidth
+      PaperProps={{
+        sx: {
+          maxHeight: "100%",
+        },
+      }}
       maxWidth="lg"
       open={open}
       onClose={() => close()}
       disableEnforceFocus={true}
-
     >
-      <Box>
+      <Box overflow={'hidden'}>
         <Typography
           p={1}
           py={2}

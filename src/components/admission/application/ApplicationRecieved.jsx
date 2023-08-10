@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import Chart from "react-apexcharts";
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import dayjs from "dayjs";
 import OfflineApplicationForm from "./popups/OfflineApplicationForm";
 import { useState } from "react";
@@ -101,10 +101,10 @@ const ApplicationRecieved = () => {
         display={"flex"}
         gap={2}
         flexDirection={{ xs: "column", lg: "row" }}
-        alignItems={{xs: "strech",lg: 'flex-start'}}
+        alignItems={{ xs: "strech", lg: "flex-start" }}
       >
         <Bbox
-          ox
+          
           p={3}
           flex={1}
           display={"flex"}
@@ -122,7 +122,10 @@ const ApplicationRecieved = () => {
             </Select>
           </FormControl>
 
-          <DateRangePicker label="Date" defaultValue={[dayjs('2022-04-17'), dayjs('2022-04-21')]} />
+          <DateRangePicker
+            label="Date"
+            defaultValue={[dayjs("2022-04-17"), dayjs("2022-04-21")]}
+          />
           <FormControl fullWidth>
             <InputLabel>Class</InputLabel>
             <Select defaultValue={0} label="class">

@@ -85,7 +85,6 @@ const NavLayout = () => {
             </Breadcrumbs>
             <Tooltip title={bookmarked ? "Remove Bookmark" : "Bookmark"}>
               <IconButton
-                title="bookmark"
                 size="small"
                 onClick={() => setBookmarked((prev) => !prev)}
               >

@@ -16,6 +16,21 @@ import { Editor } from "@tinymce/tinymce-react";
 const Email = () => {
   const [recipentTo, setRecipentTo] = useState("all");
 
+  // Get the whole page height
+  const wholePageHeight = document.body.scrollHeight;
+
+  // Get the window height
+  const windowHeight =
+    window.innerHeight ||
+    document.documentElement.clientHeight ||
+    document.body.clientHeight;
+
+  // Calculate the scrollbar height
+  const scrollbarHeight =
+    wholePageHeight > windowHeight ? wholePageHeight - windowHeight : 0;
+
+  console.log("Scrollbar Height:", scrollbarHeight);
+
   const editorRef = useRef(null);
   const log = () => {
     if (editorRef.current) {
@@ -24,7 +39,7 @@ const Email = () => {
   };
 
   return (
-    <Box >
+    <Box>
       <Grid container spacing={2}>
         <Grid item xs={2}>
           <FormControl fullWidth>
@@ -78,7 +93,7 @@ const Email = () => {
           initialValue="Welcome!"
           init={{
             branding: false,
-            height: 350,
+            height: 450,
             menubar: false,
             plugins: ["lists", "advlist", "link", "image", "fullscreen"],
             toolbar:

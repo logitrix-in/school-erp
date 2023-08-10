@@ -1,8 +1,9 @@
+import { Box } from '@mui/material'
 import React from 'react'
 
 const Whatsapp = () => {
   return (
-    <div>Whatsapp</div>
+    <Box>Whatsapp</Box>
   )
 }
 
