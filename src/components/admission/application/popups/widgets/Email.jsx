@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   FormControl,
   Grid,
   InputLabel,
@@ -90,6 +91,11 @@ const Email = () => {
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px, overflow:scroll}",
           }}
         />
+      </Box>
+      <Box display={'flex'} justifyContent={'flex-start'} gap={2} mt={2}>
+        <Button variant="contained">Save Template</Button>
+        <Button variant="contained" sx={{mr:'auto'}}>Schedule</Button>
+        <Button variant="contained">Send</Button>
       </Box>
     </Box>
   );

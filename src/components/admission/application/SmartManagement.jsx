@@ -1,9 +1,13 @@
 import { Box, Button, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import Bbox from "../../UiComponents/Bbox";
 import RevealCard from "../../AnimationComponents/RevealCard";
+import AutoResponse from "./popups/AutoResponse";
 
 const SmartManagement = () => {
+
+  const [showAutoResponse, setShowAutoResponse] = useState(false);
+
   return (
     <>
       <RevealCard>
@@ -32,9 +36,10 @@ const SmartManagement = () => {
           mt={1}
           flexDirection={{ xs: "column", md: "row" }}
         >
-          <Button fullWidth variant="contained" color="primary">
+          <Button fullWidth variant="contained" color="primary" onClick={() => setShowAutoResponse(true)}>
             Set Auto Response
           </Button>
+          <AutoResponse open={showAutoResponse} close={() => setShowAutoResponse(false)} />
           <Button fullWidth variant="contained" color="primary">
             Multiple Application
           </Button>

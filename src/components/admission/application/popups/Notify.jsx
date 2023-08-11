@@ -3,7 +3,7 @@ import Sms from "./widgets/Sms";
 import Email from "./widgets/Email";
 import Whatsapp from "./widgets/Whatsapp";
 import { Box, Dialog, Divider, Tab, Tabs, Typography } from "@mui/material";
-
+import whatsappBg from "../../../../assets/wp.jpg";
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -13,7 +13,17 @@ function CustomTabPanel(props) {
       hidden={value !== index}
       {...other}
     >
-      {value === index && <Box p={3} sx={{height:'70vh',overflowY:'scroll'}}>{children}</Box>}
+      {value === index && (
+        <Box
+          p={3}
+          sx={{
+            height: "70vh",
+            overflowY: "scroll",
+          }}
+        >
+          {children}
+        </Box>
+      )}
     </Box>
   );
 }
@@ -40,7 +50,7 @@ const Notify = ({ open, close }) => {
       onClose={() => close()}
       disableEnforceFocus={true}
     >
-      <Box overflow={'hidden'}>
+      <Box overflow={"hidden"}>
         <Typography
           p={1}
           py={2}
