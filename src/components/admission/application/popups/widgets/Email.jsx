@@ -26,50 +26,48 @@ const Email = () => {
 
   return (
     <Box>
-      <Grid container spacing={2}>
-        <Grid item xs={2}>
-          <FormControl fullWidth>
-            <InputLabel>Recipent</InputLabel>
-            <Select label="Recipent" onChange={() => {}} defaultValue={30}>
-              <MenuItem value={10}>Nill</MenuItem>
-              <MenuItem value={20}>parent</MenuItem>
-              <MenuItem value={30}>Candidates</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
+      <Box display={'flex'} gap={2}>
+        <FormControl size="small">
+          <InputLabel>Recipent</InputLabel>
+          <Select label="Recipent" onChange={() => {}} defaultValue={30}>
+            <MenuItem value={10}>Nil</MenuItem>
+            <MenuItem value={20}>parent</MenuItem>
+            <MenuItem value={30}>Candidates</MenuItem>
+          </Select>
+        </FormControl>
 
-        <Grid item mr={"auto"}>
-          <ToggleButtonGroup
-            color="secondary"
-            value={recipentTo}
-            exclusive
-            onChange={(e, val) => val != null && setRecipentTo(val)}
-          >
-            <ToggleButton value="all">{"all(491)"}</ToggleButton>
-            <ToggleButton value="custom">custom</ToggleButton>
-          </ToggleButtonGroup>
-        </Grid>
-        <Grid item xs={2}>
-          <FormControl fullWidth>
-            <InputLabel>CC</InputLabel>
-            <Select label="CC" onChange={() => {}} defaultValue={20}>
-              <MenuItem value={10}>Nill</MenuItem>
-              <MenuItem value={20}>parent</MenuItem>
-              <MenuItem value={30}>Candidates</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={2}>
-          <FormControl fullWidth>
-            <InputLabel>BCC</InputLabel>
-            <Select label="BCC" onChange={() => {}} defaultValue={10}>
-              <MenuItem value={10}>Nill</MenuItem>
-              <MenuItem value={20}>parent</MenuItem>
-              <MenuItem value={30}>Candidates</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
+        <ToggleButtonGroup
+          size="small"
+          color="secondary"
+          value={recipentTo}
+          exclusive
+          sx={{mr:'auto'}}
+          onChange={(e, val) => val != null && setRecipentTo(val)}
+        >
+          <ToggleButton value="all">{"all(491)"}</ToggleButton>
+          <ToggleButton value="custom">custom</ToggleButton>
+        </ToggleButtonGroup>
+
+        <FormControl size="small">
+          <InputLabel>CC</InputLabel>
+          <Select label="CC" onChange={() => {}} defaultValue={20}>
+            <MenuItem value={10}>Nil</MenuItem>
+            <MenuItem value={20}>parent</MenuItem>
+            <MenuItem value={30}>Candidates</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl size="small">
+          <InputLabel>BCC</InputLabel>
+          <Select label="BCC" onChange={() => {}} defaultValue={10}>
+            <MenuItem value={10}>Nil</MenuItem>
+            <MenuItem value={20}>parent</MenuItem>
+            <MenuItem value={30}>Candidates</MenuItem>
+          </Select>
+        </FormControl>
+
+        <Button variant="contained" color="secondary">Templates</Button>
+      </Box>
       <Box height={20} />
       <TextField placeholder="Subject" fullWidth size="small" sx={{ mb: 2 }} />
       <Box>
@@ -92,9 +90,11 @@ const Email = () => {
           }}
         />
       </Box>
-      <Box display={'flex'} justifyContent={'flex-start'} gap={2} mt={2}>
+      <Box display={"flex"} justifyContent={"flex-start"} gap={2} mt={2}>
         <Button variant="contained">Save Template</Button>
-        <Button variant="contained" sx={{mr:'auto'}}>Schedule</Button>
+        <Button variant="contained" sx={{ mr: "auto" }}>
+          Schedule
+        </Button>
         <Button variant="contained">Send</Button>
       </Box>
     </Box>

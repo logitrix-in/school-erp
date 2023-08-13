@@ -40,7 +40,7 @@ const Sms = () => {
             <ToggleButton value="custom">custom</ToggleButton>
           </ToggleButtonGroup>
 
-          <Button variant="contained" color="secondary">Saved Templates</Button>
+          <Button variant="contained" color="secondary">Templates</Button>
         
 
       </Box>

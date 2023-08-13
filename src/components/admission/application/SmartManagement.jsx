@@ -3,10 +3,14 @@ import React, { useState } from "react";
 import Bbox from "../../UiComponents/Bbox";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import AutoResponse from "./popups/AutoResponse";
+import MultipleApplication from "./popups/MultipleApplication";
+import Engage from "./popups/Engage";
 
 const SmartManagement = () => {
 
   const [showAutoResponse, setShowAutoResponse] = useState(false);
+  const [showMultipleApplication, setShowMultipeApplication] = useState(false);
+  const [showEngage, setShowEngage] = useState(false);
 
   return (
     <>
@@ -36,14 +40,20 @@ const SmartManagement = () => {
           mt={1}
           flexDirection={{ xs: "column", md: "row" }}
         >
+          {/* auto response */}
+          <AutoResponse open={showAutoResponse} close={() => setShowAutoResponse(false)} />
           <Button fullWidth variant="contained" color="primary" onClick={() => setShowAutoResponse(true)}>
             Set Auto Response
           </Button>
-          <AutoResponse open={showAutoResponse} close={() => setShowAutoResponse(false)} />
-          <Button fullWidth variant="contained" color="primary">
+          {/* multiple Application */}
+          <MultipleApplication open={showMultipleApplication} close={() => setShowMultipeApplication(false)}/>
+          <Button fullWidth variant="contained" color="primary" onClick={() => setShowMultipeApplication(true)}>
             Multiple Application
           </Button>
-          <Button fullWidth variant="contained" color="primary">
+
+          {/* Engage */}
+          <Engage open={showEngage} close={() => setShowEngage(false)}/>
+          <Button fullWidth variant="contained" color="primary"  onClick={() => setShowEngage(true)}>
             Engage
           </Button>
         </Bbox>

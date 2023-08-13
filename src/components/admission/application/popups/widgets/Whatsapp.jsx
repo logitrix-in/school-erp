@@ -14,17 +14,14 @@ import {
 } from "@mui/material";
 import { Editor } from "@tinymce/tinymce-react";
 
-
 const Whatsapp = () => {
   const [recipentTo, setRecipentTo] = useState("all");
   const editorRef = useRef(null);
 
   return (
-    <Box
-      
-    >
+    <Box>
       <Box display={"flex"} gap={2} alignItems={"center"}>
-        <FormControl>
+        <FormControl size="small">
           <InputLabel>Recipent</InputLabel>
           <Select label="Recipent" onChange={() => {}} defaultValue={20}>
             <MenuItem value={10}>Nill</MenuItem>
@@ -34,6 +31,7 @@ const Whatsapp = () => {
         </FormControl>
 
         <ToggleButtonGroup
+          size="small"
           sx={{ mr: "auto" }}
           color="secondary"
           value={recipentTo}
@@ -44,12 +42,12 @@ const Whatsapp = () => {
           <ToggleButton value="custom">custom</ToggleButton>
         </ToggleButtonGroup>
 
-        <Button variant="contained" color="secondary">
-          Saved Templates
+        <Button variant="contained" color="secondary" size="small">
+          Templates
         </Button>
       </Box>
 
-      <Box mt={3}>
+      <Box mt={2}>
         <Editor
           apiKey="qpa9e8xcdk75avj9zmz7eawi5rzrhhdllb4kjwr4u4pgpr8f"
           onInit={(evt, editor) => (editorRef.current = editor)}
