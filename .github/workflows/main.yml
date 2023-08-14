@@ -7,7 +7,7 @@ env:
   SSH_HOST: sociolinq.com
   SSH_USERNAME: ubuntu
   SSH_PRIVATE_KEY : ${{ secrets.SSH_PRIVATE_KEY }}
-  SSH_DESTINATION: /home/ubuntu/sociolinq-frontend/
+  SSH_DESTINATION: /var/www/sociolinq-frontend/
 jobs:
   deploy:
     runs-on: ubuntu-latest
