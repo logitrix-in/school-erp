@@ -1,0 +1,40 @@
+name: Deploy to SSH - sociolinq.com
+on:
+  push:
+    branches:
+      - main
+env:
+  SSH_HOST: sociolinq.com
+  SSH_USERNAME: ubuntu
+  SSH_PRIVATE_KEY : ${{ secrets.SSH_PRIVATE_KEY }}
+  SSH_DESTINATION: /home/ubuntu/sociolinq-frontend/
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies and build
+      run: |
+        npm ci
+        npm run build
+
+    - name: Upload files to SSH
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ env.SSH_HOST }}
+        username: ${{ env.SSH_USERNAME }}
+        key: ${{ env.SSH_PRIVATE_KEY }}
+        source: dist/  # Path to your built files
+        target: ${{ env.SSH_DESTINATION }}  # Destination folder on the SSH server
+
+    - name: Restart server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ env.SSH_HOST }}
+        username: ${{ env.SSH_USERNAME }}
+        key: ${{ env.SSH_PRIVATE_KEY }}
+        script: |
+          sudo systemctl restart nginx
