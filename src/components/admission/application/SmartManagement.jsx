@@ -22,7 +22,7 @@ const SmartManagement = () => {
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            <Typography fontWeight={"500"} borderRadius={1}>
+            <Typography fontWeight={"700"} borderRadius={1} fontSize={'1.1rem'}>
               Smart Management
             </Typography>
           </Box>

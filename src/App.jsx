@@ -32,6 +32,7 @@ import AdmissionScreening from "./pages/admission/AdmissionScreening";
 import "./assets/scss/scrollbar.scss";
 import Bbox from "./components/UiComponents/Bbox";
 import { Icon } from "@iconify/react";
+import { config } from "./config";
 
 const NavLayout = () => {
   const location = useLocation();
@@ -41,19 +42,30 @@ const NavLayout = () => {
 
   return (
     <>
-      <Navbar />
-      <Box display="flex" pr={3}>
-        <Sidebar />
+      <>
+        <Box
+          display={"flex"}
+          width={"100vw"}
+          position={"fixed"}
+          top={0}
+          zIndex={100}
+          sx={{ pointerEvents: "none" }}
+        >
+          <Sidebar />
+          <Navbar />
+        </Box>
+
         <Box
           flex={1}
-          bgcolor={"#f6f6f6"}
-          padding={2}
+          bgcolor={"#ffffff"}
+          pt={2}
+          px={3}
           sx={{ borderRadius: 2 }}
-          minHeight={"100vh"}
+          marginTop={"4rem"}
+          ml={config.NAVBAR_WIDTH}
         >
           <Bbox
-            px={1}
-            py={1}
+            p={1.4}
             mb={0.5}
             borderRadius={2}
             display="flex"
@@ -95,33 +107,36 @@ const NavLayout = () => {
               </IconButton>
             </Tooltip>
           </Bbox>
+
           <Outlet />
+          <Box mb={'auto'} />
+          <Box
+            py={2}
+            pl={1}
+            display={"flex"}
+            gap={4}
+            color={"#00a76f67"}
+            alignItems={"center"}
+            justifyContent={"space-between"}
+          >
+            <Typography
+              color={"gray"}
+              variant="caption"
+              fontWeight={600}
+              mr={"auto"}
+            >
+              Last Logged In on 4th-june-2023 4:50 pm
+            </Typography>
+            <Box display={"flex"} alignItems={"center"} gap={0.4}>
+              <Icon icon="fa:group" fontSize={"1.2rem"} />
+              <Typography fontSize={10} lineHeight={"1ch"}>
+                1000
+              </Typography>
+            </Box>
+            <Icon icon="mingcute:signal-fill" fontSize={"1.4rem"} />
+          </Box>
         </Box>
-      </Box>
-      <Divider sx={{mt:2}}/>
-      <Box
-        p={2}
-        px={3}
-        display={"flex"}
-        gap={4}
-        color={"#B0A9FF"}
-        alignItems={"center"}
-        justifyContent={"space-between"}
-      >
-        <Typography
-          color={"gray"}
-          variant="caption"
-          fontWeight={600}
-          mr={"auto"}
-        >
-          Last Logged In on 4th-june-2023 4:50 pm
-        </Typography>
-        <Box display={'flex'} alignItems={'center'} gap={0.4}>
-          <Icon icon="fa:group" fontSize={'1.2rem'}/>
-          <Typography fontSize={10} lineHeight={'1ch'}>1000</Typography>
-        </Box>
-        <Icon icon="mingcute:signal-fill" fontSize={'1.4rem'}/>
-      </Box>
+      </>
     </>
   );
 };

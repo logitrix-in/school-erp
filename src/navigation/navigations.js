@@ -66,5 +66,45 @@ export const navigations = [
         path: 'Feedback/',
         icon: 'material-symbols:feedback'
     },
+    {
+        name:'Feedback',
+        path: 'Feedback/',
+        icon: 'material-symbols:feedback'
+    },
+    {
+        name:'Feedback',
+        path: 'Feedback/',
+        icon: 'material-symbols:feedback'
+    },
+    {
+        name:'Feedback',
+        path: 'Feedback/',
+        icon: 'material-symbols:feedback'
+    },
+    {
+        name:'Feedback',
+        path: 'Feedback/',
+        icon: 'material-symbols:feedback'
+    },
+    {
+        name:'Feedback',
+        path: 'Feedback/',
+        icon: 'material-symbols:feedback'
+    },
+    {
+        name:'Feedback',
+        path: 'Feedback/',
+        icon: 'material-symbols:feedback'
+    },
+    {
+        name:'Feedback',
+        path: 'Feedback/',
+        icon: 'material-symbols:feedback'
+    },
+    {
+        name:'Feedback',
+        path: 'Feedback/',
+        icon: 'material-symbols:feedback'
+    },
 ]
 

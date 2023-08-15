@@ -23,7 +23,7 @@ const ManageApplications = () => {
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            <Typography fontWeight={"500"}>Manage Application</Typography>
+            <Typography fontWeight={"700"} borderRadius={1} fontSize={'1.1rem'}>Manage Application</Typography>
             <Button size="small" variant="contained" color="secondary">
               Edit
             </Button>

@@ -125,7 +125,7 @@ const ManageTable = () => {
             {Application.map((row, idx) => (
               <TableRow
                 key={idx}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 }, "&:nth-of-type(2n)": {background: '#e0e0e05d'} }}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 }, "&:nth-of-type(2n)": {background: ''} }}
               >
                 <TableCell>{row.class}</TableCell>
                 <TableCell>{row.openingDate}</TableCell>

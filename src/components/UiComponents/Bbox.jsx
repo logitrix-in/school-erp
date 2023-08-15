@@ -9,8 +9,8 @@ const Bbox = (props) => {
       bgcolor={"white"}
       sx={{
         border: "1px solid",
-        borderColor: "grey.200",
-        boxShadow: "0 2px 10px -2px #5555552f",
+        borderColor: "rgba(0,0,0,0.06)",
+        boxShadow: "0 4px 14px -2px rgba(0,0,0,0.06)",
       }}
     >
       {props.children}
