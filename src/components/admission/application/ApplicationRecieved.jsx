@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Divider,
   FormControl,
   InputLabel,
   MenuItem,
@@ -36,10 +37,10 @@ const ApplicationRecieved = () => {
         enabled: true,
         easing: "linear",
         speed: 1000,
-        animateGradually:{
+        animateGradually: {
           enabled: true,
-          delay: 1000
-        }
+          delay: 1000,
+        },
       },
       toolbar: {
         show: true,
@@ -87,126 +88,126 @@ const ApplicationRecieved = () => {
   return (
     <>
       <RevealCard>
-        <Bbox
-          bgcolor={"white"}
-          py={1.3}
-          px={2}
-          borderRadius={2}
-          display={"flex"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-        >
-          <Typography fontWeight={"500"} borderRadius={1}>
-            Application Recieved
-          </Typography>
-
-          <Select defaultValue={30} size="small" onChange={() => {}}>
-            <MenuItem value={10}>Un- screened</MenuItem>
-            <MenuItem value={20}>Screened</MenuItem>
-            <MenuItem value={30}>All</MenuItem>
-          </Select>
-        </Bbox>
-      </RevealCard>
-
-      <RevealCard delay={0.4}>
-        <Box
-          mt={1}
-          display={"flex"}
-          gap={2}
-          flexDirection={{ xs: "column", lg: "row" }}
-          alignItems={{ xs: "strech", lg: "flex-start" }}
-        >
-          <Bbox
-            p={3}
-            flex={1}
-            display={"flex"}
-            flexDirection={"column"}
-            gap={"2rem"}
-            borderRadius={2}
+        <Bbox borderRadius={2} overflow={"hidden"}>
+          <Box
             bgcolor={"white"}
-          >
-            <FormControl fullWidth>
-              <InputLabel>Academic Year</InputLabel>
-              <Select label="Academic Year" defaultValue={10}>
-                <MenuItem value={10}>2023-24</MenuItem>
-                <MenuItem value={20}>2024-25</MenuItem>
-                <MenuItem value={30}>2025-26</MenuItem>
-              </Select>
-            </FormControl>
-
-            <DateRangePicker
-              label="Date"
-              defaultValue={[dayjs("2022-04-17"), dayjs("2022-04-21")]}
-            />
-            <FormControl fullWidth>
-              <InputLabel>Class</InputLabel>
-              <Select defaultValue={0} label="class">
-                <MenuItem value={0}>All</MenuItem>
-                <MenuItem value={10}>1</MenuItem>
-                <MenuItem value={20}>2</MenuItem>
-                <MenuItem value={30}>3</MenuItem>
-              </Select>
-            </FormControl>
-          </Bbox>
-          <Bbox
-            p={3}
-            flex={2}
-            display={"flex"}
-            flexDirection={"column"}
-            gap={"2rem"}
+            py={1.3}
+            px={3}
             borderRadius={2}
-            bgcolor={"white"}
+            display={"flex"}
+            justifyContent={"space-between"}
+            alignItems={"center"}
           >
-            <OfflineApplicationForm
-              open={applocationPopupOpen}
-              close={onApplicationClose}
-            />
-            <Notify open={notifyPopup} close={() => setNotifyPopup(false)} />
+            <Typography fontWeight={"500"} borderRadius={1}>
+              Application Recieved
+            </Typography>   
 
-            <Chart
-              options={options}
-              series={series}
-              type="donut"
-              height={400}
-            />
-            <Box display={"flex"} justifyContent={"center"} gap={"1rem"}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setApplocationPopupOpen(true)}
-              >
-                Apply Offline
+            <Select defaultValue={30} size="small"  onChange={() => {}}>
+              <MenuItem value={10}>Un- screened</MenuItem>
+              <MenuItem value={20}>Screened</MenuItem>
+              <MenuItem value={30}>All</MenuItem>
+            </Select>
+          </Box>
+
+          <Divider/>
+
+          <Box
+            display={"flex"}
+            gap={5}
+            flexDirection={{ xs: "column", lg: "row" }}
+            alignItems={{ xs: "strech", lg: "flex-start" }}
+          >
+            <Box
+              p={3}
+              flex={1}
+              display={"flex"}
+              flexDirection={"column"}
+              gap={"2rem"}
+              bgcolor={"white"}
+            >
+              <FormControl fullWidth>
+                <InputLabel>Academic Year</InputLabel>
+                <Select label="Academic Year" defaultValue={10}>
+                  <MenuItem value={10}>2023-24</MenuItem>
+                  <MenuItem value={20}>2024-25</MenuItem>
+                  <MenuItem value={30}>2025-26</MenuItem>
+                </Select>
+              </FormControl>
+
+              <DateRangePicker
+                label="Date"
+                defaultValue={[dayjs("2022-04-17"), dayjs("2022-04-21")]}
+              />
+              <FormControl fullWidth>
+                <InputLabel>Class</InputLabel>
+                <Select defaultValue={0} label="class">
+                  <MenuItem value={0}>All</MenuItem>
+                  <MenuItem value={10}>1</MenuItem>
+                  <MenuItem value={20}>2</MenuItem>
+                  <MenuItem value={30}>3</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box
+              p={3}
+              flex={2}
+              display={"flex"}
+              flexDirection={"column"}
+              gap={"2rem"}
+              borderRadius={2}
+              bgcolor={"white"}
+            >
+              <OfflineApplicationForm
+                open={applocationPopupOpen}
+                close={onApplicationClose}
+              />
+              <Notify open={notifyPopup} close={() => setNotifyPopup(false)} />
+
+              <Chart
+                options={options}
+                series={series}
+                type="donut"
+                height={400}
+              />
+              <Box display={"flex"} justifyContent={"center"} gap={"1rem"}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setApplocationPopupOpen(true)}
+                >
+                  Apply Offline
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setNotifyPopup(true)}
+                >
+                  Notify
+                </Button>
+              </Box>
+            </Box>
+            <Box
+              display={"flex"}
+              flexDirection={"column"}
+              gap={1}
+              p={3}
+              borderRadius={2}
+            >
+              <Button variant="contained" size="small" color="secondary">
+                View
               </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setNotifyPopup(true)}
-              >
-                Notify
+              <Button variant="contained" size="small" color="secondary">
+                Excel
+              </Button>
+              <Button variant="contained" size="small" color="secondary">
+                CSV
+              </Button>
+              <Button variant="contained" size="small" color="secondary">
+                Print
               </Button>
             </Box>
-          </Bbox>
-          <Bbox
-            display={"flex"}
-            flexDirection={"column"}
-            gap={1}
-            p={3}
-            borderRadius={2}
-          >
-            <Button variant="contained" size="small" color="secondary">
-              View
-            </Button>
-            <Button variant="contained" size="small" color="secondary">
-              Excel
-            </Button>
-            <Button variant="contained" size="small" color="secondary">
-              CSV
-            </Button>
-            <Button variant="contained" size="small" color="secondary">
-              Print
-            </Button>
-          </Bbox>
-        </Box>
+          </Box>
+        </Bbox>
       </RevealCard>
     </>
   );

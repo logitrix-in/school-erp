@@ -18,6 +18,7 @@ import { Editor } from "@tinymce/tinymce-react";
 const AutoResponse = ({ open, close }) => {
   const [value, setValue] = useState(0);
   const [enabled, setEnabled] = useState([true, false, false]);
+  const [content, setContent] = useState(['', '', '']);
 
   const statusChange = (e) => {
     var temp = [...enabled];
@@ -27,7 +28,11 @@ const AutoResponse = ({ open, close }) => {
     setEnabled(temp);
   };
 
-  const editorRef = useRef(null);
+  const ref1 = useRef(null);
+
+  const changeFunc = (e) => {
+    console.log(ref1.current.getContent());
+  };
 
   return (
     <Dialog
@@ -58,6 +63,9 @@ const AutoResponse = ({ open, close }) => {
           <FormControl size="small">
             <Select
               onChange={(e) => {
+                setContent(prev => {
+                  
+                })
                 setValue(e.target.value);
               }}
               defaultValue={0}
@@ -84,31 +92,35 @@ const AutoResponse = ({ open, close }) => {
             <Button sx={{ ml: "auto" }}>Saved Templates</Button>
           )}
         </Box>
-        {enabled[value] && (
-          <Box p={2} pt={0}>
-            <Editor
-              apiKey="qpa9e8xcdk75avj9zmz7eawi5rzrhhdllb4kjwr4u4pgpr8f"
-              onInit={(evt, editor) => (editorRef.current = editor)}
-              initialValue="Welcome!"
-              init={{
-                branding: false,
-                height: 450,
-                menubar: false,
-                plugins: ["lists", "advlist", "link", "image", "fullscreen"],
-                toolbar:
-                  "undo redo | formatselect | " +
-                  "bold italic backcolor | alignleft aligncenter " +
-                  "alignright alignjustify | bullist numlist outdent indent | " +
-                  "removeformat | image link | fullscreen |",
-                content_style:
-                  "body { font-family:Helvetica,Arial,sans-serif; font-size:14px, overflow:scroll}",
-              }}
-            />
-            <Box mt={1} display={"flex"} justifyContent={"flex-end"}>
-              <Button variant="contained">Apply</Button>
-            </Box>
+        <Box p={2} pt={0}>
+          <Editor
+            disabled={!enabled[value]}
+            apiKey="qpa9e8xcdk75avj9zmz7eawi5rzrhhdllb4kjwr4u4pgpr8f"
+            onInit={(evt, editor) => {
+              ref1.current = editor
+            }}
+            
+            init={{
+              branding: false,
+              height: 450,
+              menubar: false,
+              plugins: ["lists", "advlist", "link", "image", "fullscreen"],
+              toolbar:
+                "undo redo | formatselect | " +
+                "bold italic backcolor | alignleft aligncenter " +
+                "alignright alignjustify | bullist numlist outdent indent | " +
+                "removeformat | image link | fullscreen |",
+              content_style:
+                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px, overflow:scroll}",
+            }}
+            onChange={changeFunc}
+          />
+          <Box mt={1} display={"flex"} justifyContent={"flex-end"}>
+            <Button variant="contained" disabled={!enabled[value]}>
+              Apply
+            </Button>
           </Box>
-        )}
+        </Box>
       </Box>
     </Dialog>
   );

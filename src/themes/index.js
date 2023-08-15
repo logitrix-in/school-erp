@@ -13,7 +13,7 @@ import themeTypography from './typography';
  * @param {JsonObject} customization customization parameter object
  */
 
-export const theme = () => {
+export const theme = (customization) => {
     const color = colors;
 
     const themeOption = {
@@ -27,8 +27,8 @@ export const theme = () => {
         textDark: color.grey900,
         menuSelected: color.secondaryDark,
         menuSelectedBack: color.secondaryLight,
-        divider: color.grey300,
-
+        divider: color.grey200,
+        customization
     };
 
     const themeOptions = {

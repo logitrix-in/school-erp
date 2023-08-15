@@ -7,83 +7,138 @@ import {
   TableHead,
   TableRow,
   Paper,
-  ToggleButton,
-  ToggleButtonGroup,
-  Switch,
-  IconButton,
+  Box,
 } from "@mui/material";
-import { Check, Clear } from "@mui/icons-material";
-import { Icon } from "@iconify/react";
-import Bbox from "../../../UiComponents/Bbox";
+
+
+const data = [
+  {
+    class: "KG",
+    openingDate: new Date().toLocaleDateString().toString(),
+    closingDate: new Date().toLocaleDateString().toString(),
+    active: true,
+  },
+  {
+    class: "Class I",
+    openingDate: new Date().toLocaleDateString().toString(),
+    closingDate: new Date().toLocaleDateString().toString(),
+    active: true,
+  },
+  {
+    class: "Class II",
+    openingDate: new Date().toLocaleDateString().toString(),
+    closingDate: new Date().toLocaleDateString().toString(),
+    active: true,
+  },
+  {
+    class: "Class III",
+    openingDate: new Date().toLocaleDateString().toString(),
+    closingDate: new Date().toLocaleDateString().toString(),
+    active: true,
+  },
+
+  {
+    class: "Class IV",
+    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
+    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
+    active: false,
+  },
+  {
+    class: "Class V",
+    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
+    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
+    active: false,
+  },
+  {
+    class: "Class VI",
+    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
+    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
+    active: false,
+  },
+  {
+    class: "Class VII",
+    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
+    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
+    active: false,
+  },
+  {
+    class: "Class VIII",
+    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
+    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
+    active: false,
+  },
+  {
+    class: "Class IX",
+    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
+    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
+    active: false,
+  },
+  {
+    class: "Class X",
+    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
+    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
+    active: false,
+  },
+  {
+    class: "Class XI",
+    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
+    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
+    active: false,
+  },
+  {
+    class: "Class XII - Science",
+    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
+    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
+    active: false,
+  },
+  {
+    class: "Class XII - Commerce",
+    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
+    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
+    active: false,
+  },
+  {
+    class: "Class XII - Arts",
+    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
+    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
+    active: false,
+  },
+];
 
 const ManageTable = () => {
   // Sample data for the table
-  const [Application, SetApplication] = useState([
-    {
-      class: "KG",
-      openingDate: new Date().toLocaleDateString().toString(),
-      closingDate: new Date().toLocaleDateString().toString(),
-      active: true,
-    },
-    {
-      class: "Class I",
-      openingDate: new Date().toLocaleDateString().toString(),
-      closingDate: new Date().toLocaleDateString().toString(),
-      active: true,
-    },
-    {
-      class: "Class IV",
-      openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
-      closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
-      active: false,
-    },
-  ]);
-
-  const handleActiveChange = (index) => (event) => {
-    const updatedApplications = [...Application];
-    updatedApplications[index].active = event.target.checked;
-    SetApplication(updatedApplications);
-  };
+  const [Application, SetApplication] = useState(data);
 
   return (
-    <Bbox borderRadius={10} >
-      <TableContainer component={Paper} >
-        <Table>
+    <Box>
+      <TableContainer >
+        <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell>Class</TableCell>
               <TableCell>Opening Date</TableCell>
               <TableCell>Closing Date</TableCell>
-              <TableCell>Active</TableCell>
-              <TableCell style={{ width: "10%" }} align="right">
-                Actions
-              </TableCell>
+              <TableCell align="right">Active</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody sx={{ p: 0 }}>
             {Application.map((row, idx) => (
-              <TableRow key={idx}>
+              <TableRow
+                key={idx}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 }, "&:nth-of-type(2n)": {background: '#e0e0e05d'} }}
+              >
                 <TableCell>{row.class}</TableCell>
                 <TableCell>{row.openingDate}</TableCell>
                 <TableCell>{row.closingDate}</TableCell>
-                <TableCell>
-                  {/* <Switch
-                    checked={row.active}
-                    onClick={handleActiveChange(idx)}
-                  /> */}
-                  {row.active ? "Open" : "Closed" }
-                </TableCell>
-                <TableCell style={{ width: "5%" }} align="right">
-                  <IconButton>
-                    <Icon icon="tabler:edit" />
-                  </IconButton>
+                <TableCell align="right">
+                  {row.active ? "Open" : "Closed"}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-    </Bbox>
+    </Box>
   );
 };
 

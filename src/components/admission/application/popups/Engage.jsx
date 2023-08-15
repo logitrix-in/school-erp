@@ -73,7 +73,7 @@ const Engage = ({ close, open }) => {
 
           <Box>
             {lineups.map((lineup, i) => (
-              <>
+              <Box key={i}>
               <Box display={"flex"} width={'100%'} p={1} alignItems={'center'}>
                 <Typography flex={1}>{lineup.subject}</Typography>
                 <Typography variant="caption">Day {lineup.days}</Typography>
@@ -83,7 +83,7 @@ const Engage = ({ close, open }) => {
                 </IconButton>
               </Box>
               <Divider/>
-              </>
+              </Box>
             ))}
           </Box>
 

@@ -5,7 +5,7 @@
 
 export default function themeTypography(theme) {
     return {
-        fontFamily: 'Poppins',
+        fontFamily: theme?.customization?.fontFamily,
         h6: {
             fontWeight: 500,
             color: theme.heading,
@@ -94,7 +94,7 @@ export default function themeTypography(theme) {
             padding: '20px',
             marginTop: '88px',
             marginRight: '20px',
-            borderRadius: '8px'
+            borderRadius: `${theme?.customization?.borderRadius}px`
         },
         menuCaption: {
             fontSize: '0.875rem',
