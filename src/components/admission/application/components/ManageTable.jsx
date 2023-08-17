@@ -1,145 +1,109 @@
-import React, { useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Box,
-} from "@mui/material";
+import * as React from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import { Box, Button } from "@mui/material";
 
-
-const data = [
+const columns = [
+  { field: "class", headerName: "Class", width: 140 },
+  { field: "startingDate", headerName: "application open", width: 160 },
+  { field: "closingDate", headerName: "application close", width: 160 },
   {
-    class: "KG",
-    openingDate: new Date().toLocaleDateString().toString(),
-    closingDate: new Date().toLocaleDateString().toString(),
-    active: true,
-  },
-  {
-    class: "Class I",
-    openingDate: new Date().toLocaleDateString().toString(),
-    closingDate: new Date().toLocaleDateString().toString(),
-    active: true,
-  },
-  {
-    class: "Class II",
-    openingDate: new Date().toLocaleDateString().toString(),
-    closingDate: new Date().toLocaleDateString().toString(),
-    active: true,
-  },
-  {
-    class: "Class III",
-    openingDate: new Date().toLocaleDateString().toString(),
-    closingDate: new Date().toLocaleDateString().toString(),
-    active: true,
-  },
-
-  {
-    class: "Class IV",
-    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
-    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
-    active: false,
-  },
-  {
-    class: "Class V",
-    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
-    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
-    active: false,
-  },
-  {
-    class: "Class VI",
-    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
-    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
-    active: false,
-  },
-  {
-    class: "Class VII",
-    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
-    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
-    active: false,
-  },
-  {
-    class: "Class VIII",
-    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
-    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
-    active: false,
-  },
-  {
-    class: "Class IX",
-    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
-    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
-    active: false,
-  },
-  {
-    class: "Class X",
-    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
-    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
-    active: false,
-  },
-  {
-    class: "Class XI",
-    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
-    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
-    active: false,
-  },
-  {
-    class: "Class XII - Science",
-    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
-    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
-    active: false,
-  },
-  {
-    class: "Class XII - Commerce",
-    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
-    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
-    active: false,
-  },
-  {
-    class: "Class XII - Arts",
-    openingDate: new Date("1/2/2022").toLocaleDateString().toString(),
-    closingDate: new Date("10/3/2022").toLocaleDateString().toString(),
-    active: false,
+    field: "applicationStatus",
+    headerName: "Status",
   },
 ];
 
-const ManageTable = () => {
-  // Sample data for the table
-  const [Application, SetApplication] = useState(data);
+const rows = [
+  {
+    id: 1,
+    class: "Kg",
+    startingDate: "Jon",
+    closingDate: "nice",
+    applicationStatus: "open",
+  },
+  {
+    id: 2,
+    class: "I",
+    startingDate: "Cersei",
+    closingDate: "nice",
+    applicationStatus: "open",
+  },
+  {
+    id: 3,
+    class: "II",
+    startingDate: "Jaime",
+    closingDate: "nice",
+    applicationStatus: "open",
+  },
+  {
+    id: 4,
+    class: "III",
+    startingDate: "Arya",
+    closingDate: "nice",
+    applicationStatus: "open",
+  },
+  {
+    id: 5,
+    class: "IV",
+    startingDate: "Daenerys",
+    closingDate: "nice",
+    applicationStatus: "open",
+  },
+  {
+    id: 6,
+    class: "V",
+    startingDate: null,
+    closingDate: "nice",
+    applicationStatus: "open",
+  },
+  {
+    id: 7,
+    class: "VI",
+    startingDate: "Ferrara",
+    closingDate: "nice",
+    applicationStatus: "open",
+  },
+  {
+    id: 8,
+    class: "VII",
+    startingDate: "Rossini",
+    closingDate: "nice",
+    applicationStatus: "open",
+  },
+  {
+    id: 9,
+    class: "VII",
+    startingDate: "Harvey",
+    closingDate: "nice",
+    applicationStatus: "open",
+  },
+  {
+    id: 10,
+    class: "IX",
+    startingDate: "Harvey",
+    closingDate: "nice",
+    applicationStatus: "open",
+  },
+];
 
+export default function DataTable() {
   return (
-    <Box>
-      <TableContainer >
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Class</TableCell>
-              <TableCell>Opening Date</TableCell>
-              <TableCell>Closing Date</TableCell>
-              <TableCell align="right">Active</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody sx={{ p: 0 }}>
-            {Application.map((row, idx) => (
-              <TableRow
-                key={idx}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 }, "&:nth-of-type(2n)": {background: ''} }}
-              >
-                <TableCell>{row.class}</TableCell>
-                <TableCell>{row.openingDate}</TableCell>
-                <TableCell>{row.closingDate}</TableCell>
-                <TableCell align="right">
-                  {row.active ? "Open" : "Closed"}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+    <div style={{ width: "100%", height: 370 }}>
+      <DataGrid
+        density="standard"
+        rows={rows}
+        columns={columns}
+        initialState={{
+          pagination: {
+            paginationModel: { page: 0, pageSize: 5 },
+          },
+        }}
+        pageSizeOptions={[
+          Math.round((rows.length * 1) / 4),
+          Math.round((rows.length * 2) / 4),
+          Math.round((rows.length * 3) / 4),
+          rows.length,
+        ]}
+      />
+    </div>
   );
-};
-
-export default ManageTable;
+}

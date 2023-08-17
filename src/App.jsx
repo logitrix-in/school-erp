@@ -72,10 +72,10 @@ const NavLayout = () => {
             gap={1}
             alignItems="center"
           >
-            <Button color="secondary" size="small" variant="contained">
+            <Button color="primary" size="small" variant="contained">
               Application
             </Button>
-            <Button color="secondary" size="small" variant="contained">
+            <Button color="primary" size="small" variant="contained">
               Library
             </Button>
           </Bbox>

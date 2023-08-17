@@ -43,7 +43,7 @@ const ApplicationRecieved = () => {
         },
       },
       toolbar: {
-        show: true,
+        // show: true,
       },
       dropShadow: {
         enabled: true,
@@ -95,7 +95,7 @@ const ApplicationRecieved = () => {
             px={3}
             borderRadius={2}
             display={"flex"}
-            justifyContent={"space-between"}
+            justifyContent={"space-between"}  
             alignItems={"center"}
           >
             <Typography fontWeight={"700"} borderRadius={1} fontSize={'1.1rem'}>
@@ -115,7 +115,7 @@ const ApplicationRecieved = () => {
             display={"flex"}
             gap={5}
             flexDirection={{ xs: "column", lg: "row" }}
-            alignItems={{ xs: "strech", lg: "flex-start" }}
+            alignItems={{ xs: "strech", lg: "center" }}
           >
             <Box
               p={3}
@@ -172,14 +172,14 @@ const ApplicationRecieved = () => {
               <Box display={"flex"} justifyContent={"center"} gap={"1rem"}>
                 <Button
                   variant="contained"
-                  color="primary"
+                  color="secondary"
                   onClick={() => setApplocationPopupOpen(true)}
                 >
                   Apply Offline
                 </Button>
                 <Button
                   variant="contained"
-                  color="primary"
+                  color="secondary"
                   onClick={() => setNotifyPopup(true)}
                 >
                   Notify
@@ -193,16 +193,16 @@ const ApplicationRecieved = () => {
               p={3}
               borderRadius={2}
             >
-              <Button variant="contained" size="small" color="secondary">
+              <Button variant="outlined" size="small" color="info">
                 View
               </Button>
-              <Button variant="contained" size="small" color="secondary">
+              <Button variant="outlined" size="small" color="info">
                 Excel
               </Button>
-              <Button variant="contained" size="small" color="secondary">
+              <Button variant="outlined" size="small" color="info">
                 CSV
               </Button>
-              <Button variant="contained" size="small" color="secondary">
+              <Button variant="outlined" size="small" color="info">
                 Print
               </Button>
             </Box>

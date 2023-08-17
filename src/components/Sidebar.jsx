@@ -1,7 +1,8 @@
 import { Icon, InlineIcon } from "@iconify/react";
-import { Search } from "@mui/icons-material";
+import { InboxRounded, Search } from "@mui/icons-material";
 import {
   Box,
+  ButtonBase,
   Divider,
   IconButton,
   InputAdornment,
@@ -14,6 +15,7 @@ import { navigations } from "../navigation/navigations";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { config } from "../config";
+import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
 const Sidebar = () => {
   const theme = useTheme();
   const location = useLocation();
@@ -49,7 +51,7 @@ const Sidebar = () => {
           pointerEvents: "auto",
         }}
       >
-        <Box height={"9rem"} display={"flex"} alignItems={"center"}>
+        <Box height={"8rem"} display={"flex"} alignItems={"center"}>
           <Typography
             fontSize={"1.2rem"}
             color={"primary.main"}
@@ -87,6 +89,7 @@ const Sidebar = () => {
         </Box>
         <TextField
           sx={{ my: 2 }}
+          size="small"
           label="Search"
           variant="outlined"
           placeholder="Search Modules"
@@ -98,7 +101,7 @@ const Sidebar = () => {
             ),
           }}
         />
-        <Box sx={{ overflowY: "scroll" }} pr={2} pb={3}>
+        <Box sx={{ overflowY: "scroll" }} pr={2} pb={3} height={"100%"}>
           {navigations.map((nav, idx) => (
             <Box
               component={motion.div}
@@ -107,105 +110,125 @@ const Sidebar = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: idx * 0.2 }}
+              overflow={"hidden"}
+              borderRadius={1}
             >
-              <Box
-                component={Link}
-                to={nav.dropdown ? null : nav?.path}
-                onClick={() => nav.dropdown && handleDropdown(idx)}
-                className={`${isPathActive(nav.path) ? "active" : ""}`}
-                py={1.2}
-                minHeight={"3rem"}
-                px={2}
-                display={"flex"}
-                alignItems={"center"}
-                borderRadius={1}
-                sx={{
-                  cursor: "pointer",
-                  "&.active": {
-                    bgcolor: "primary.light",
-                  },
-                  "&.active .navs": {
-                    fontWeight: "500",
-                    color: "primary.main",
-                  },
-                  "&:hover": { bgcolor: "primary.light" },
-                  "&:hover .navs": {
-                    color: "primary.main",
-                  },
-                }}
+              <ButtonBase
+                sx={(theme) => ({
+                  width: "100%",
+                  color: "#00000069",
+                })}
               >
                 <Box
-                  display={"flex"}
+                  component={Link}
+                  to={nav.dropdown ? null : nav?.path}
+                  onClick={() => nav.dropdown && handleDropdown(idx)}
+                  className={`${isPathActive(nav.path) ? "active" : ""}`}
                   width={"100%"}
-                  gap={1}
+                  py={1.2}
+                  minHeight={"3rem"}
+                  borderRadius={1}
+                  px={2}
+                  display={"flex"}
                   alignItems={"center"}
-                  className="navs"
-                  color={"#4d4d4d"}
+                  sx={{
+                    cursor: "pointer",
+                    "&.active": {
+                      bgcolor: "primary.lighter",
+                    },
+                    "&.active .navs": {
+                      fontWeight: "500",
+                      color: "primary.main",
+                    },
+                    "&:hover": { bgcolor: "grey.200" },
+                    "&.active:hover": {
+                      bgcolor: "primary.light",
+                    },
+                    "&.active:hover .navs": {
+                      color: "primary.main",
+                    },
+                  }}
                 >
-                  <Icon icon={nav.icon} />
-                  <Typography
-                    textTransform={"capitalize"}
-                    lineHeight={"1ch"}
-                    mr={"auto"}
-                    fontSize={"0.9rem"}
+                  <Box
+                    display={"flex"}
+                    width={"100%"}
+                    gap={1}
+                    alignItems={"center"}
+                    className="navs"
+                    color={"#4d4d4d"}
                   >
-                    {nav.name}
-                  </Typography>
-                  {nav.dropdown && (
-                    <IconButton
-                      onClick={() => handleDropdown(idx)}
-                      sx={{
-                        rotate: activeTab == idx && "-180deg",
-                        transition: "0.3s",
-                      }}
+                    <Icon icon={nav.icon} />
+                    <Typography
+                      textTransform={"capitalize"}
+                      lineHeight={"1ch"}
+                      mr={"auto"}
+                      fontSize={"0.9rem"}
                     >
-                      <Icon icon="mingcute:down-fill" height={15} />
-                    </IconButton>
-                  )}
+                      {nav.name}
+                    </Typography>
+                    {nav.dropdown && (
+                      <Box
+                        sx={{
+                          rotate: activeTab == idx && "-180deg",
+                          transition: "0.3s",
+                        }}
+                      >
+                        <Icon icon="mingcute:down-fill" height={15} />
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
-              </Box>
+              </ButtonBase>
+
               {/* submenu */}
-              <Box>
-                <Box borderLeft={"1px solid #d6d6d6"} marginLeft={"1rem"}>
-                  {activeTab == idx &&
-                    nav.subMenu?.map((submenu, idx) => (
-                      <Link key={idx} to={submenu.path}>
-                        <Box
-                          p={1}
-                          py={1.3}
-                          display={"flex"}
-                          borderRadius={1}
-                          ml={1}
-                          alignItems={"center"}
-                          gap={1}
-                          color={"#4d4d4d"}
-                          className={`${
-                            isPathActive(submenu.path) ? "active" : ""
-                          }`}
-                          sx={{
-                            cursor: "pointer",
-                            "&.active": {
-                              color: "primary.main",
-                            },
-                            "&.active .navs": {
-                              fontWeight: "500",
-                              color: "primary.main",
-                            },
-                            "&:hover": { color: "primary.main" },
-                            "&:hover .navs": {
-                              color: "primary.main",
-                            },
-                          }}
-                        >
-                          <Icon icon={submenu.icon} height={13} />
-                          <Typography className="navs" fontSize={"0.87rem"}>
-                            {submenu.name}
-                          </Typography>
-                        </Box>
-                      </Link>
-                    ))}
+              {(
+                <Box
+                  borderLeft={"1px solid #d6d6d6"}
+                  marginLeft={"1rem"}
+                  overflow={"hidden"}
+                  component={motion.div}
+                  animate={{
+                    height: activeTab == idx ? 'auto' : 0,
+                  }}
+                >
+                  {nav.subMenu?.map((submenu, idx) => (
+                    <Link to={submenu.path} key={idx}>
+                      <Box
+                        p={1}
+                        py={1.3}
+                        display={"flex"}
+                        borderRadius={1}
+                        ml={1}
+                        alignItems={"center"}
+                        gap={1}
+                        color={"#4d4d4d"}
+                        className={`${
+                          isPathActive(submenu.path) ? "active" : ""
+                        }`}
+                        sx={{
+                          cursor: "pointer",
+                          "&.active": {
+                            color: "primary.main",
+                          },
+                          "&.active .navs": {
+                            fontWeight: "500",
+                            color: "primary.main",
+                          },
+                          "&:hover": { color: "primary.main" },
+                          "&:hover .navs": {
+                            color: "primary.main",
+                          },
+                        }}
+                      >
+                        <Icon icon={submenu.icon} height={13} />
+                        <Typography className="navs" fontSize={"0.87rem"}>
+                          {submenu.name}
+                        </Typography>
+                      </Box>
+                    </Link>
+                  ))}
                 </Box>
-              </Box>
+              )}
             </Box>
           ))}
         </Box>

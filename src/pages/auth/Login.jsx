@@ -38,7 +38,7 @@ const Login = () => {
         <Avatar sx={{ bgcolor: "primary.main", m: 2}}>
           <Icon icon="solar:user-broken" color="white" fontSize={"1.4rem"} />
         </Avatar>
-        <Typography component="h1" variant="h2" fontWeight={400}>
+        <Typography component="h1" variant="h4" fontWeight={400}>
           Sign in
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>

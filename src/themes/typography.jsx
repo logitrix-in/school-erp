@@ -81,15 +81,15 @@ const typography = {
   },
   body1: {
     lineHeight: 1.5,
-    fontSize: pxToRem(16),
+    fontSize: pxToRem(14),
   },
   body2: {
     lineHeight: 22 / 14,
-    fontSize: pxToRem(14),
+    fontSize: pxToRem(13),
   },
   caption: {
     lineHeight: 1.5,
-    fontSize: pxToRem(12),
+    fontSize: pxToRem(11),
   },
   overline: {
     fontWeight: 700,
