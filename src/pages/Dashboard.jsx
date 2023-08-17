@@ -5,14 +5,15 @@ import {
   ButtonGroup,
   Typography,
 } from "@mui/material";
-import React, { useContext, useEffect, useRef } from "react";
-import Bbox from "../components/UiComponents/Bbox";
-import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
+import useAuth from "../hooks/useAuth";
 
 const Dashboard = () => {
-  const editorRef = useRef(null);
 
-  return <></>;
+  const user = useAuth();
+
+  return <Box>
+    {user?.first_name} {user?.last_name}
+  </Box>;
 };
 
 export default Dashboard;

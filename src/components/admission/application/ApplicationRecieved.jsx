@@ -134,10 +134,10 @@ const ApplicationRecieved = () => {
                 </Select>
               </FormControl>
 
-              <DateRangePicker
+              {/* <DateRangePicker
                 label="Date"
                 defaultValue={[dayjs("2022-04-17"), dayjs("2022-04-21")]}
-              />
+              /> */}
               <FormControl fullWidth>
                 <InputLabel>Class</InputLabel>
                 <Select defaultValue={0} label="class">

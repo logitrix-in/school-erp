@@ -17,7 +17,7 @@ const Loader = () => {
       justifyContent={'center'}
       bgcolor={"#f8f8f8"}
     >
-      <HashLoader color={"#5E35B1"} loading={true} size={40} />
+      <HashLoader color={"#00A76F"} loading={true} size={40} />
       <Typography color={'text.secondary'} fontSize={'1rem'} mt={4}>Plan, Enroll, Thrive, Excel, Succeed</Typography>
     </Box>
   );

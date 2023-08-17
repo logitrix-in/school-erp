@@ -2,10 +2,36 @@ import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button } from "@mui/material";
 
+
+function formatDate(date) {
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear()
+
+  let daySuffix;
+  if (day === 1 || day === 21 || day === 31) {
+    daySuffix = "st";
+  } else if (day === 2 || day === 22) {
+    daySuffix = "nd";
+  } else if (day === 3 || day === 23) {
+    daySuffix = "rd";
+  } else {
+    daySuffix = "th";
+  }
+
+  return `${day}${daySuffix} ${month}, ${year}`;
+}
+
+
 const columns = [
   { field: "class", headerName: "Class", width: 140 },
-  { field: "startingDate", headerName: "application open", width: 160 },
-  { field: "closingDate", headerName: "application close", width: 160 },
+  { field: "startingDate", headerName: "application open", width: 180 },
+  { field: "closingDate", headerName: "application close", width: 180 },
   {
     field: "applicationStatus",
     headerName: "Status",
@@ -16,71 +42,71 @@ const rows = [
   {
     id: 1,
     class: "Kg",
-    startingDate: "Jon",
-    closingDate: "nice",
+    startingDate:  formatDate(new Date("12.10.22")),
+    closingDate:  formatDate(new Date("10.09.23")),
     applicationStatus: "open",
   },
   {
     id: 2,
     class: "I",
-    startingDate: "Cersei",
-    closingDate: "nice",
+    startingDate: formatDate(new Date("12.10.22")),
+    closingDate:  formatDate(new Date("10.09.23")),
     applicationStatus: "open",
   },
   {
     id: 3,
     class: "II",
-    startingDate: "Jaime",
-    closingDate: "nice",
+    startingDate:  formatDate(new Date("12.10.22")),
+    closingDate:  formatDate(new Date("10.09.23")),
     applicationStatus: "open",
   },
   {
     id: 4,
     class: "III",
-    startingDate: "Arya",
-    closingDate: "nice",
+    startingDate:  formatDate(new Date("12.10.22")),
+    closingDate:  formatDate(new Date("10.09.23")),
     applicationStatus: "open",
   },
   {
     id: 5,
     class: "IV",
-    startingDate: "Daenerys",
-    closingDate: "nice",
+    startingDate:  formatDate(new Date("12.10.22")),
+    closingDate:  formatDate(new Date("10.09.23")),
     applicationStatus: "open",
   },
   {
-    id: 6,
+    id: 6,  
     class: "V",
-    startingDate: null,
-    closingDate: "nice",
+    startingDate:  formatDate(new Date("12.10.22")),
+    closingDate:  formatDate(new Date("10.09.23")),
     applicationStatus: "open",
   },
   {
     id: 7,
     class: "VI",
-    startingDate: "Ferrara",
-    closingDate: "nice",
+    startingDate:  formatDate(new Date("12.10.22")),
+    closingDate:  formatDate(new Date("10.09.23")),
     applicationStatus: "open",
   },
   {
     id: 8,
     class: "VII",
-    startingDate: "Rossini",
-    closingDate: "nice",
+    startingDate:  formatDate(new Date("12.10.22")),
+    closingDate:  formatDate(new Date("10.09.23")),
     applicationStatus: "open",
   },
   {
     id: 9,
     class: "VII",
-    startingDate: "Harvey",
-    closingDate: "nice",
+    startingDate:  formatDate(new Date("12.10.22")),
+    closingDate:  formatDate(new Date("10.09.23")),
     applicationStatus: "open",
   },
   {
     id: 10,
     class: "IX",
-    startingDate: "Harvey",
-    closingDate: "nice",
+    startingDate:  formatDate(new Date("12.10.22")),
+    closingDate:  formatDate(new Date("10.09.23")),
     applicationStatus: "open",
   },
 ];
