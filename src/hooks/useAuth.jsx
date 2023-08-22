@@ -3,7 +3,7 @@ import { AppContext } from "../context/AppContext";
 
 const useAuth = () => {
   const context = useContext(AppContext);
-  return context.user;
+  return { user: context.user, setUser: context.setUser };
 };
 
 export default useAuth;

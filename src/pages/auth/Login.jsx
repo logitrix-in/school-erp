@@ -1,4 +1,5 @@
 import { Icon } from "@iconify/react";
+import SaveIcon from "@mui/icons-material/Save";
 import {
   Avatar,
   Box,
@@ -16,6 +17,7 @@ import axios from "axios";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
+import { LoadingButton } from "@mui/lab";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -26,11 +28,13 @@ const Login = () => {
   const context = useContext(AppContext);
 
   const [error, setError] = useState("");
-  const naviagte = useNavigate()
+  const [isLoading, setIsLoading] = useState(false);
+
+  const naviagte = useNavigate();
 
   const login = () => {
     if (!formData.username.length > 3 && !formData.password.length > 2) return;
-
+    setIsLoading(true);
     axios
       .post(
         "https://api.sociolinq.com/login/",
@@ -43,8 +47,15 @@ const Login = () => {
       )
       .then((res) => {
         context.setUser(res.data);
-        naviagte('/dashboard/')
-      });
+        naviagte("/dashboard/");
+      })
+      .catch((err) =>
+        setError(
+          err.response.data.text
+            ? err.response.data.text
+            : "Some Unknown Server Error ( " + err.response.status + " ) "
+        )
+      );
   };
 
   const handleChange = (event) => {
@@ -94,7 +105,8 @@ const Login = () => {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <Button
+          <LoadingButton
+            loading={isLoading}
             onClick={login}
             fullWidth
             color="primary"
@@ -102,7 +114,9 @@ const Login = () => {
             sx={{ mt: 3, mb: 2 }}
           >
             Sign In
-          </Button>
+          </LoadingButton>
+
+
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">

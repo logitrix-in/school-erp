@@ -24,38 +24,46 @@ import Quickbar from "./components/Quickbar";
 import Breadcrumb from "./components/Breadcrumb";
 import axios from "axios";
 import { AppContext } from "./context/AppContext";
+import useAuth from "./hooks/useAuth";
 
 const NavLayout = () => {
+  const ux = useAuth();
+  const naviagte = useNavigate();
+
+  useEffect(() => {
+    if (ux.user == null) {
+      naviagte("/login");
+    }
+  });
   return (
     <>
-      <>
-        <Box
-          display={"flex"}
-          width={"100vw"}
-          position={"fixed"}
-          top={0}
-          zIndex={100}
-          sx={{ pointerEvents: "none" }}
-        >
-          <Sidebar />
-          <Navbar />
-        </Box>
+      <Box
+        display={"flex"}
+        width={"100vw"}
+        position={"fixed"}
+        top={0}
+        zIndex={100}
+        sx={{ pointerEvents: "none" }}
+      >
+        <Sidebar />
+        <Navbar />
+        
+      </Box>
 
-        <Box
-          flex={1}
-          bgcolor={"#ffffff"}
-          pt={2}
-          px={3}
-          sx={{ borderRadius: 2 }}
-          marginTop={"4rem"}
-          ml={config.NAVBAR_WIDTH}
-        >
-          <Quickbar />
-          <Breadcrumb />
-          <Outlet />
-          <Footer />
-        </Box>
-      </>
+      <Box
+        flex={1}
+        bgcolor={"#ffffff"}
+        pt={2}
+        px={3}
+        sx={{ borderRadius: 2 }}
+        marginTop={"6rem"}
+        ml={config.NAVBAR_WIDTH}
+      >
+        
+        <Breadcrumb />
+        <Outlet />
+        <Footer />
+      </Box>
     </>
   );
 };
@@ -75,15 +83,15 @@ function App() {
       })
       .then((res) => {
         context.setUser(res.data);
-        // naviagte('/dashboard')
-        console.log(res);
+        if (currentRoute == "/") navigate("/dashboard/");
       })
-      .catch((er) => console.log(er));
-
-    if (currentRoute == ("" || "/")) navigate("dashboard/");
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
+      .catch((er) => {
+        context.setUser(null);
+        navigate("/login/");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (

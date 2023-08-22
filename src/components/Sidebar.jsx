@@ -16,9 +16,11 @@ import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { config } from "../config";
 import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
+import useAuth from "../hooks/useAuth";
 const Sidebar = () => {
   const theme = useTheme();
   const location = useLocation();
+  const user = useAuth();
 
   const isPathActive = (path) => {
     return location.pathname.startsWith(`/${path}`);
@@ -51,7 +53,7 @@ const Sidebar = () => {
           pointerEvents: "auto",
         }}
       >
-        <Box height={"8rem"} display={"flex"} alignItems={"center"}>
+        <Box height={"5rem"} display={"flex"} alignItems={"center"}>
           <Typography
             fontSize={"1.2rem"}
             color={"primary.main"}
@@ -75,8 +77,8 @@ const Sidebar = () => {
             height={"2rem"}
           />
           <Box>
-            <Typography fontSize={"1.1rem"} mb={0.3}>
-              Rajesh Patel
+            <Typography fontSize={"1.05rem"} fontWeight={600}>
+              {user.user?.first_name}
             </Typography>
             <Typography
               fontSize={"0.9rem"}
