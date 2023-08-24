@@ -56,7 +56,7 @@ const NavLayout = () => {
         pt={2}
         px={3}
         sx={{ borderRadius: 2 }}
-        marginTop={"6.8rem"}
+        marginTop={"5.8rem"}
         ml={config.NAVBAR_WIDTH}
       >
         
