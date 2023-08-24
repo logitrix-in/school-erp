@@ -106,7 +106,7 @@ const Navbar = () => {
           </>
         )}
       </Box>
-      <Box >
+      <Box mt={1}>
         <Quickbar />
       </Box>
     </Box>
