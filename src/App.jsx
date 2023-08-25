@@ -1,35 +1,126 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Box } from "@mui/material";
+import "./App.scss";
+import {
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import _404 from "./pages/404Page";
+import Loader from "./components/Loader";
+import { useContext, useEffect, useState } from "react";
+import Sidebar from "./components/Sidebar";
+import Navbar from "./components/Navbar";
+import Dashboard from "./pages/Dashboard";
+import AdmissionApplication from "./pages/admission/AdmissionApplication";
+import AdmissionScreening from "./pages/admission/AdmissionScreening";
+import "./assets/scss/scrollbar.scss";
+import { config } from "./config";
+import Footer from "./components/Footer";
+import Quickbar from "./components/Quickbar";
+import Breadcrumb from "./components/Breadcrumb";
+import axios from "axios";
+import { AppContext } from "./context/AppContext";
+import useAuth from "./hooks/useAuth";
+
+const NavLayout = () => {
+  const ux = useAuth();
+  const naviagte = useNavigate();
+
+  useEffect(() => {
+    if (ux.user == null) {
+      naviagte("/login");
+    }
+  });
+  return (
+    <>
+      <Box
+        display={"flex"}
+        width={"100vw"}
+        position={"fixed"}
+        top={0}
+        zIndex={100}
+        sx={{ pointerEvents: "none" }}
+      >
+        <Sidebar />
+        <Navbar />
+        
+      </Box>
+
+      <Box
+        flex={1}
+        bgcolor={"#ffffff"}
+        pt={2}
+        px={3}
+        sx={{ borderRadius: 2 }}
+        marginTop={"5.8rem"}
+        ml={config.NAVBAR_WIDTH}
+      >
+        
+        <Breadcrumb />
+        <Outlet />
+        <Footer />
+      </Box>
+    </>
+  );
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const currentRoute = location.pathname;
+  const context = useContext(AppContext);
+
+  useEffect(() => {
+    axios
+      .get("https://api.sociolinq.com/accounts/", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        context.setUser(res.data);
+        if (currentRoute == "/") navigate("/dashboard/");
+      })
+      .catch((er) => {
+        context.setUser(null);
+        navigate("/login/");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Routes>
+          <Route path="/" element={<NavLayout />}>
+            <Route path="dashboard/" element={<Dashboard />} />
+
+            {/* Admission Routes */}
+            <Route
+              path="admission/application/"
+              element={<AdmissionApplication />}
+            />
+            <Route
+              path="admission/screening/"
+              element={<AdmissionScreening />}
+            />
+
+            <Route path="*" element={<_404 />} />
+          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
