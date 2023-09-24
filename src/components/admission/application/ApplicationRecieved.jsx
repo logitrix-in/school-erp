@@ -9,19 +9,74 @@ import {
   Typography,
 } from "@mui/material";
 import Chart from "react-apexcharts";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+// import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import { DateRangePicker, DateRange } from "react-date-range";
+import { addDays } from "date-fns";
 import dayjs from "dayjs";
 import OfflineApplicationForm from "./popups/OfflineApplicationForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Notify from "./popups/Notify";
 import Bbox from "../../UiComponents/Bbox";
 import RevealCard from "../../AnimationComponents/RevealCard";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const ApplicationRecieved = () => {
-  const series = [200, 55, 145, 90];
+  let data = {
+    academic_year: "2023-24",
+    // start_date: "2023-09-21",
+    // end_date: "2023-09-24",
+    // class: {
+    //   type: "custom",
+    //   criteria: ["11", "5"],
+    // },
+  };
+
+  const [series, setSeries] = useState([]);
+
+  useEffect(() => {
+    console.log(series);
+  }, [series]);
+
+  useEffect(() => {
+    function getChart() {
+      axios
+        .post(
+          "https://web-production-a472.up.railway.app/api/admission/application/graph/",
+          data,
+          {
+            headers: {
+              "x-api-key": "a8518942-17ea-44a6-b4e1-a974189a9a90",
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          var values = Object.keys(response.data)
+            .filter((key) => key !== "all")
+            .map((key) => response.data[key]);
+
+          console.log(values);
+
+          setSeries(values);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    getChart();
+
+    // setInterval(() => {
+    //   getChart();
+    // }, 100000000);
+
+    return () => clearInterval();
+  }, []);
 
   const options = {
-    labels: ["Website ", "Offline", "Advertisement", "others"],
+    labels: ["Offline ", "Online", "Marketing", "Others"],
     colors: ["#FF5630", "#00A76F", "#FFAB00", "#00B8D9"],
     legend: {
       show: true,
@@ -82,6 +137,14 @@ const ApplicationRecieved = () => {
   const [applocationPopupOpen, setApplocationPopupOpen] = useState(false);
   const [notifyPopup, setNotifyPopup] = useState(false);
 
+  const [state, setState] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: "selection",
+    },
+  ]);
+
   const onApplicationClose = () => {
     setApplocationPopupOpen(false);
   };
@@ -95,21 +158,21 @@ const ApplicationRecieved = () => {
             px={3}
             borderRadius={2}
             display={"flex"}
-            justifyContent={"space-between"}  
+            justifyContent={"space-between"}
             alignItems={"center"}
           >
-            <Typography fontWeight={"700"} borderRadius={1} fontSize={'1.1rem'}>
+            <Typography fontWeight={"700"} borderRadius={1} fontSize={"1.1rem"}>
               Application Recieved
-            </Typography>   
+            </Typography>
 
-            <Select defaultValue={30} size="small"  onChange={() => {}}>
+            <Select defaultValue={30} size="small" onChange={() => {}}>
               <MenuItem value={10}>Un- screened</MenuItem>
               <MenuItem value={20}>Screened</MenuItem>
               <MenuItem value={30}>All</MenuItem>
             </Select>
           </Box>
 
-          <Divider/>
+          <Divider />
 
           <Box
             display={"flex"}
@@ -119,7 +182,7 @@ const ApplicationRecieved = () => {
           >
             <Box
               p={3}
-              flex={1}
+              // flex={1}
               display={"flex"}
               flexDirection={"column"}
               gap={"2rem"}
@@ -133,11 +196,17 @@ const ApplicationRecieved = () => {
                   <MenuItem value={30}>2025-26</MenuItem>
                 </Select>
               </FormControl>
-
               {/* <DateRangePicker
                 label="Date"
                 defaultValue={[dayjs("2022-04-17"), dayjs("2022-04-21")]}
               /> */}
+              <DateRange
+                editableDateInputs={true}
+                onChange={(item) => setState([item.selection])}
+                moveRangeOnFirstSelection={false}
+                ranges={state}
+              />
+
               <FormControl fullWidth>
                 <InputLabel>Class</InputLabel>
                 <Select defaultValue={0} label="class">
@@ -169,6 +238,7 @@ const ApplicationRecieved = () => {
                 type="donut"
                 height={400}
               />
+
               <Box display={"flex"} justifyContent={"center"} gap={"1rem"}>
                 <Button
                   variant="contained"
@@ -193,9 +263,11 @@ const ApplicationRecieved = () => {
               p={3}
               borderRadius={2}
             >
-              <Button variant="outlined" size="small" color="info">
-                View
-              </Button>
+              <Link to={'view'}>
+                <Button variant="outlined" size="small" color="info">
+                  View
+                </Button>
+              </Link>
               <Button variant="outlined" size="small" color="info">
                 Excel
               </Button>

@@ -25,6 +25,9 @@ import Breadcrumb from "./components/Breadcrumb";
 import axios from "axios";
 import { AppContext } from "./context/AppContext";
 import useAuth from "./hooks/useAuth";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import ApplicationView from "./components/admission/application/ApplicationView";
 
 const NavLayout = () => {
   const ux = useAuth();
@@ -47,7 +50,6 @@ const NavLayout = () => {
       >
         <Sidebar />
         <Navbar />
-        
       </Box>
 
       <Box
@@ -59,7 +61,6 @@ const NavLayout = () => {
         marginTop={"5.8rem"}
         ml={config.NAVBAR_WIDTH}
       >
-        
         <Breadcrumb />
         <Outlet />
         <Footer />
@@ -77,8 +78,13 @@ function App() {
   const context = useContext(AppContext);
 
   useEffect(() => {
+    context.setUser({});
+    setLoading(false);
     axios
-      .get("https://api.sociolinq.com/accounts/", {
+      .get("https://web-production-a472.up.railway.app/api/login/current/", {
+        headers:{
+          'x-api-key':'a8518942-17ea-44a6-b4e1-a974189a9a90'
+        },
         withCredentials: true,
       })
       .then((res) => {
@@ -107,6 +113,10 @@ function App() {
             <Route
               path="admission/application/"
               element={<AdmissionApplication />}
+            />
+            <Route
+              path="admission/application/view"
+              element={<ApplicationView />}
             />
             <Route
               path="admission/screening/"

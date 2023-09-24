@@ -26,16 +26,12 @@ const Quickbar = () => {
 
         <Box
           p={0.5}
-          // bgcolor={"#3B98C420"}
           borderRadius={1}
           px={2}
           display={"flex"}
           gap={1}
           alignItems={"center"}
           boxShadow={"1px 1px 5px 0 rgba(0,0,0,0.2)"}
-          sx={{
-            // background: "linear-gradient(to bottom, #3b99c418, #3b99c451)"
-          }}
           bgcolor={"#3B98C420"}
           whiteSpace="nowrap"
           textAlign={"center"}
