@@ -1,40 +1,48 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Divider, Typography } from "@mui/material";
 import React from "react";
+import Bbox from "../../UiComponents/Bbox";
+import RevealCard from "../../AnimationComponents/RevealCard";
 
 const ScreeningManager = () => {
   return (
-    <>
-      <Box
+    <RevealCard>
+      <Bbox
         mt={3}
         bgcolor={"white"}
-        py={2}
-        px={2}
         borderRadius={2}
         display={"flex"}
+        flexDirection={"column"}
         justifyContent={"space-between"}
-        alignItems={"center"}
+        alignItems={"stretch"}
       >
-        <Typography fontWeight={"500"} borderRadius={1}>
-          Screening Management
+        <Typography
+          p={2}
+          fontWeight={"700"}
+          borderRadius={1}
+          fontSize={"1.1rem"}
+        >
+          Screening Manager
         </Typography>
-      </Box>
-      <Box
-        display={"flex"}
-        gap={2}
-        mt={2}
-        flexDirection={{ xs: "column", md: "row" }}
-      >
-        <Button fullWidth variant="contained" color="primary">
-          Screen Pending Application
-        </Button>
-        <Button fullWidth variant="contained" color="primary">
-          Reset Screening
-        </Button>
-        <Button fullWidth variant="contained" color="primary">
-          Review
-        </Button>
-      </Box>
-    </>
+        <Divider />
+        <Box
+          p={2}
+          px={3}
+          display={"flex"}
+          gap={2}
+          flexDirection={{ xs: "column", md: "row" }}
+        >
+          <Button fullWidth variant="contained" color="primary">
+            Screen Pending Application
+          </Button>
+          <Button fullWidth variant="contained" color="primary">
+            Reset Screening
+          </Button>
+          <Button fullWidth variant="contained" color="primary">
+            Review
+          </Button>
+        </Box>
+      </Bbox>
+    </RevealCard>
   );
 };
 

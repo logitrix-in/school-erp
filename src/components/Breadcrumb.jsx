@@ -9,50 +9,54 @@ import {
 } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Icon } from "@iconify/react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Breadcrumb = () => {
   const location = useLocation();
   var paths = location.pathname.split("/");
+  console.log(paths);
   const [bookmarked, setBookmarked] = useState(false);
 
   return (
     <Box
       mb={1}
       mt={1}
-      // p={2}
       py={0.6}
       borderRadius={1}
-      sx={{
-        // background: "linear-gradient( to left, #2C7BA0, #9BD9F4)",
-      }}
-      // bgcolor={'#9BD9F4'}
+
     >
-      {/* <Typography
-        textTransform={"capitalize"}
-        fontWeight={600}
-        fontSize={"1.5rem"}
-        lineHeight={"1.5ch"}
-        color={"#2C7BA0"}
-      >
-        {paths[2]}
-      </Typography> */}
+  
       <Box
         borderRadius={2}
         display="flex"
         justifyContent="space-between"
         alignItems="center"
       >
-        <Breadcrumbs separator={"."} color={"#2C7BA0"}>
-          {paths.slice(1, paths.length - 1).map((path, _) => (
-            <Typography
-              textTransform={"capitalize"}
-              fontSize={"1rem"}
-              key={_}
-            >
-              {path}
-            </Typography>
-          ))}
+        <Breadcrumbs
+          separator={<Icon icon={"bi:diamond-fill"} fontSize={7} />}
+          color={"#2C7BA0"}
+        >
+          {paths.slice(1, paths.length - 1).map((path, idx) =>
+            idx == 0 ? (
+              <Typography
+                textTransform={"capitalize"}
+                fontSize={"0.95rem"}
+                key={idx}
+              >
+                {path}
+              </Typography>
+            ) : (
+              <Typography
+                textTransform={"capitalize"}
+                fontSize={"0.95rem"}
+                key={idx}
+                component={Link}
+                to={paths.slice(1, idx + 2).join("/") + "/"}
+              >
+                {path}
+              </Typography>
+            )
+          )}
         </Breadcrumbs>
         <Tooltip title={bookmarked ? "Remove Bookmark" : "Bookmark"}>
           <IconButton

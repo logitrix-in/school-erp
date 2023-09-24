@@ -1,10 +1,13 @@
 import {
   Box,
   Button,
+  Checkbox,
   Divider,
   FormControl,
   InputLabel,
+  ListItemText,
   MenuItem,
+  OutlinedInput,
   Select,
   Typography,
 } from "@mui/material";
@@ -137,13 +140,27 @@ const ApplicationRecieved = () => {
   const [applocationPopupOpen, setApplocationPopupOpen] = useState(false);
   const [notifyPopup, setNotifyPopup] = useState(false);
 
-  const [state, setState] = useState([
+  const [dateRan, setDateRan] = useState([
     {
       startDate: new Date(),
       endDate: addDays(new Date(), 7),
       key: "selection",
     },
   ]);
+
+  const classes = ["I", "II", "III", "IV"];
+
+  const [acYear, setAcYear] = useState("");
+  const [curClass, setClass] = useState([]);
+
+  const handleClassChange = (e) => {
+    const {
+      target: { value },
+    } = e;
+
+    console.log(typeof value === "string" ? value.split(",") : value);
+    setClass(typeof value === "string" ? value.split(",") : value);
+  };
 
   const onApplicationClose = () => {
     setApplocationPopupOpen(false);
@@ -202,18 +219,29 @@ const ApplicationRecieved = () => {
               /> */}
               <DateRange
                 editableDateInputs={true}
-                onChange={(item) => setState([item.selection])}
+                onChange={(item) => setDateRan([item.selection])}
                 moveRangeOnFirstSelection={false}
-                ranges={state}
+                ranges={dateRan}
               />
 
               <FormControl fullWidth>
                 <InputLabel>Class</InputLabel>
-                <Select defaultValue={0} label="class">
-                  <MenuItem value={0}>All</MenuItem>
-                  <MenuItem value={10}>1</MenuItem>
-                  <MenuItem value={20}>2</MenuItem>
-                  <MenuItem value={30}>3</MenuItem>
+                <Select
+                  multiple
+                  value={curClass}
+                  onChange={handleClassChange}
+                  input={<OutlinedInput label="class" />}
+                  renderValue={(selected) => selected.join(", ")}
+                >
+                  {classes.map((name) => (
+                    <MenuItem key={name} value={name}>
+                      <Checkbox
+                        size="small"
+                        checked={curClass.indexOf(name) > -1}
+                      />
+                      <ListItemText primary={name} />
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Box>
@@ -263,7 +291,7 @@ const ApplicationRecieved = () => {
               p={3}
               borderRadius={2}
             >
-              <Link to={'view'}>
+              <Link to={"view/"}>
                 <Button variant="outlined" size="small" color="info">
                   View
                 </Button>
@@ -274,7 +302,7 @@ const ApplicationRecieved = () => {
               <Button variant="outlined" size="small" color="info">
                 CSV
               </Button>
-              <Button variant="outlined" size="small" color="info">
+              <Button variant="outlined" size="small" color="info" onClick={()=> print()}>
                 Print
               </Button>
             </Box>
