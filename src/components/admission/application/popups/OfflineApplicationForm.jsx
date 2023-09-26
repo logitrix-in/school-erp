@@ -37,6 +37,9 @@ function OfflineApplicationForm({ open, close }) {
   const [curState, setCurState] = useState([]);
   const [curCities, setCurCities] = useState([]);
 
+  const [board, setBoard] = useState("");
+  const [medium, setMedium] = useState("");
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -92,6 +95,61 @@ function OfflineApplicationForm({ open, close }) {
     type: "",
   });
 
+  const nationalityCategories = [
+    "Asian",
+    "European",
+    "African",
+    "North American",
+    "South American",
+    "Middle Eastern",
+    "Oceanian",
+    "Caribbean",
+    "Central American",
+    "Pacific Islander",
+    "Indigenous Peoples",
+    "Mixed or Multinational",
+  ];
+
+  const religionOptions = [
+    "Christianity",
+    "Islam",
+    "Hinduism",
+    "Buddhism",
+    "Judaism",
+    "Sikhism",
+    "Jainism",
+    "Bahá'í Faith",
+    "Shintoism",
+    "Taoism",
+    "Zoroastrianism",
+    "Atheism",
+    "Agnosticism",
+    "Other / Not specified",
+  ];
+
+  const classOptions = [
+    "I",
+    "II",
+    "III",
+    "IV",
+    "V",
+    "VI",
+    "VII",
+    "VIII",
+    "IX",
+    "X",
+    "XI Science",
+    "XI Commerce",
+    "XI Arts",
+    "XII Science",
+    "XII Commerce",
+    "XII Arts",
+  ];
+
+  const admissionYearOptions = ["2023", "2024", "2025"];
+  const specializationOptions = ["Science", "Arts", "Commerce"];
+  const boardOptions = ["CBSE", "ICSE", "State Board", "Other"];
+  const mediumOptions = ["English", "Bengali", "Hindi", "Other"];
   // country
 
   useEffect(() => {
@@ -176,8 +234,10 @@ function OfflineApplicationForm({ open, close }) {
   }, [formData]);
 
   function handleChange(e) {
+    const { name, value } = e.target;
+
     setFormData((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
+      return { ...prev, [name]: value };
     });
   }
 
@@ -209,7 +269,7 @@ function OfflineApplicationForm({ open, close }) {
         </Toolbar>
       </AppBar>
       <Box display={"flex"} p={3} alignItems={"flex-start"}>
-        <Grid container px={4} spacing={1} flex={2}>
+        <Grid container px={4} spacing={1} rowSpacing={2} flex={2}>
           <Grid item xs={12}>
             <Typography
               p={1}
@@ -233,13 +293,31 @@ function OfflineApplicationForm({ open, close }) {
             <Typography fontWeight={600}>Candidate's Name</Typography>
           </Grid>
           <Grid item xs={4}>
-            <TextField fullWidth label="First" />
+            <TextField
+              fullWidth
+              label="First"
+              value={formData.first_name}
+              name="first_name"
+              onChange={handleChange}
+            />
           </Grid>
           <Grid item xs={4}>
-            <TextField fullWidth label="Middle" />
+            <TextField
+              fullWidth
+              label="Middle"
+              value={formData.middle_name}
+              name="middle_name"
+              onChange={handleChange}
+            />
           </Grid>
           <Grid item xs={4}>
-            <TextField fullWidth label="Last" />
+            <TextField
+              fullWidth
+              label="Last"
+              value={formData.last_name}
+              name="last_name"
+              onChange={handleChange}
+            />
           </Grid>
           <Grid item xs={12}>
             <Typography fontWeight={600} mt={2}>
@@ -248,10 +326,29 @@ function OfflineApplicationForm({ open, close }) {
           </Grid>
 
           <Grid item xs={4}>
-            <TextField fullWidth label="Contact Number" />
+            <TextField
+              fullWidth
+              label="Contact Number"
+              type="number"
+              name="contact_number"
+              value={formData.contact_number}
+              onChange={handleChange}
+              onInput={(e) => {
+                e.target.value = Math.max(0, parseInt(e.target.value))
+                  .toString()
+                  .slice(0, 10);
+              }}
+            />
           </Grid>
           <Grid item xs={8}>
-            <TextField fullWidth label="Email" />
+            <TextField
+              fullWidth
+              label="Email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              name="email"
+            />
           </Grid>
 
           <Grid item xs={12}>
@@ -260,29 +357,100 @@ function OfflineApplicationForm({ open, close }) {
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <TextField fullWidth label="Nationality" />
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Nationality</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Nationality"
+                onChange={handleChange}
+                name="nationality"
+                value={formData.nationality}
+              >
+                {nationalityCategories.map((category, index) => (
+                  <MenuItem key={index} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
+
           <Grid item xs={4}>
-            <TextField fullWidth label="Religion" />
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Religion</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Religion"
+                onChange={handleChange}
+                name="religion"
+                value={formData.religion}
+              >
+                {religionOptions.map((option, index) => (
+                  <MenuItem key={index} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
+
           <Grid item xs={4}>
-            <TextField fullWidth label="Category" />
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Category</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Category"
+                onChange={handleChange}
+                name="category"
+                value={formData.category}
+              >
+                <MenuItem value={"gn"}>General</MenuItem>
+                <MenuItem value={"sc"}>Sc</MenuItem>
+                <MenuItem value={"st"}>St</MenuItem>
+                <MenuItem value={"obc"}>Obc</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
+
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <DatePicker
+                label="Date of Birth"
+                onChange={(date) => {
+                  setFormData((prev) => ({ ...prev, dob: date }));
+                }}
+              />
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Gender"
+                onChange={handleChange}
+                name="gender"
+                value={formData.gender}
+              >
+                <MenuItem value={"male"}>Male</MenuItem>
+                <MenuItem value={"female"}>Female</MenuItem>
+                <MenuItem value={"other"}>Other</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
           <Grid item xs={4}>
             <TextField
               fullWidth
-              label="Date of Birth"
-              placeholder="yyyy-mm-dd"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <TextField fullWidth label="Gender" />
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              fullWidth
-              label="Critical Medical
-Ailment(if any)"
+              label="Critical Medical Ailment (if any)"
+              onChange={handleChange}
+              name="critical_ailment"
+              value={formData.critical_ailment}
             />
           </Grid>
           <Grid item xs={12}>
@@ -300,32 +468,164 @@ Ailment(if any)"
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <TextField fullWidth label="Applying For" placeholder="class" />
+            <FormControl fullWidth>
+              <InputLabel id="applying-for-label">Applying For</InputLabel>
+              <Select
+                labelId="applying-for-label"
+                id="applying-for"
+                label="Applying For"
+                name="applying_for"
+                onChange={handleChange}
+                value={formData.applying_for}
+              >
+                {classOptions.map((option, index) => (
+                  <MenuItem key={index} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
+
           <Grid item xs={4}>
-            <TextField fullWidth label="Admission Year" />
+            <FormControl fullWidth>
+              <InputLabel id="admission-year-label">Admission Year</InputLabel>
+              <Select
+                labelId="admission-year-label"
+                id="admission-year"
+                label="Admission Year"
+                name="admission_year"
+                onChange={handleChange}
+                value={formData.admission_year}
+              >
+                {admissionYearOptions.map((option, index) => (
+                  <MenuItem key={index} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
+
           <Grid item xs={4}>
-            <TextField fullWidth label="Current Class" />
+            <FormControl fullWidth>
+              <InputLabel id="current-class-label">Current Class</InputLabel>
+              <Select
+                labelId="current-class-label"
+                id="current-class"
+                label="Current Class"
+                name="current_class"
+                onChange={handleChange}
+                value={formData.current_class}
+              >
+                {classOptions.map((option, index) => (
+                  <MenuItem key={index} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
+
           <Grid item xs={4}>
             <TextField
               fullWidth
-              label="% secured in Prev.
-Class Final Exam"
+              label="% secured in Prev. Class Final Exam"
+              name="percentage_secured"
+              value={formData.percentage_secured}
+              onChange={handleChange}
             />
           </Grid>
+
           <Grid item xs={4}>
-            <TextField fullWidth label="Specialization" />
+            <FormControl fullWidth>
+              <InputLabel id="specialization-label">Specialization</InputLabel>
+              <Select
+                labelId="specialization-label"
+                id="specialization"
+                label="Specialization"
+                name="specialization"
+                // onChange={handleChange}
+                // value={formData.}
+              >
+                <MenuItem value="" disabled>
+                  Select specialization
+                </MenuItem>
+                {specializationOptions.map((option, index) => (
+                  <MenuItem key={index} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
+
           <Grid item xs={4}>
-            <TextField fullWidth label="School Name" />
+            <TextField
+              fullWidth
+              label="School Name"
+              name="school_name"
+              value={formData.school_name}
+              onChange={handleChange}
+            />
           </Grid>
-          <Grid item xs={4}>
-            <TextField fullWidth label="Board" />
+
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <InputLabel id="board-label">Board</InputLabel>
+              <Select
+                labelId="board-label"
+                id="board"
+                label="Board"
+                name="board"
+                onChange={handleChange}
+                value={formData.board}
+              >
+                {boardOptions.map((option, index) => (
+                  <MenuItem key={index} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {formData.board == "Other" && (
+              <TextField
+                sx={{ mt: 0.5 }}
+                fullWidth
+                placeholder="Board Name"
+                value={board}
+                onChange={(e) => setBoard(e.target.value)}
+              />
+            )}
           </Grid>
-          <Grid item xs={4}>
-            <TextField fullWidth label="Medium" />
+
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <InputLabel id="medium-label">Medium</InputLabel>
+              <Select
+                labelId="medium-label"
+                id="medium"
+                label="Medium"
+                name="medium"
+                onChange={handleChange}
+                value={formData.medium}
+              >
+                {mediumOptions.map((option, index) => (
+                  <MenuItem key={index} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {formData.medium == "Other" && (
+              <TextField
+                sx={{ mt: 0.5 }}
+                fullWidth
+                placeholder="Medium Name"
+                value={medium}
+                onChange={(e) => setMedium(e.target.value)}
+              />
+            )}
           </Grid>
           <Grid item xs={12}>
             <Typography
@@ -394,7 +694,6 @@ Class Final Exam"
               borderRadius={1}
               color={"black"}
               fontWeight={500}
-              mb={1}
             >
               Address Details
             </Typography>
@@ -810,8 +1109,8 @@ Class Final Exam"
               fullWidth
               label="Name"
               onChange={handleChange}
-              name="mother_name"
-              value={formData.mother_name}
+              name="guardian_name"
+              value={formData.guardian_name}
             />
           </Grid>
           <Grid item xs={4}>
@@ -822,8 +1121,8 @@ Class Final Exam"
                 id="demo-simple-select"
                 label="Occupation"
                 onChange={handleChange}
-                name="mother_occupation"
-                value={formData.mother_occupation}
+                name="guardian_occupation"
+                value={formData.guardian_occupation}
               >
                 <MenuItem value={"Government"}>Government</MenuItem>
                 <MenuItem value={"private"}>Private</MenuItem>
@@ -836,8 +1135,8 @@ Class Final Exam"
               fullWidth
               label="Anual Income"
               onChange={handleChange}
-              name="mother_annual_income"
-              value={formData.mother_annual_income}
+              name="guardian_annual_income"
+              value={formData.guardian_annual_income}
             />
           </Grid>
           <Grid item xs={6}>
@@ -845,9 +1144,9 @@ Class Final Exam"
               type="number"
               fullWidth
               label="Contact Number"
-              value={formData.mother_contact_number}
+              value={formData.guardian_contact_number}
               onChange={handleChange}
-              name="mother_contact_number"
+              name="guardian_contact_number"
               onInput={(e) => {
                 e.target.value = Math.max(0, parseInt(e.target.value))
                   .toString()
@@ -860,12 +1159,11 @@ Class Final Exam"
               type="email"
               fullWidth
               label="Email"
-              value={formData.mother_email}
+              value={formData.guardian_email}
               onChange={handleChange}
-              name="mother_email"
+              name="guardian_email"
             />
           </Grid>
-          
         </Grid>
       </Box>
     </Dialog>
