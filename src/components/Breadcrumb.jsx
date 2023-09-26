@@ -14,7 +14,6 @@ import { Link, useLocation } from "react-router-dom";
 const Breadcrumb = () => {
   const location = useLocation();
   var paths = location.pathname.split("/");
-  console.log(paths);
   const [bookmarked, setBookmarked] = useState(false);
 
   return (

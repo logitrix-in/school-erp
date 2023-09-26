@@ -58,6 +58,7 @@ const ScreeningDashboard = () => {
             flexDirection={"column"}
             gap={"2rem"}
             bgcolor={"white"}
+            width={'30rem'}
           >
             <FormControl fullWidth>
               <InputLabel>Academic Year</InputLabel>
@@ -68,12 +69,20 @@ const ScreeningDashboard = () => {
               </Select>
             </FormControl>
 
-            <DateRange
+            {/* <DateRange
               editableDateInputs={true}
               onChange={(item) => setState([item.selection])}
               moveRangeOnFirstSelection={false}
               ranges={state}
-            />
+            /> */}
+
+            <Box display={"flex"} gap={2}>
+              <DatePicker
+                label="Start Date"
+                onChange={(e) => setStartDate(e)}
+              />
+              <DatePicker label="End Date" onChange={(e) => setEndDate(e)} />
+            </Box>
 
             <FormControl fullWidth>
               <InputLabel>Class</InputLabel>
@@ -92,17 +101,30 @@ const ScreeningDashboard = () => {
               borderRadius={1}
               p={2}
               display={"flex"}
-              alignItems={'center'}
+              alignItems={"center"}
               sx={{
                 background: "linear-gradient(to right, #2C7BA0, #9BD9F4)",
               }}
             >
               <Box flex={2} p={3}>
-                <Typography fontSize={'4rem'} fontWeight={500} color={'#CEE7FF'} lineHeight={1.2}>1000</Typography>
-                <Typography fontSize={'1.5rem'} color={'#CDDFF4'}>Total Application Recieved</Typography>
+                <Typography
+                  fontSize={"4rem"}
+                  fontWeight={500}
+                  color={"#CEE7FF"}
+                  lineHeight={1.2}
+                >
+                  1000
+                </Typography>
+                <Typography fontSize={"1.5rem"} color={"#CDDFF4"}>
+                  Total Application Recieved
+                </Typography>
               </Box>
               <Box flex={1}>
-                <Icon icon={'material-symbols:person'} fontSize={'10rem'} color="#2C7BA0"/>
+                <Icon
+                  icon={"material-symbols:person"}
+                  fontSize={"10rem"}
+                  color="#2C7BA0"
+                />
               </Box>
             </Box>
             <Box
@@ -110,17 +132,30 @@ const ScreeningDashboard = () => {
               borderRadius={1}
               p={2}
               display={"flex"}
-              alignItems={'center'}
+              alignItems={"center"}
               sx={{
                 background: "linear-gradient(to right, #E59D7A, #FAD2C0)",
               }}
             >
               <Box flex={2} p={3}>
-                <Typography fontSize={'4rem'} fontWeight={500} color={'#B34A19'} lineHeight={1.2}>491</Typography>
-                <Typography fontSize={'1.5rem'} color={'#974B27'}>Screening Pending</Typography>
+                <Typography
+                  fontSize={"4rem"}
+                  fontWeight={500}
+                  color={"#B34A19"}
+                  lineHeight={1.2}
+                >
+                  491
+                </Typography>
+                <Typography fontSize={"1.5rem"} color={"#974B27"}>
+                  Screening Pending
+                </Typography>
               </Box>
               <Box flex={1}>
-                <Icon icon={'material-symbols:person'} fontSize={'10rem'} color="#C4673B"/>
+                <Icon
+                  icon={"material-symbols:person"}
+                  fontSize={"10rem"}
+                  color="#C4673B"
+                />
               </Box>
             </Box>
           </Box>

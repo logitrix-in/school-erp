@@ -23,60 +23,49 @@ import Bbox from "../../UiComponents/Bbox";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { DatePicker } from "@mui/x-date-pickers";
 
 const ApplicationRecieved = () => {
-  let data = {
-    academic_year: "2023-24",
-    // start_date: "2023-09-21",
-    // end_date: "2023-09-24",
-    // class: {
-    //   type: "custom",
-    //   criteria: ["11", "5"],
-    // },
-  };
-
   const [series, setSeries] = useState([]);
+  const [filter, setFilter] = useState({});
+
+  function getChart() {
+    axios
+      .post(
+        "https://web-production-a472.up.railway.app/api/admission/application/graph/",
+        filter,
+        {
+          headers: {
+            "x-api-key": "a8518942-17ea-44a6-b4e1-a974189a9a90",
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      )
+      .then((response) => {
+        var values = Object.keys(response.data)
+          .filter((key) => key !== "all")
+          .map((key) => response.data[key]);
+
+        setSeries(values);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   useEffect(() => {
-    console.log(series);
-  }, [series]);
-
-  useEffect(() => {
-    function getChart() {
-      axios
-        .post(
-          "https://web-production-a472.up.railway.app/api/admission/application/graph/",
-          data,
-          {
-            headers: {
-              "x-api-key": "a8518942-17ea-44a6-b4e1-a974189a9a90",
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-          var values = Object.keys(response.data)
-            .filter((key) => key !== "all")
-            .map((key) => response.data[key]);
-
-          console.log(values);
-
-          setSeries(values);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
     getChart();
-
     // setInterval(() => {
     //   getChart();
     // }, 100000000);
 
     return () => clearInterval();
   }, []);
+
+  useEffect(() => {
+    getChart();
+  }, [filter]);
 
   const options = {
     labels: ["Offline ", "Online", "Marketing", "Others"],
@@ -140,18 +129,27 @@ const ApplicationRecieved = () => {
   const [applocationPopupOpen, setApplocationPopupOpen] = useState(false);
   const [notifyPopup, setNotifyPopup] = useState(false);
 
-  const [dateRan, setDateRan] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: "selection",
-    },
-  ]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  const classes = ["I", "II", "III", "IV"];
+  const classes = ["I", "II", "III", "IV", "12-Commerce"];
 
   const [acYear, setAcYear] = useState("");
   const [curClass, setClass] = useState([]);
+
+  // filter
+
+  useEffect(() => {
+    if (endDate == "") setEndDate(startDate);
+
+    const _filter = {
+      academic_year: acYear,
+      start_date: startDate && new Date(startDate).toLocaleDateString("en-CA"),
+      end_date: endDate && new Date(endDate).toLocaleDateString("en-CA"),
+      class: curClass,
+    };
+    setFilter(_filter);
+  }, [acYear, curClass, startDate, endDate]);
 
   const handleClassChange = (e) => {
     const {
@@ -199,30 +197,40 @@ const ApplicationRecieved = () => {
           >
             <Box
               p={3}
-              // flex={1}
               display={"flex"}
+              // flex={0.7}
+              width={"25rem"}
+              // bgcolor={'red'}
               flexDirection={"column"}
               gap={"2rem"}
-              bgcolor={"white"}
             >
               <FormControl fullWidth>
                 <InputLabel>Academic Year</InputLabel>
-                <Select label="Academic Year" defaultValue={10}>
-                  <MenuItem value={10}>2023-24</MenuItem>
-                  <MenuItem value={20}>2024-25</MenuItem>
-                  <MenuItem value={30}>2025-26</MenuItem>
+                <Select
+                  label="Academic Year"
+                  value={acYear}
+                  onChange={(e) => setAcYear(e.target.value)}
+                >
+                  <MenuItem value={"2021-22"}>2021-22</MenuItem>
+                  <MenuItem value={"2023-24"}>2023-24</MenuItem>
+                  <MenuItem value={"2024-25"}>2024-25</MenuItem>
+                  <MenuItem value={"2025-26"}>2025-26</MenuItem>
                 </Select>
               </FormControl>
-              {/* <DateRangePicker
-                label="Date"
-                defaultValue={[dayjs("2022-04-17"), dayjs("2022-04-21")]}
-              /> */}
-              <DateRange
+              {/* <DateRange
                 editableDateInputs={true}
                 onChange={(item) => setDateRan([item.selection])}
                 moveRangeOnFirstSelection={false}
                 ranges={dateRan}
-              />
+              /> */}
+
+              <Box display={"flex"} gap={2}>
+                <DatePicker
+                  label="Start Date"
+                  onChange={(e) => setStartDate(e)}
+                />
+                <DatePicker label="End Date" onChange={(e) => setEndDate(e)} />
+              </Box>
 
               <FormControl fullWidth>
                 <InputLabel>Class</InputLabel>
@@ -259,13 +267,27 @@ const ApplicationRecieved = () => {
                 close={onApplicationClose}
               />
               <Notify open={notifyPopup} close={() => setNotifyPopup(false)} />
-
-              <Chart
-                options={options}
-                series={series}
-                type="donut"
-                height={400}
-              />
+              {series.every((value) => value == 0) ? (
+                <Box
+                  display={"flex"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  height={400}
+                >
+                  <img
+                    src="https://static.vecteezy.com/system/resources/previews/023/392/613/original/no-data-or-chart-to-display-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-vector.jpg"
+                    alt=""
+                    height={350}
+                  />
+                </Box>
+              ) : (
+                <Chart
+                  options={options}
+                  series={series}
+                  type="donut"
+                  height={400}
+                />
+              )}
 
               <Box display={"flex"} justifyContent={"center"} gap={"1rem"}>
                 <Button
@@ -302,7 +324,12 @@ const ApplicationRecieved = () => {
               <Button variant="outlined" size="small" color="info">
                 CSV
               </Button>
-              <Button variant="outlined" size="small" color="info" onClick={()=> print()}>
+              <Button
+                variant="outlined"
+                size="small"
+                color="info"
+                onClick={() => print()}
+              >
                 Print
               </Button>
             </Box>
