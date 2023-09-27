@@ -1,15 +1,14 @@
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import ListItemText from "@mui/material/ListItemText";
-import ListItem from "@mui/material/ListItem";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
+import ImgCrop from "antd-img-crop";
+import { Upload } from "antd";
+
 import {
   Box,
   Checkbox,
@@ -21,9 +20,11 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import { DatePicker } from "@mui/x-date-pickers";
+import debounce from "lodash.debounce";
+import api from "../../../../config/api";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -46,13 +47,14 @@ function OfflineApplicationForm({ open, close }) {
     middle_name: "",
     dob: "",
     gender: "",
-    is_critical_ailment: "",
+    is_critical_ailment: 1,
     critical_ailment: "",
     nationality: "",
     religion: "",
     category: "",
     contact_number: "",
     email: "",
+    profile_photo: "",
     applying_for: "",
     admission_year: "",
     current_class: "",
@@ -95,7 +97,29 @@ function OfflineApplicationForm({ open, close }) {
     type: "",
   });
 
-  const nationalityCategories = [
+  const convertObjectToFormData = (obj) => {
+    const formData = new FormData();
+
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        formData.append(key, obj[key]);
+      }
+    }
+
+    return formData;
+  };
+
+  const onSubmit = () => {
+    console.log(convertObjectToFormData(formData));
+    api
+      .post("/admission/application/", convertObjectToFormData(formData), {
+        "Content-Type": "multipart/form-data",
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  const nationalityCategories = useMemo(() => [
     "Asian",
     "European",
     "African",
@@ -108,9 +132,9 @@ function OfflineApplicationForm({ open, close }) {
     "Pacific Islander",
     "Indigenous Peoples",
     "Mixed or Multinational",
-  ];
+  ]);
 
-  const religionOptions = [
+  const religionOptions = useMemo(() => [
     "Christianity",
     "Islam",
     "Hinduism",
@@ -125,9 +149,9 @@ function OfflineApplicationForm({ open, close }) {
     "Atheism",
     "Agnosticism",
     "Other / Not specified",
-  ];
+  ]);
 
-  const classOptions = [
+  const classOptions = useMemo(() => [
     "I",
     "II",
     "III",
@@ -144,12 +168,12 @@ function OfflineApplicationForm({ open, close }) {
     "XII Science",
     "XII Commerce",
     "XII Arts",
-  ];
+  ]);
 
-  const admissionYearOptions = ["2023", "2024", "2025"];
-  const specializationOptions = ["Science", "Arts", "Commerce"];
-  const boardOptions = ["CBSE", "ICSE", "State Board", "Other"];
-  const mediumOptions = ["English", "Bengali", "Hindi", "Other"];
+  const admissionYearOptions = useMemo(() => ["2023", "2024", "2025"]);
+  const specializationOptions = useMemo(() => ["Science", "Arts", "Commerce"]);
+  const boardOptions = useMemo(() => ["CBSE", "ICSE", "State Board", "Other"]);
+  const mediumOptions = useMemo(() => ["English", "Bengali", "Hindi", "Other"]);
   // country
 
   useEffect(() => {
@@ -233,15 +257,61 @@ function OfflineApplicationForm({ open, close }) {
     console.log(formData);
   }, [formData]);
 
+  const [image, setImage] = useState();
+  const [imagePreview, setImagePreview] = useState(null);
+
+  useEffect(() => {
+    if (image) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        setImagePreview(event.target.result);
+        console.log(event.target.result);
+      };
+
+      reader.readAsDataURL(image);
+    } else {
+      setImagePreview(null);
+    }
+  }, [image]);
+
+  function handleImageChange(e) {
+    const selectedFile = e.target.files[0];
+
+    setImage(selectedFile);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      profile_photo: selectedFile,
+    }));
+  }
+
+  const debouncedHandleChange = debounce((name, value) => {
+    if (name == "dob") {
+      console.log("Hi");
+    }
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  }, 300);
+
   function handleChange(e) {
     const { name, value } = e.target;
+    debouncedHandleChange(name, value);
+  }
 
-    setFormData((prev) => {
-      return { ...prev, [name]: value };
-    });
+  function bouncedhandleChange(e) {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   }
 
   const [PAC, setPAC] = useState(false);
+
+  const imageRef = useRef();
 
   return (
     <Dialog
@@ -263,7 +333,7 @@ function OfflineApplicationForm({ open, close }) {
           <Typography sx={{ ml: 2, flex: 1 }} fontSize={"1rem"}>
             Offline Application
           </Typography>
-          <Button autoFocus color="inherit" onClick={close}>
+          <Button autoFocus color="inherit" onClick={onSubmit}>
             Submit
           </Button>
         </Toolbar>
@@ -285,8 +355,51 @@ function OfflineApplicationForm({ open, close }) {
           <Grid item xs={12}>
             <Typography fontWeight={600}>Candidate's Image</Typography>
           </Grid>
-          <Grid item xs={12} mb={2}>
-            <input type="file" />
+          <Grid
+            item
+            xs={12}
+            mb={2}
+            display={"flex"}
+            alignItems={"stretch"}
+            gap={2}
+          >
+            <input
+              type="file"
+              hidden
+              ref={imageRef}
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+            {imagePreview && (
+              <img
+                style={{
+                  borderRadius: "10px",
+                  height: "150px",
+                  width: "150px",
+                  objectFit: "contain",
+                  background: "whitesmoke",
+                }}
+                src={imagePreview}
+                alt="Preview"
+              />
+            )}
+            <Box flex={1} display={"flex"} flexDirection={"column"}>
+              {image && <Typography fontWeight={500}>{image.name}</Typography>}
+              {image && <Typography>{image.type}</Typography>}
+              {image && (
+                <Typography>
+                  {(image.size / (1024 * 1024)).toFixed(2) + "MB"}
+                </Typography>
+              )}
+              <Button
+                sx={{ mt: "auto" }}
+                variant="contained"
+                fullWidth
+                onClick={() => imageRef.current.click()}
+              >
+                Upload
+              </Button>
+            </Box>
           </Grid>
 
           <Grid item xs={12}>
@@ -296,7 +409,7 @@ function OfflineApplicationForm({ open, close }) {
             <TextField
               fullWidth
               label="First"
-              value={formData.first_name}
+              // value={formData.first_name}
               name="first_name"
               onChange={handleChange}
             />
@@ -305,7 +418,7 @@ function OfflineApplicationForm({ open, close }) {
             <TextField
               fullWidth
               label="Middle"
-              value={formData.middle_name}
+              // value={formData.middle_name}
               name="middle_name"
               onChange={handleChange}
             />
@@ -314,7 +427,7 @@ function OfflineApplicationForm({ open, close }) {
             <TextField
               fullWidth
               label="Last"
-              value={formData.last_name}
+              // value={formData.last_name}
               name="last_name"
               onChange={handleChange}
             />
@@ -331,7 +444,7 @@ function OfflineApplicationForm({ open, close }) {
               label="Contact Number"
               type="number"
               name="contact_number"
-              value={formData.contact_number}
+              // value={formData.contact_number}
               onChange={handleChange}
               onInput={(e) => {
                 e.target.value = Math.max(0, parseInt(e.target.value))
@@ -345,7 +458,7 @@ function OfflineApplicationForm({ open, close }) {
               fullWidth
               label="Email"
               type="email"
-              value={formData.email}
+              // value={formData.email}
               onChange={handleChange}
               name="email"
             />
@@ -365,7 +478,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Nationality"
                 onChange={handleChange}
                 name="nationality"
-                value={formData.nationality}
+                // value={formData.nationality}
               >
                 {nationalityCategories.map((category, index) => (
                   <MenuItem key={index} value={category}>
@@ -385,7 +498,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Religion"
                 onChange={handleChange}
                 name="religion"
-                value={formData.religion}
+                // value={formData.religion}
               >
                 {religionOptions.map((option, index) => (
                   <MenuItem key={index} value={option}>
@@ -405,7 +518,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Category"
                 onChange={handleChange}
                 name="category"
-                value={formData.category}
+                // value={formData.category}
               >
                 <MenuItem value={"gn"}>General</MenuItem>
                 <MenuItem value={"sc"}>Sc</MenuItem>
@@ -415,18 +528,24 @@ function OfflineApplicationForm({ open, close }) {
             </FormControl>
           </Grid>
 
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <FormControl fullWidth>
               <DatePicker
                 label="Date of Birth"
                 onChange={(date) => {
-                  setFormData((prev) => ({ ...prev, dob: date }));
+                  const _date = new Date(date);
+                  const year = _date.getFullYear();
+                  const month = String(_date.getMonth() + 1).padStart(2, "0");
+                  const day = String(_date.getDate()).padStart(2, "0");
+
+                  const formattedDate = `${year}-${month}-${day}`;
+                  setFormData((prev) => ({ ...prev, dob: formattedDate }));
                 }}
               />
             </FormControl>
           </Grid>
 
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Gender</InputLabel>
               <Select
@@ -435,7 +554,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Gender"
                 onChange={handleChange}
                 name="gender"
-                value={formData.gender}
+                // value={formData.gender}
               >
                 <MenuItem value={"male"}>Male</MenuItem>
                 <MenuItem value={"female"}>Female</MenuItem>
@@ -444,15 +563,32 @@ function OfflineApplicationForm({ open, close }) {
             </FormControl>
           </Grid>
 
-          <Grid item xs={4}>
-            <TextField
-              fullWidth
-              label="Critical Medical Ailment (if any)"
-              onChange={handleChange}
-              name="critical_ailment"
-              value={formData.critical_ailment}
-            />
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Critical Medical Ailment (if any)
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Critical Medical Ailment (if any)"
+                onChange={handleChange}
+                name="is_critical_ailment"
+                // value={formData.gender}
+              >
+                <MenuItem value={1}>Yes</MenuItem>
+                <MenuItem value={2}>No</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
+
+          {formData.is_critical_ailment == 1 && (
+            <Grid item xs={12}>
+              {" "}
+              <TextField onChange={handleChange} name="critical_ailment" fullWidth placeholder="Critical Condition" />{" "}
+            </Grid>
+          )}
+
           <Grid item xs={12}>
             <Typography
               p={1}
@@ -476,7 +612,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Applying For"
                 name="applying_for"
                 onChange={handleChange}
-                value={formData.applying_for}
+                // value={formData.applying_for}
               >
                 {classOptions.map((option, index) => (
                   <MenuItem key={index} value={option}>
@@ -496,7 +632,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Admission Year"
                 name="admission_year"
                 onChange={handleChange}
-                value={formData.admission_year}
+                // value={formData.admission_year}
               >
                 {admissionYearOptions.map((option, index) => (
                   <MenuItem key={index} value={option}>
@@ -516,7 +652,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Current Class"
                 name="current_class"
                 onChange={handleChange}
-                value={formData.current_class}
+                // value={formData.current_class}
               >
                 {classOptions.map((option, index) => (
                   <MenuItem key={index} value={option}>
@@ -532,7 +668,8 @@ function OfflineApplicationForm({ open, close }) {
               fullWidth
               label="% secured in Prev. Class Final Exam"
               name="percentage_secured"
-              value={formData.percentage_secured}
+              type="number"
+              // value={formData.percentage_secured}
               onChange={handleChange}
             />
           </Grid>
@@ -545,7 +682,7 @@ function OfflineApplicationForm({ open, close }) {
                 id="specialization"
                 label="Specialization"
                 name="specialization"
-                // onChange={handleChange}
+                onChange={handleChange}
                 // value={formData.}
               >
                 <MenuItem value="" disabled>
@@ -565,7 +702,7 @@ function OfflineApplicationForm({ open, close }) {
               fullWidth
               label="School Name"
               name="school_name"
-              value={formData.school_name}
+              // value={formData.school_name}
               onChange={handleChange}
             />
           </Grid>
@@ -579,7 +716,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Board"
                 name="board"
                 onChange={handleChange}
-                value={formData.board}
+                // value={formData.board}
               >
                 {boardOptions.map((option, index) => (
                   <MenuItem key={index} value={option}>
@@ -593,8 +730,8 @@ function OfflineApplicationForm({ open, close }) {
                 sx={{ mt: 0.5 }}
                 fullWidth
                 placeholder="Board Name"
-                value={board}
-                onChange={(e) => setBoard(e.target.value)}
+                // value={board}
+                onChange={(e) => debounce(() => setBoard(e.target.value))}
               />
             )}
           </Grid>
@@ -608,7 +745,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Medium"
                 name="medium"
                 onChange={handleChange}
-                value={formData.medium}
+                // value={formData.medium}
               >
                 {mediumOptions.map((option, index) => (
                   <MenuItem key={index} value={option}>
@@ -622,8 +759,8 @@ function OfflineApplicationForm({ open, close }) {
                 sx={{ mt: 0.5 }}
                 fullWidth
                 placeholder="Medium Name"
-                value={medium}
-                onChange={(e) => setMedium(e.target.value)}
+                // value={medium}
+                onChange={(e) => debounce(() => setMedium(e.target.value))}
               />
             )}
           </Grid>
@@ -645,12 +782,18 @@ function OfflineApplicationForm({ open, close }) {
             <FormControl fullWidth>
               <DatePicker
                 label="Payment Date"
-                onChange={(e) =>
+                onChange={(e) => {
+                  const _date = new Date(e);
+                  const year = _date.getFullYear();
+                  const month = String(_date.getMonth() + 1).padStart(2, "0");
+                  const day = String(_date.getDate()).padStart(2, "0");
+
+                  const formattedDate = `${year}-${month}-${day}`;
                   setFormData((prev) => ({
                     ...prev,
-                    payment_date: new Date(e),
-                  }))
-                }
+                    payment_date: formattedDate,
+                  }));
+                }}
               />
             </FormControl>
           </Grid>
@@ -665,7 +808,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Payment Mode"
                 onChange={handleChange}
                 name="payment_mode"
-                value={formData.payment_mode}
+                // value={formData.payment_mode}
               >
                 <MenuItem value={"offline"}>offline</MenuItem>
                 <MenuItem value={"online"}>online</MenuItem>
@@ -679,7 +822,7 @@ function OfflineApplicationForm({ open, close }) {
               label="Challan No. / Reciept No."
               onChange={handleChange}
               name="receipt_no"
-              value={formData.receipt_no}
+              // value={formData.receipt_no}
             />
           </Grid>
         </Grid>
@@ -706,7 +849,7 @@ function OfflineApplicationForm({ open, close }) {
               fullWidth
               label="Current Residential Address"
               name="permanent_address"
-              value={formData.permanent_address}
+              // value={formData.permanent_address}
               onChange={handleChange}
             />
           </Grid>
@@ -720,7 +863,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Country"
                 name="permanent_country"
                 onChange={handleChange}
-                value={formData.permanent_country}
+                // value={formData.permanent_country}
               >
                 {countries.map((c, idx) => (
                   <MenuItem key={idx} value={c.iso2}>
@@ -742,7 +885,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="State"
                 onChange={handleChange}
                 name="permanent_states"
-                value={formData.permanent_states}
+                // value={formData.permanent_states}
               >
                 {permStates.map((s, idx) => (
                   <MenuItem key={idx} value={s.iso2}>
@@ -764,7 +907,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="City"
                 onChange={handleChange}
                 name="permanent_cities"
-                value={formData.permanent_cities}
+                // value={formData.permanent_cities}
               >
                 {permCities.map((c, idx) => (
                   <MenuItem key={idx} value={c.name}>
@@ -778,7 +921,7 @@ function OfflineApplicationForm({ open, close }) {
             <TextField
               fullWidth
               label="District"
-              value={formData.permanent_district}
+              // value={formData.permanent_district}
               onChange={handleChange}
               name="permanent_district"
             />
@@ -788,7 +931,7 @@ function OfflineApplicationForm({ open, close }) {
               type="number"
               fullWidth
               label="Pin Code"
-              value={formData.permanent_pin_code}
+              // value={formData.permanent_pin_code}
               onChange={handleChange}
               name="permanent_pin_code"
               onInput={(e) => {
@@ -828,7 +971,7 @@ function OfflineApplicationForm({ open, close }) {
             <TextField
               disabled={PAC}
               fullWidth
-              onChange={handleChange}
+              onChange={bouncedhandleChange}
               name="current_address"
               value={
                 PAC ? formData.permanent_address : formData.current_address
@@ -930,7 +1073,7 @@ function OfflineApplicationForm({ open, close }) {
               value={
                 PAC ? formData.permanent_district : formData.current_district
               }
-              onChange={handleChange}
+              onChange={bouncedhandleChange}
               name="current_district"
             />
           </Grid>
@@ -943,7 +1086,7 @@ function OfflineApplicationForm({ open, close }) {
               value={
                 PAC ? formData.permanent_pin_code : formData.current_pin_code
               }
-              onChange={handleChange}
+              onChange={bouncedhandleChange}
               name="current_pin_code"
               onInput={(e) => {
                 e.target.value = Math.max(0, parseInt(e.target.value))

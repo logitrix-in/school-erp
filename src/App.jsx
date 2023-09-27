@@ -1,5 +1,7 @@
 import { Box } from "@mui/material";
 import "./App.scss";
+import 'antd/es/modal/style';
+import 'antd/es/slider/style';
 import {
   Outlet,
   Route,
