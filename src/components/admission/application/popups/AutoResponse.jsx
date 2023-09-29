@@ -14,11 +14,18 @@ import {
   Typography,
 } from "@mui/material";
 import { Editor } from "@tinymce/tinymce-react";
+import axios from "axios";
 
 const AutoResponse = ({ open, close }) => {
+  const n = 3;
+
   const [value, setValue] = useState(0);
-  const [enabled, setEnabled] = useState([true, false, false]);
-  const [content, setContent] = useState(['', '', '']);
+  const [enabled, setEnabled] = useState(new Array(n).fill(false));
+  const [content, setContent] = useState(new Array(n).fill(""));
+
+  useEffect(() => {
+    console.log(content);
+  }, [content]);
 
   const statusChange = (e) => {
     var temp = [...enabled];
@@ -63,17 +70,22 @@ const AutoResponse = ({ open, close }) => {
           <FormControl size="small">
             <Select
               onChange={(e) => {
-                setContent(prev => {
-                  
-                })
-                setValue(e.target.value);
+                // setContent((prev) => {
+                //   const temp = [...prev];
+                //   temp[value] = ref1.current.getContent();
+                //   return temp;
+                // });
+                // console.log(value);
+                // console.log(ref1.current.getContent());
+                // setValue(e.target.value);
+                // ref1.current.setContent([...content][e.target.value]);
+
+                
               }}
               defaultValue={0}
               value={value}
             >
-              <MenuItem value={0}>
-                Upon Successful Application Submission
-              </MenuItem>
+              <MenuItem value={0}>Upon Successful Application Submission</MenuItem>
               <MenuItem value={1}>Upon clearing system screening</MenuItem>
               <MenuItem value={2}>Upon Rejection</MenuItem>
             </Select>
@@ -97,9 +109,8 @@ const AutoResponse = ({ open, close }) => {
             disabled={!enabled[value]}
             apiKey="qpa9e8xcdk75avj9zmz7eawi5rzrhhdllb4kjwr4u4pgpr8f"
             onInit={(evt, editor) => {
-              ref1.current = editor
+              ref1.current = editor;
             }}
-            
             init={{
               branding: false,
               height: 450,

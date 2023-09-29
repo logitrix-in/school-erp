@@ -285,10 +285,7 @@ function OfflineApplicationForm({ open, close }) {
     }));
   }
 
-  const debouncedHandleChange = debounce((name, value) => {
-    if (name == "dob") {
-      console.log("Hi");
-    }
+  const dehandleChange = debounce((name, value) => {
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -296,12 +293,12 @@ function OfflineApplicationForm({ open, close }) {
     }));
   }, 300);
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    debouncedHandleChange(name, value);
-  }
+  // function handleChange(e) {
+  //   const { name, value } = e.target;
+  //   dehandleChange(name, value);
+  // }
 
-  function bouncedhandleChange(e) {
+  function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -333,9 +330,6 @@ function OfflineApplicationForm({ open, close }) {
           <Typography sx={{ ml: 2, flex: 1 }} fontSize={"1rem"}>
             Offline Application
           </Typography>
-          <Button autoFocus color="inherit" onClick={onSubmit}>
-            Submit
-          </Button>
         </Toolbar>
       </AppBar>
       <Box display={"flex"} p={3} alignItems={"flex-start"}>
@@ -585,7 +579,12 @@ function OfflineApplicationForm({ open, close }) {
           {formData.is_critical_ailment == 1 && (
             <Grid item xs={12}>
               {" "}
-              <TextField onChange={handleChange} name="critical_ailment" fullWidth placeholder="Critical Condition" />{" "}
+              <TextField
+                onChange={handleChange}
+                name="critical_ailment"
+                fullWidth
+                placeholder="Critical Condition"
+              />{" "}
             </Grid>
           )}
 
@@ -873,50 +872,50 @@ function OfflineApplicationForm({ open, close }) {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">State</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                disabled={
-                  formData.permanent_country == "" || permStates.length == 0
-                }
-                label="State"
-                onChange={handleChange}
-                name="permanent_states"
-                // value={formData.permanent_states}
-              >
-                {permStates.map((s, idx) => (
-                  <MenuItem key={idx} value={s.iso2}>
-                    {s.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">City</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                disabled={
-                  formData.permanent_states == "" || permCities.length == 0
-                }
-                id="demo-simple-select"
-                label="City"
-                onChange={handleChange}
-                name="permanent_cities"
-                // value={formData.permanent_cities}
-              >
-                {permCities.map((c, idx) => (
-                  <MenuItem key={idx} value={c.name}>
-                    {c.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">State</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  disabled={
+                    formData.permanent_country == "" || permStates.length == 0
+                  }
+                  label="State"
+                  onChange={handleChange}
+                  name="permanent_states"
+                  // value={formData.permanent_states}
+                >
+                  {permStates.map((s, idx) => (
+                    <MenuItem key={idx} value={s.iso2}>
+                      {s.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={4}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">City</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  disabled={
+                    formData.permanent_states == "" || permCities.length == 0
+                  }
+                  id="demo-simple-select"
+                  label="City"
+                  onChange={handleChange}
+                  name="permanent_cities"
+                  // value={formData.permanent_cities}
+                >
+                  {permCities.map((c, idx) => (
+                    <MenuItem key={idx} value={c.name}>
+                      {c.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
           <Grid item xs={4}>
             <TextField
               fullWidth
@@ -971,7 +970,7 @@ function OfflineApplicationForm({ open, close }) {
             <TextField
               disabled={PAC}
               fullWidth
-              onChange={bouncedhandleChange}
+              onChange={handleChange}
               name="current_address"
               value={
                 PAC ? formData.permanent_address : formData.current_address
@@ -1073,7 +1072,7 @@ function OfflineApplicationForm({ open, close }) {
               value={
                 PAC ? formData.permanent_district : formData.current_district
               }
-              onChange={bouncedhandleChange}
+              onChange={handleChange}
               name="current_district"
             />
           </Grid>
@@ -1086,7 +1085,7 @@ function OfflineApplicationForm({ open, close }) {
               value={
                 PAC ? formData.permanent_pin_code : formData.current_pin_code
               }
-              onChange={bouncedhandleChange}
+              onChange={handleChange}
               name="current_pin_code"
               onInput={(e) => {
                 e.target.value = Math.max(0, parseInt(e.target.value))
@@ -1308,6 +1307,11 @@ function OfflineApplicationForm({ open, close }) {
             />
           </Grid>
         </Grid>
+      </Box>
+      <Box p={2} px={6}>
+        <Button fullWidth variant="contained" onClick={() => onSubmit()}>
+          Submit
+        </Button>
       </Box>
     </Dialog>
   );

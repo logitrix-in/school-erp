@@ -4,37 +4,59 @@ import {
   Button,
   Dialog,
   Divider,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Grid,
   IconButton,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
   Typography,
 } from "@mui/material";
 import { Editor } from "@tinymce/tinymce-react";
 import { Delete } from "@mui/icons-material";
+import api from "../../../../config/api";
 
 const Engage = ({ close, open }) => {
-  const lineups = [
-    {
-      subject: "Know our school",
-      days: 3,
-    },
-    {
-      subject: "Our records and prizes",
-      days: 7,
-    },
-  ];
+  const [lineups, setLineups] = useState([]);
+
+  function fetchData() {
+    api
+      .get("/admission/application/smart-management/application-engagement/")
+      .then((res) => setLineups(res.data))
+      .catch((err) => console.log(err));
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const editorRef = useRef(null);
+
+  const formData = {
+    schedule_after_days: 3,
+    subject: "",
+    content: "",
+  };
+
+  const [state, setState] = useState(formData);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setState((prev) => ({ ...prev, [name]: value }));
+  };
+
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
+
+  const submit = () => {
+    api
+      .post(
+        "/admission/application/smart-management/application-engagement/",
+        state
+      )
+      .then((res) => {
+        console.log(res.data);
+        fetchData();
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <Dialog
@@ -74,15 +96,49 @@ const Engage = ({ close, open }) => {
           <Box>
             {lineups.map((lineup, i) => (
               <Box key={i}>
-              <Box display={"flex"} width={'100%'} p={1} alignItems={'center'}>
-                <Typography flex={1}>{lineup.subject}</Typography>
-                <Typography variant="caption">Day {lineup.days}</Typography>
-                
-                <IconButton size="small" sx={{ml:2}}>
-                  <Delete sx={{fontSize:20}} />
-                </IconButton>
-              </Box>
-              <Divider/>
+                <Box
+                  display={"flex"}
+                  width={"100%"}
+                  p={1}
+                  alignItems={"center"}
+                >
+                  <Typography
+                    flex={1}
+                    onClick={() =>
+                      editorRef && editorRef.current.setContent(lineup.content)
+                    }
+                  >
+                    {lineup.subject}
+                  </Typography>
+                  <Typography variant="caption">
+                    Day {lineup.schedule_after_days}
+                  </Typography>
+
+                  <IconButton
+                    size="small"
+                    sx={{ ml: 2 }}
+                    onClick={() => {
+                      console.log(lineup.id);
+                      api
+                        .delete(
+                          "/admission/application/smart-management/application-engagement/",
+                          {
+                            data: {
+                              id: lineup.id,
+                            },
+                          }
+                        )
+                        .then((res) => {
+                          console.log(res.data);
+                          fetchData();
+                        })
+                        .catch((err) => console.log(err));
+                    }}
+                  >
+                    <Delete sx={{ fontSize: 20 }} />
+                  </IconButton>
+                </Box>
+                <Divider />
               </Box>
             ))}
           </Box>
@@ -98,16 +154,27 @@ const Engage = ({ close, open }) => {
           </Typography>
           <Box display={"flex"} alignItems={"center"} gap={1}>
             <Typography>Schedule after </Typography>
+
             <TextField
               type="number"
+              onChange={handleChange}
+              name="schedule_after_days"
               size="small"
-              defaultValue={3}
+              value={state.schedule_after_days}
               sx={{ width: "3rem" }}
               variant="standard"
             />
+
             <Typography>days from application</Typography>
           </Box>
-          <TextField label="subject" size="small" fullWidth sx={{ mt: 2 }}>
+          <TextField
+            label="subject"
+            size="small"
+            fullWidth
+            sx={{ mt: 2 }}
+            onChange={handleChange}
+            name="subject"
+          >
             Subject
           </TextField>
           <Box mt={2}>
@@ -115,6 +182,12 @@ const Engage = ({ close, open }) => {
               apiKey="qpa9e8xcdk75avj9zmz7eawi5rzrhhdllb4kjwr4u4pgpr8f"
               onInit={(evt, editor) => (editorRef.current = editor)}
               initialValue="Welcome!"
+              onChange={() => {
+                setState((prev) => ({
+                  ...prev,
+                  content: editorRef.current.getContent(),
+                }));
+              }}
               init={{
                 branding: false,
                 height: 450,
@@ -131,7 +204,7 @@ const Engage = ({ close, open }) => {
             />
           </Box>
           <Box display={"flex"} justifyContent={"flex-end"}>
-            <Button sx={{ mt: 1 }} variant="contained">
+            <Button sx={{ mt: 1 }} variant="contained" onClick={submit}>
               Add
             </Button>
           </Box>

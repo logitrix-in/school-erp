@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import "./App.scss";
-import 'antd/es/modal/style';
-import 'antd/es/slider/style';
+import "antd/es/modal/style";
+import "antd/es/slider/style";
 import {
   Outlet,
   Route,
@@ -80,12 +80,10 @@ function App() {
   const context = useContext(AppContext);
 
   useEffect(() => {
-    context.setUser({});
-    setLoading(false);
     axios
       .get("https://web-production-a472.up.railway.app/api/login/current/", {
-        headers:{
-          'x-api-key':'a8518942-17ea-44a6-b4e1-a974189a9a90'
+        headers: {
+          "x-api-key": "a8518942-17ea-44a6-b4e1-a974189a9a90",
         },
         withCredentials: true,
       })
