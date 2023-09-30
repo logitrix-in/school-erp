@@ -34,7 +34,7 @@ const ManageApplications = () => {
               startingDate: d.application_open,
               closingDate: d.application_close,
               class: d.class_name,
-              applicationStatus: d.is_active ? "Open" : "Close",
+              applicationStatus: d.is_active.toString(),
             };
           })
         );
@@ -45,6 +45,25 @@ const ManageApplications = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  // open all
+
+  const [openDates, setOpenDates] = useState({
+    start_date: new Date().toLocaleDateString("en-CA"),
+    end_date: new Date(dayjs().add(7, "day")).toLocaleDateString("en-CA"),
+  });
+
+  useEffect(() => {
+    console.log(openDates);
+  }, [openDates]);
+
+  // close all
+
+  const [closeDate, setCloseDate] = useState(new Date(dayjs().add(1, "day")).toLocaleDateString("en-CA"));
+
+  useEffect(() => {
+    console.log(closeDate);
+  }, [closeDate]);
 
   return (
     <>
@@ -93,15 +112,28 @@ const ManageApplications = () => {
                 borderRadius={1}
               >
                 <DatePicker
-                  label="Open Date"
+                  label="Opening Date"
                   format="DD MMM, YYYY"
                   defaultValue={new dayjs()}
                   minDate={new dayjs()}
+                  onChange={(e) =>
+                    setOpenDates((prev) => ({
+                      ...prev,
+                      start_date: new Date(e).toLocaleDateString("en-CA"),
+                    }))
+                  }
                 />
                 <DatePicker
-                  label="Close Date"
+                  label="Closing Date"
                   format="DD MMM, YYYY"
                   minDate={dayjs().add(1, "day")}
+                  defaultValue={dayjs().add(7, "day")}
+                  onChange={(e) =>
+                    setOpenDates((prev) => ({
+                      ...prev,
+                      end_date: new Date(e).toLocaleDateString("en-CA"),
+                    }))
+                  }
                 />
                 <LoadingButton
                   loading={loading}
@@ -114,6 +146,8 @@ const ManageApplications = () => {
                       .post("/admission/application/manage-application/", {
                         type: "all",
                         action: true,
+                        start_date: openDates.start_date,
+                        end_date: openDates.end_date,
                       })
                       .then((res) => {
                         console.log("opend all registration");
@@ -133,9 +167,15 @@ const ManageApplications = () => {
                 borderRadius={1}
               >
                 <DatePicker
-                  label="Close Date"
+                  label="Closing Date"
                   format="DD MMM, YYYY"
                   minDate={dayjs().add(1, "day")}
+                  defaultValue={dayjs().add(1, "day")}
+                  onChange={(e) =>
+                    setCloseDate((prev) =>
+                      new Date(e).toLocaleDateString("en-CA")
+                    )
+                  }
                 />
 
                 <LoadingButton
@@ -150,6 +190,7 @@ const ManageApplications = () => {
                       .post("/admission/application/manage-application/", {
                         type: "all",
                         action: false,
+                        end_date: closeDate,
                       })
                       .then((res) => {
                         console.log("closed all registration");
@@ -165,6 +206,7 @@ const ManageApplications = () => {
               <ManageTable rows={rows} />
               {showDialog && (
                 <EditManageApplication
+                  fetchData={fetchData}
                   open={showDialog}
                   close={() => setShowDialog(false)}
                 />

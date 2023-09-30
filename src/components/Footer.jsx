@@ -1,8 +1,11 @@
 import { Icon } from '@iconify/react'
 import { Box, Typography } from '@mui/material'
 import React from 'react'
+import useAuth from '../hooks/useAuth';
 
 const Footer = () => {
+
+  const user = useAuth();
   return (
     <Box
             py={2}
@@ -19,7 +22,7 @@ const Footer = () => {
               fontWeight={600}
               mr={"auto"}
             >
-              Last Logged In on 4th-june-2023 4:50 pm
+              Last Logged In on {user?.user.last_login}
             </Typography>
             <Box display={"flex"} alignItems={"center"} gap={0.4}>
               <Icon icon="fa:group" fontSize={"1.2rem"} />

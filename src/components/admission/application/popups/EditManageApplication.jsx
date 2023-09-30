@@ -23,7 +23,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import Bbox from "../../../UiComponents/Bbox";
 
-const EditManageApplication = ({ open, close }) => {
+const EditManageApplication = ({ open, close, fetchData: refetch }) => {
   const classOptions = [
     "I",
     "II",
@@ -60,11 +60,11 @@ const EditManageApplication = ({ open, close }) => {
               id: d.id,
               startingDate: d.application_open,
               closingDate: d.application_close,
-              class: d.class_name,
-              applicationStatus: d.is_active,
+              class: d.class_name
             };
           })
         );
+        refetch();
         setLoading(false);
       })
       .catch((err) => console.log(err));
@@ -169,6 +169,7 @@ const EditManageApplication = ({ open, close }) => {
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">Class</InputLabel>
                     <Select
+                      disabled
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       label="Class"

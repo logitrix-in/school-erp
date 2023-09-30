@@ -49,6 +49,7 @@ const Login = () => {
         }
       )
       .then((res) => {
+        console.log(res.data)
         context.setUser(res.data.user);
         naviagte("/dashboard/");
         setIsLoading(false);

@@ -25,6 +25,7 @@ import axios from "axios";
 import { DatePicker } from "@mui/x-date-pickers";
 import debounce from "lodash.debounce";
 import api from "../../../../config/api";
+import dayjs from "dayjs";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -151,24 +152,7 @@ function OfflineApplicationForm({ open, close }) {
     "Other / Not specified",
   ]);
 
-  const classOptions = useMemo(() => [
-    "I",
-    "II",
-    "III",
-    "IV",
-    "V",
-    "VI",
-    "VII",
-    "VIII",
-    "IX",
-    "X",
-    "XI Science",
-    "XI Commerce",
-    "XI Arts",
-    "XII Science",
-    "XII Commerce",
-    "XII Arts",
-  ]);
+  const [classOptions, setClasses] = useState([]);
 
   const admissionYearOptions = useMemo(() => ["2023", "2024", "2025"]);
   const specializationOptions = useMemo(() => ["Science", "Arts", "Commerce"]);
@@ -177,6 +161,15 @@ function OfflineApplicationForm({ open, close }) {
   // country
 
   useEffect(() => {
+
+    api
+      .get(
+        "/admission/application/manage-application/?date_format=calendar&is_active=1"
+      )
+      .then((res) => {
+        setClasses(res.data.map(d => d.class_name));
+      });
+
     axios
       .get("https://api.countrystatecity.in/v1/countries", {
         headers: {
@@ -286,7 +279,6 @@ function OfflineApplicationForm({ open, close }) {
   }
 
   const dehandleChange = debounce((name, value) => {
-
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
@@ -872,50 +864,50 @@ function OfflineApplicationForm({ open, close }) {
               </Select>
             </FormControl>
           </Grid>
-            <Grid item xs={6}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">State</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  disabled={
-                    formData.permanent_country == "" || permStates.length == 0
-                  }
-                  label="State"
-                  onChange={handleChange}
-                  name="permanent_states"
-                  // value={formData.permanent_states}
-                >
-                  {permStates.map((s, idx) => (
-                    <MenuItem key={idx} value={s.iso2}>
-                      {s.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={4}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">City</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  disabled={
-                    formData.permanent_states == "" || permCities.length == 0
-                  }
-                  id="demo-simple-select"
-                  label="City"
-                  onChange={handleChange}
-                  name="permanent_cities"
-                  // value={formData.permanent_cities}
-                >
-                  {permCities.map((c, idx) => (
-                    <MenuItem key={idx} value={c.name}>
-                      {c.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
+          <Grid item xs={6}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">State</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                disabled={
+                  formData.permanent_country == "" || permStates.length == 0
+                }
+                label="State"
+                onChange={handleChange}
+                name="permanent_states"
+                // value={formData.permanent_states}
+              >
+                {permStates.map((s, idx) => (
+                  <MenuItem key={idx} value={s.iso2}>
+                    {s.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">City</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                disabled={
+                  formData.permanent_states == "" || permCities.length == 0
+                }
+                id="demo-simple-select"
+                label="City"
+                onChange={handleChange}
+                name="permanent_cities"
+                // value={formData.permanent_cities}
+              >
+                {permCities.map((c, idx) => (
+                  <MenuItem key={idx} value={c.name}>
+                    {c.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
           <Grid item xs={4}>
             <TextField
               fullWidth
