@@ -15,6 +15,7 @@ import { config } from "../config";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
 import Quickbar from "./Quickbar";
+import api from "../config/api";
 
 const Navbar = () => {
   const user = useAuth();
@@ -87,15 +88,11 @@ const Navbar = () => {
               variant="contained"
               size="small"
               onClick={() => {
-                axios
-                  .post(
-                    "https://api.sociolinq.com/login/logout/",
-                    {},
-                    {
-                      withCredentials: true,
-                    }
-                  )
-                  .finally((res) => {
+                api
+                  .delete("/login/")
+                  .then((res) => console.log("logged out"))
+                  .catch(console.log("logged out"))
+                  .finally(() => {
                     navigate("/login/");
                     user.setUser(null);
                   });

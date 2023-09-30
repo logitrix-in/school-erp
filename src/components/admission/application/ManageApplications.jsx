@@ -13,6 +13,8 @@ import RevealCard from "../../AnimationComponents/RevealCard";
 import api from "../../../config/api";
 import { LoadingButton } from "@mui/lab";
 import EditManageApplication from "./popups/EditManageApplication";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 const ManageApplications = () => {
   const [rows, setRows] = useState([]);
@@ -82,53 +84,91 @@ const ManageApplications = () => {
               alignItems={{ xs: "stretch", lg: "center" }}
               gap={2}
             >
-              <LoadingButton
-                loading={loading}
-                sx={{ px: 5 }}
-                variant="contained"
-                color="primary"
-                onClick={() => {
-                  setLoading(true);
-                  api
-                    .post("/admission/application/manage-application/", {
-                      type: "all",
-                      action: true,
-                    })
-                    .then((res) => {
-                      console.log("opend all registration");
-                      fetchData();
-                    });
-                }}
+              <Bbox
+                p={2}
+                flex={1}
+                display={"flex"}
+                gap={2}
+                flexDirection={"column"}
+                borderRadius={1}
               >
-                Open All
-              </LoadingButton>
-              <LoadingButton
-                loading={loading}
-                sx={{ px: 5 }}
-                variant="contained"
-                color="primary"
-                onClick={() => {
-                  setLoading(true);
-                  api
-                    .post("/admission/application/manage-application/", {
-                      type: "all",
-                      action: false,
-                    })
-                    .then((res) => {
-                      console.log("closed all registration");
-                      fetchData();
-                    });
-                }}
+                <DatePicker
+                  label="Open Date"
+                  format="DD MMM, YYYY"
+                  defaultValue={new dayjs()}
+                  minDate={new dayjs()}
+                />
+                <DatePicker
+                  label="Close Date"
+                  format="DD MMM, YYYY"
+                  minDate={dayjs().add(1, "day")}
+                />
+                <LoadingButton
+                  loading={loading}
+                  sx={{ px: 5 }}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    setLoading(true);
+                    api
+                      .post("/admission/application/manage-application/", {
+                        type: "all",
+                        action: true,
+                      })
+                      .then((res) => {
+                        console.log("opend all registration");
+                        fetchData();
+                      });
+                  }}
+                >
+                  Open All
+                </LoadingButton>
+              </Bbox>
+              <Bbox
+                p={2}
+                flex={1}
+                display={"flex"}
+                gap={2}
+                flexDirection={"column"}
+                borderRadius={1}
               >
-                Close All
-              </LoadingButton>
+                <DatePicker
+                  label="Close Date"
+                  format="DD MMM, YYYY"
+                  minDate={dayjs().add(1, "day")}
+                />
+
+                <LoadingButton
+                  fullWidth
+                  loading={loading}
+                  sx={{ px: 5 }}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    setLoading(true);
+                    api
+                      .post("/admission/application/manage-application/", {
+                        type: "all",
+                        action: false,
+                      })
+                      .then((res) => {
+                        console.log("closed all registration");
+                        fetchData();
+                      });
+                  }}
+                >
+                  Close All
+                </LoadingButton>
+              </Bbox>
             </Box>
             <Bbox borderRadius={1} flex={2} width={"100%"}>
               <ManageTable rows={rows} />
-              <EditManageApplication
-                open={showDialog}
-                close={() => setShowDialog(false)}
-              />
+              {showDialog && (
+                <EditManageApplication
+                  open={showDialog}
+                  close={() => setShowDialog(false)}
+                />
+              )}
             </Bbox>
 
             <Box

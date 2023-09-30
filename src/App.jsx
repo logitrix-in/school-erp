@@ -22,7 +22,6 @@ import AdmissionScreening from "./pages/admission/AdmissionScreening";
 import "./assets/scss/scrollbar.scss";
 import { config } from "./config";
 import Footer from "./components/Footer";
-import Quickbar from "./components/Quickbar";
 import Breadcrumb from "./components/Breadcrumb";
 import axios from "axios";
 import { AppContext } from "./context/AppContext";
@@ -122,7 +121,6 @@ function App() {
               path="admission/screening/"
               element={<AdmissionScreening />}
             />
-
             <Route path="*" element={<_404 />} />
           </Route>
           <Route path="/login" element={<Login />} />

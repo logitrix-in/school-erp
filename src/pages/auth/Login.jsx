@@ -49,16 +49,18 @@ const Login = () => {
         }
       )
       .then((res) => {
-        context.setUser(res.data);
+        context.setUser(res.data.user);
         naviagte("/dashboard/");
+        setIsLoading(false);
       })
-      .catch((err) =>
+      .catch((err) => {
         setError(
-          err.response.data.text
-            ? err.response.data.text
+          err.response.data.message
+            ? err.response.data.message
             : "Some Unknown Server Error ( " + err.response.status + " ) "
-        )
-      );
+        );
+        setIsLoading(false);
+      });
   };
 
   const handleChange = (event) => {
