@@ -26,6 +26,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import debounce from "lodash.debounce";
 import api from "../../../../config/api";
 import dayjs from "dayjs";
+import { ToastContainer, toast } from "react-toastify";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -48,7 +49,7 @@ function OfflineApplicationForm({ open, close }) {
     middle_name: "",
     dob: "",
     gender: "",
-    is_critical_ailment: 1,
+    is_critical_ailment: false,
     critical_ailment: "",
     nationality: "",
     religion: "",
@@ -95,7 +96,7 @@ function OfflineApplicationForm({ open, close }) {
     payment_date: "",
     payment_mode: "",
     receipt_no: "",
-    type: "",
+    type: "offline",
   });
 
   const convertObjectToFormData = (obj) => {
@@ -111,7 +112,29 @@ function OfflineApplicationForm({ open, close }) {
   };
 
   const onSubmit = () => {
-    console.log(convertObjectToFormData(formData));
+    const required = [
+      "first_name",
+      "last_name",
+      "dob",
+      "admission_year",
+      "applying_for",
+    ];
+    if (
+      required.map((key, idx) => {
+        if (formData[key] == "")
+          return toast.error(`${key.replaceAll("_", " ")} is required`, {
+            position: "top-right",
+            autoClose: (idx + 3) * 500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: false,
+            progress: undefined,
+            theme: "dark",
+          });
+      })
+    )
+      console.log(convertObjectToFormData(formData));
     api
       .post("/admission/application/", convertObjectToFormData(formData), {
         "Content-Type": "multipart/form-data",
@@ -154,20 +177,19 @@ function OfflineApplicationForm({ open, close }) {
 
   const [classOptions, setClasses] = useState([]);
 
-  const admissionYearOptions = useMemo(() => ["2023", "2024", "2025"]);
+  const admissionYearOptions = useMemo(() => ["2023-24", "2024-25", "2025-26"]);
   const specializationOptions = useMemo(() => ["Science", "Arts", "Commerce"]);
   const boardOptions = useMemo(() => ["CBSE", "ICSE", "State Board", "Other"]);
   const mediumOptions = useMemo(() => ["English", "Bengali", "Hindi", "Other"]);
   // country
 
   useEffect(() => {
-
     api
       .get(
         "/admission/application/manage-application/?date_format=calendar&is_active=1"
       )
       .then((res) => {
-        setClasses(res.data.map(d => d.class_name));
+        setClasses(res.data.map((d) => d.class_name));
       });
 
     axios
@@ -278,18 +300,6 @@ function OfflineApplicationForm({ open, close }) {
     }));
   }
 
-  const dehandleChange = debounce((name, value) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  }, 300);
-
-  // function handleChange(e) {
-  //   const { name, value } = e.target;
-  //   dehandleChange(name, value);
-  // }
-
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -309,6 +319,7 @@ function OfflineApplicationForm({ open, close }) {
       onClose={close}
       TransitionComponent={Transition}
     >
+      <ToastContainer />
       <AppBar sx={{ position: "relative" }}>
         <Toolbar>
           <IconButton
@@ -394,6 +405,7 @@ function OfflineApplicationForm({ open, close }) {
           <Grid item xs={4}>
             <TextField
               fullWidth
+              required
               label="First"
               // value={formData.first_name}
               name="first_name"
@@ -411,6 +423,7 @@ function OfflineApplicationForm({ open, close }) {
           </Grid>
           <Grid item xs={4}>
             <TextField
+              required
               fullWidth
               label="Last"
               // value={formData.last_name}
@@ -517,6 +530,7 @@ function OfflineApplicationForm({ open, close }) {
           <Grid item xs={6}>
             <FormControl fullWidth>
               <DatePicker
+                defaultValue={new dayjs()}
                 label="Date of Birth"
                 onChange={(date) => {
                   const _date = new Date(date);
@@ -560,23 +574,23 @@ function OfflineApplicationForm({ open, close }) {
                 label="Critical Medical Ailment (if any)"
                 onChange={handleChange}
                 name="is_critical_ailment"
+                defaultValue={2}
                 // value={formData.gender}
               >
-                <MenuItem value={1}>Yes</MenuItem>
-                <MenuItem value={2}>No</MenuItem>
+                <MenuItem value={true}>Yes</MenuItem>
+                <MenuItem value={false}>No</MenuItem>
               </Select>
             </FormControl>
           </Grid>
 
-          {formData.is_critical_ailment == 1 && (
+          {formData.is_critical_ailment && (
             <Grid item xs={12}>
-              {" "}
               <TextField
                 onChange={handleChange}
                 name="critical_ailment"
                 fullWidth
                 placeholder="Critical Condition"
-              />{" "}
+              />
             </Grid>
           )}
 
@@ -618,6 +632,7 @@ function OfflineApplicationForm({ open, close }) {
             <FormControl fullWidth>
               <InputLabel id="admission-year-label">Admission Year</InputLabel>
               <Select
+                required
                 labelId="admission-year-label"
                 id="admission-year"
                 label="Admission Year"
@@ -941,7 +956,8 @@ function OfflineApplicationForm({ open, close }) {
             justifyContent={"space-between"}
           >
             <Typography fontWeight={"bold"}>Current Address</Typography>
-            <FormControlLabel
+            <FormControl
+              Label
               control={
                 <Checkbox
                   checked={PAC}

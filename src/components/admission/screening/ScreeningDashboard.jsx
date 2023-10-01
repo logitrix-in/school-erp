@@ -2,30 +2,103 @@ import { Icon } from "@iconify/react";
 import {
   Box,
   Card,
+  Checkbox,
   Divider,
   FormControl,
   IconButton,
   InputLabel,
+  ListItemText,
   MenuItem,
+  OutlinedInput,
   Select,
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
 import { DateRange } from "react-date-range";
 import { addDays } from "date-fns";
+import api from "../../../config/api";
 
 const ScreeningDashboard = () => {
-  const [state, setState] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: "selection",
-    },
-  ]);
+  const curYear = new Date().getFullYear();
+  const academicYear = `${curYear}-${(curYear + 1).toString().slice(2, 4)}`;
+
+  const [filter, setFilter] = useState({
+    academic_year: academicYear,
+    start_date: "",
+    end_date: "",
+    class: [],
+  });
+
+  const [classes, setClasses] = useState([]);
+  const [charts, setCharts] = useState({
+    total: 0,
+    screenedPending: 0,
+  });
+
+  function getValues() {
+    api
+      .put("/admission/screening/", filter)
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        setCharts({
+          total: data.total_application,
+          screenedPending: data.screened_pending,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    getValues();
+    return () => clearInterval();
+  }, []);
+
+  useEffect(() => {
+    console.log(filter);
+    getValues();
+  }, [filter]);
+
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  useEffect(() => {
+    api.get("/admission/application/manage-application/").then((res) => {
+      const classes = res.data.map((d) => d.class_name);
+      console.log(classes);
+      setClasses(classes);
+    });
+  }, []);
+
+  const [acYear, setAcYear] = useState(academicYear);
+  const [curClass, setClass] = useState([]);
+
+  useEffect(() => {
+    if (endDate == "") setEndDate(startDate);
+
+    const _filter = {
+      academic_year: acYear,
+      start_date: startDate && new Date(startDate).toLocaleDateString("en-CA"),
+      end_date: endDate && new Date(endDate).toLocaleDateString("en-CA"),
+      class: curClass,
+    };
+    setFilter(_filter);
+  }, [acYear, curClass, startDate, endDate]);
+
+  const handleClassChange = (e) => {
+    const {
+      target: { value },
+    } = e;
+
+    console.log(typeof value === "string" ? value.split(",") : value);
+    setClass(typeof value === "string" ? value.split(",") : value);
+  };
 
   return (
     <RevealCard>
@@ -58,39 +131,53 @@ const ScreeningDashboard = () => {
             flexDirection={"column"}
             gap={"2rem"}
             bgcolor={"white"}
-            width={'30rem'}
+            width={"30rem"}
           >
             <FormControl fullWidth>
               <InputLabel>Academic Year</InputLabel>
-              <Select label="Academic Year" defaultValue={10}>
-                <MenuItem value={10}>2023-24</MenuItem>
-                <MenuItem value={20}>2024-25</MenuItem>
-                <MenuItem value={30}>2025-26</MenuItem>
+              <Select
+                label="Academic Year"
+                value={acYear}
+                onChange={(e) => setAcYear(e.target.value)}
+              >
+                <MenuItem value={"2021-22"}>2021-22</MenuItem>
+                <MenuItem value={"2023-24"}>2023-24</MenuItem>
+                <MenuItem value={"2024-25"}>2024-25</MenuItem>
+                <MenuItem value={"2025-26"}>2025-26</MenuItem>
               </Select>
             </FormControl>
-
-            {/* <DateRange
-              editableDateInputs={true}
-              onChange={(item) => setState([item.selection])}
-              moveRangeOnFirstSelection={false}
-              ranges={state}
-            /> */}
 
             <Box display={"flex"} gap={2}>
               <DatePicker
                 label="Start Date"
                 onChange={(e) => setStartDate(e)}
+                format="DD MMM, YYYY"
               />
-              <DatePicker label="End Date" onChange={(e) => setEndDate(e)} />
+              <DatePicker
+                format="DD MMM, YYYY"
+                label="End Date"
+                onChange={(e) => setEndDate(e)}
+              />
             </Box>
 
             <FormControl fullWidth>
               <InputLabel>Class</InputLabel>
-              <Select defaultValue={0} label="class">
-                <MenuItem value={0}>All</MenuItem>
-                <MenuItem value={10}>1</MenuItem>
-                <MenuItem value={20}>2</MenuItem>
-                <MenuItem value={30}>3</MenuItem>
+              <Select
+                multiple
+                value={curClass}
+                onChange={handleClassChange}
+                input={<OutlinedInput label="class" />}
+                renderValue={(selected) => selected.join(", ")}
+              >
+                {classes?.map((name) => (
+                  <MenuItem key={name} value={name}>
+                    <Checkbox
+                      size="small"
+                      checked={curClass.indexOf(name) > -1}
+                    />
+                    <ListItemText primary={name} />
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>
@@ -113,7 +200,7 @@ const ScreeningDashboard = () => {
                   color={"#CEE7FF"}
                   lineHeight={1.2}
                 >
-                  1000
+                  {charts.total}
                 </Typography>
                 <Typography fontSize={"1.5rem"} color={"#CDDFF4"}>
                   Total Application Recieved
@@ -144,7 +231,7 @@ const ScreeningDashboard = () => {
                   color={"#B34A19"}
                   lineHeight={1.2}
                 >
-                  491
+                  {charts.screenedPending}
                 </Typography>
                 <Typography fontSize={"1.5rem"} color={"#974B27"}>
                   Screening Pending

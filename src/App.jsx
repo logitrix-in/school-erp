@@ -29,6 +29,7 @@ import useAuth from "./hooks/useAuth";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import ApplicationView from "./components/admission/application/ApplicationView";
+import ScreeningRuleEdit from "./components/admission/screening/ScreeningRuleEdit";
 
 const NavLayout = () => {
   const ux = useAuth();
@@ -120,6 +121,10 @@ function App() {
             <Route
               path="admission/screening/"
               element={<AdmissionScreening />}
+            />
+            <Route
+              path="admission/screening/edit/"
+              element={<ScreeningRuleEdit />}
             />
             <Route path="*" element={<_404 />} />
           </Route>

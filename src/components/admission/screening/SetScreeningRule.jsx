@@ -2,6 +2,7 @@ import { Box, Button, Divider, Typography } from "@mui/material";
 import React from "react";
 import Bbox from "../../UiComponents/Bbox";
 import RevealCard from "../../AnimationComponents/RevealCard";
+import { Link } from "react-router-dom";
 
 const SetScreeningRule = () => {
   return (
@@ -24,7 +25,7 @@ const SetScreeningRule = () => {
             Set Screening Rule
           </Typography>
 
-          <Button variant="contained" color="secondary" size="small">Edit</Button>
+          <Button variant="contained" color="secondary" size="small" LinkComponent={Link} to="edit/">Edit</Button>
         </Box>
 
         <Divider />

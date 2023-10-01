@@ -24,24 +24,15 @@ import RevealCard from "../../AnimationComponents/RevealCard";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers";
+import api from "../../../config/api";
 
 const ApplicationRecieved = () => {
   const [series, setSeries] = useState([]);
   const [filter, setFilter] = useState({});
 
   function getChart() {
-    axios
-      .post(
-        "https://web-production-a472.up.railway.app/api/admission/application/graph/",
-        filter,
-        {
-          headers: {
-            "x-api-key": "a8518942-17ea-44a6-b4e1-a974189a9a90",
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      )
+    api
+      .post("/admission/application/graph/", filter)
       .then((response) => {
         var values = Object.keys(response.data)
           .filter((key) => key !== "all")
@@ -134,7 +125,11 @@ const ApplicationRecieved = () => {
 
   const classes = ["I", "II", "III", "IV", "12-Commerce"];
 
-  const [acYear, setAcYear] = useState("");
+  const curYear = new Date().getFullYear();
+
+  const academicYear = `${curYear}-${(curYear + 1).toString().slice(2, 4)}`;
+
+  const [acYear, setAcYear] = useState(academicYear);
   const [curClass, setClass] = useState([]);
 
   // filter
@@ -163,6 +158,7 @@ const ApplicationRecieved = () => {
   const onApplicationClose = () => {
     setApplocationPopupOpen(false);
   };
+
   return (
     <>
       <RevealCard>
@@ -217,12 +213,6 @@ const ApplicationRecieved = () => {
                   <MenuItem value={"2025-26"}>2025-26</MenuItem>
                 </Select>
               </FormControl>
-              {/* <DateRange
-                editableDateInputs={true}
-                onChange={(item) => setDateRan([item.selection])}
-                moveRangeOnFirstSelection={false}
-                ranges={dateRan}
-              /> */}
 
               <Box display={"flex"} gap={2}>
                 <DatePicker
@@ -262,10 +252,13 @@ const ApplicationRecieved = () => {
               borderRadius={2}
               bgcolor={"white"}
             >
-              <OfflineApplicationForm
-                open={applocationPopupOpen}
-                close={onApplicationClose}
-              />
+              {applocationPopupOpen && (
+                <OfflineApplicationForm
+                  open={applocationPopupOpen}
+                  close={onApplicationClose}
+                />
+              )}
+
               <Notify open={notifyPopup} close={() => setNotifyPopup(false)} />
               {series.every((value) => value == 0) ? (
                 <Box
