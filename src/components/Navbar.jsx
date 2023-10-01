@@ -24,6 +24,7 @@ const Navbar = () => {
     <Box
       ml={config.NAVBAR_WIDTH}
       flex={1}
+      height={"fit-content"}
       pt={1}
       px={3}
       sx={{

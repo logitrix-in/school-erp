@@ -49,6 +49,8 @@ const NavLayout = () => {
         top={0}
         zIndex={100}
         sx={{ pointerEvents: "none" }}
+        overflow={'hidden'}
+        height={'100vh'}
       >
         <Sidebar />
         <Navbar />
@@ -60,7 +62,7 @@ const NavLayout = () => {
         pt={2}
         px={3}
         sx={{ borderRadius: 2 }}
-        marginTop={"5.8rem"}
+        paddingTop={"7.5rem"}
         ml={config.NAVBAR_WIDTH}
       >
         <Breadcrumb />

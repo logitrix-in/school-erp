@@ -4,13 +4,18 @@ import {
   Box,
   Button,
   ButtonBase,
+  Checkbox,
   FormControl,
+  FormControlLabel,
   Grid,
   IconButton,
   InputLabel,
+  ListItemText,
   MenuItem,
+  OutlinedInput,
   Select,
   Skeleton,
+  Switch,
   TextField,
   Tooltip,
   Typography,
@@ -35,6 +40,18 @@ const ScreeningRuleEdit = () => {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
   }
+
+  useEffect(() => {
+    console.log(classes.find((c) => c.Class == selectedClass)?.criteria);
+    setCrit(
+      classes.find((c) => c.Class == selectedClass) != null
+        ? classes.find((c) => c.Class == selectedClass).criteria
+        : []
+    );
+    console.log(selectedClass);
+  }, [selectedClass]);
+
+  const [enable, setEnable] = useState(true);
 
   // dynamic criteria
 
@@ -112,10 +129,11 @@ const ScreeningRuleEdit = () => {
   }, [crit]);
 
   return (
-    <Bbox display={"flex"} borderRadius={1}>
+    <Bbox display={"flex"} borderRadius={1} height={"70vh"}>
       <ToastContainer />
       {/* left */}
       <Box
+        overflow={"auto"}
         display={"flex"}
         gap={1}
         flexDirection={"column"}
@@ -155,7 +173,7 @@ const ScreeningRuleEdit = () => {
       </Box>
 
       {/* right */}
-      <Box p={2} flex={1}>
+      <Box p={2} flex={1} display={"flex"} flexDirection={"column"}>
         <Box
           display={"flex"}
           justifyContent={"space-between"}
@@ -176,27 +194,45 @@ const ScreeningRuleEdit = () => {
               : "Select a class to edit screenung rules"}
           </Typography>
 
+          <Tooltip
+            sx={{ ml: "auto" }}
+            placement="bottom-end"
+            title={
+              <pre style={{ padding: "1rem", width: "20rem" }}>
+                {JSON.stringify(
+                  {
+                    type: "update",
+                    class: selectedClass,
+                    active: enable,
+                    criteria: crit,
+                  },
+                  null,
+                  4
+                )}
+              </pre>
+            }
+          >
+            <IconButton>
+              <InfoRounded />
+            </IconButton>
+          </Tooltip>
+          {selectedClass && (
+            <FormControlLabel
+              control={
+                <Switch checked={enable} onChange={(e, c) => setEnable(c)} />
+              }
+              label={enable ? "Enabled" : "Disabled"}
+            />
+          )}
           {selectedClass && crit.length < availCrits.length && (
-            <Box ml={"auto"}>
-              <Tooltip
-                placement="bottom-end"
-                title={
-                  <pre style={{ padding: '1rem', width: '20rem' }}>
-                    {JSON.stringify(crit, null, 4)}
-                  </pre>
-                }
-              >
-                <IconButton>
-                  <InfoRounded />
-                </IconButton>
-              </Tooltip>
+            <Box>
               <Button size="small" variant="contained" onClick={addNew}>
                 Add New criteria
               </Button>
             </Box>
           )}
         </Box>
-        <Box display={"flex"} flexDirection={"column"} gap={1} mt={2}>
+        <Box display={"flex"} flexDirection={"column"} gap={2} mt={2}>
           {crit.map((c, idx) => (
             <Grid container key={idx} spacing={1}>
               <Grid item xs={4}>
@@ -273,11 +309,16 @@ const ScreeningRuleEdit = () => {
                       multiple
                       name="value"
                       value={c.value}
+                      renderValue={(selected) => selected.join(", ")}
                       onChange={(e) => handleChange(e, idx)}
                     >
                       {option[c.criteria]?.options.map((item) => (
                         <MenuItem key={item} value={item}>
-                          {item}
+                          <Checkbox
+                            size="small"
+                            checked={c.value.indexOf(item) > -1}
+                          />
+                          <ListItemText primary={item} />
                         </MenuItem>
                       ))}
                     </Select>
@@ -296,18 +337,21 @@ const ScreeningRuleEdit = () => {
                 )}
               </Grid>
               <Grid item xs={1}>
-                <Button
-                  variant="contained"
-                  size="large"
-                  fullWidth
-                  onClick={() => remove(idx)}
-                >
-                  Remove
-                </Button>
+                <Box display={"flex"} alignItems={"center"} height={"100%"}>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    onClick={() => remove(idx)}
+                    size="large"
+                  >
+                    Remove
+                  </Button>
+                </Box>
               </Grid>
             </Grid>
           ))}
         </Box>
+        <Box mt={"auto"}>asda</Box>
       </Box>
     </Bbox>
   );
