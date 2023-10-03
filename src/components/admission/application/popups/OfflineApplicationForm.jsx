@@ -956,8 +956,7 @@ function OfflineApplicationForm({ open, close }) {
             justifyContent={"space-between"}
           >
             <Typography fontWeight={"bold"}>Current Address</Typography>
-            <FormControl
-              Label
+            <FormControlLabel
               control={
                 <Checkbox
                   checked={PAC}

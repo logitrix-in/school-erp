@@ -2,8 +2,12 @@ import { Box, Button, Divider, Typography } from "@mui/material";
 import React from "react";
 import Bbox from "../../UiComponents/Bbox";
 import RevealCard from "../../AnimationComponents/RevealCard";
+import api from "../../../config/api";
+import { Link } from "react-router-dom";
 
 const ScreeningManager = () => {
+  function resetScreening() {}
+
   return (
     <RevealCard>
       <Bbox
@@ -37,7 +41,7 @@ const ScreeningManager = () => {
           <Button fullWidth variant="contained" color="primary">
             Reset Screening
           </Button>
-          <Button fullWidth variant="contained" color="primary">
+          <Button fullWidth variant="contained" color="primary" LinkComponent={Link} to={'review/'}>
             Review
           </Button>
         </Box>

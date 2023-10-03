@@ -30,6 +30,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import ApplicationView from "./components/admission/application/ApplicationView";
 import ScreeningRuleEdit from "./components/admission/screening/ScreeningRuleEdit";
+import ReviewScreening from "./components/admission/screening/ReviewScreening";
 
 const NavLayout = () => {
   const ux = useAuth();
@@ -49,8 +50,8 @@ const NavLayout = () => {
         top={0}
         zIndex={100}
         sx={{ pointerEvents: "none" }}
-        overflow={'hidden'}
-        height={'100vh'}
+        overflow={"hidden"}
+        height={"100vh"}
       >
         <Sidebar />
         <Navbar />
@@ -111,7 +112,7 @@ function App() {
           <Route path="/" element={<NavLayout />}>
             <Route path="dashboard/" element={<Dashboard />} />
 
-            {/* Admission Routes */}
+            {/* application Routes */}
             <Route
               path="admission/application/"
               element={<AdmissionApplication />}
@@ -120,6 +121,8 @@ function App() {
               path="admission/application/view"
               element={<ApplicationView />}
             />
+
+            {/* screening */}
             <Route
               path="admission/screening/"
               element={<AdmissionScreening />}
@@ -128,6 +131,12 @@ function App() {
               path="admission/screening/edit/"
               element={<ScreeningRuleEdit />}
             />
+
+            <Route
+              path="admission/screening/review/"
+              element={<ReviewScreening />}
+            />
+
             <Route path="*" element={<_404 />} />
           </Route>
           <Route path="/login" element={<Login />} />

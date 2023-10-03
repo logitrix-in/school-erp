@@ -13,27 +13,34 @@ import {
   ListItemText,
   MenuItem,
   OutlinedInput,
+  TextField,
   Select,
   Skeleton,
   Switch,
-  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
 import api from "../../../config/api";
 import LoadingBar from "react-top-loading-bar";
 import { ToastContainer, toast } from "react-toastify";
-import { InfoRounded } from "@mui/icons-material";
+import { ConstructionOutlined, InfoRounded } from "@mui/icons-material";
+import { Icon } from "@iconify/react";
+import { State } from "country-state-city";
+import ReignsPopup from "../../UiComponents/ReignsPopup";
 
 const ScreeningRuleEdit = () => {
   const [classes, setClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState(null);
 
-  useEffect(() => {
-    scrollToTop();
+  function fetchData() {
     api.get("/admission/screening/").then((res) => {
+      // console.log('got data');
       setClasses(res.data);
     });
+  }
+  useEffect(() => {
+    scrollToTop();
+    fetchData();
   }, []);
 
   function scrollToTop() {
@@ -42,16 +49,18 @@ const ScreeningRuleEdit = () => {
   }
 
   useEffect(() => {
-    console.log(classes.find((c) => c.Class == selectedClass)?.criteria);
+    fetchData();
     setCrit(
       classes.find((c) => c.Class == selectedClass) != null
         ? classes.find((c) => c.Class == selectedClass).criteria
         : []
     );
-    console.log(selectedClass);
   }, [selectedClass]);
 
-  const [enable, setEnable] = useState(true);
+  useEffect(() => {
+    // fetchData();
+    console.log(classes);
+  }, [classes]);
 
   // dynamic criteria
 
@@ -60,12 +69,35 @@ const ScreeningRuleEdit = () => {
     "board",
     "previous_percent",
     "specialization",
+    "medium",
+    "permanent_states",
+    "total_income",
+    "critical_ailment",
   ];
 
   const specializationOptions = ["Science", "Arts", "Commerce"];
   const boardOptions = ["CBSE", "ICSE", "State Board"];
+  const mediumOptions = ["English", "Bengali", "Hindi", "Other"];
 
   const option = {
+    total_income: {
+      label: "Total Income",
+      type: "number",
+    },
+    critical_ailment: {
+      label: "Critical Ailment",
+      type: "text",
+    },
+    permanent_states: {
+      label: "Permanent States",
+      type: "select",
+      options: State.getStatesOfCountry("IN").map((st) => st.name),
+    },
+    medium: {
+      label: "Medium",
+      type: "select",
+      options: mediumOptions,
+    },
     age: {
       label: "Age",
       type: "number",
@@ -104,33 +136,106 @@ const ScreeningRuleEdit = () => {
     setCrit(updatedItems);
   }
 
+  const [rangeHelper, setRangeHelper] = useState([]);
+
+  function updateRangeHelper(row, val) {
+    const temp = [...rangeHelper];
+    temp[row] = val;
+    setRangeHelper(temp);
+  }
+
+  function handleRangeBlur(e, row) {
+    if (crit[row].criteria == "age") {
+      if (crit[row].operator == "rn" && !e.target.value.includes("-")) {
+        updateRangeHelper(row, `invalid range`);
+
+        const temp = [...crit];
+        temp[row].value = "";
+        setCrit(temp);
+      }
+
+      const [min, max] = e.target.value.split("-");
+      if (parseInt(min) >= parseInt(max)) {
+        updateRangeHelper(row, `minimum age must be less than maximum age`);
+
+        const temp = [...crit];
+        temp[row].value = "";
+        setCrit(temp);
+      }
+    }
+  }
+
   function handleChange(e, row) {
+    updateRangeHelper(row, "");
     const { name, value } = e.target;
-
-    if (
-      crit[row].criteria == "previous_percent" &&
-      name == "value" &&
-      value > 100
-    )
-      return toast.error("Percentage can't be more than 100%");
-
-    if (crit[row].criteria == "age" && name == "value" && value > 50)
-      return toast.error("Age can't be more than 50");
-
     const temp = [...crit];
+
+    if (name == "value") {
+      // age
+      if (crit[row].criteria == "age") {
+        if (crit[row].operator == "rn") {
+          if (value.length > 5) return;
+
+          if (value.length >= 3 && !value.includes("-"))
+            return updateRangeHelper(
+              row,
+              `Invalid range field. It should be min-max. Ex: 12-20`
+            );
+        } else if (value.length > 2) return;
+      }
+      // previous percentage
+      if (crit[row].criteria == "previous_percent" && value > 100)
+        return updateRangeHelper(row, "Percentage can't be more than 100%");
+    }
+
+    if (name == "operator")
+      temp[row].value = option[temp[row].criteria]?.type == "select" ? [] : "";
+
     if (name == "criteria")
       temp[row].value = option[value].type == "select" ? [] : "";
+
     temp[row][name] = value;
     setCrit(temp);
   }
 
   useEffect(() => {
-    console.log(crit);
+    // console.log(crit);
   }, [crit]);
 
+  useEffect(() => {
+    // console.log(classes.find((c) => c.Class == selectedClass));
+    // setCrit(classes.find((c) => c.Class == selectedClass)?.criteria);
+  }, [selectedClass]);
+
+  function SetScreeningRule() {
+    api
+      .post("/admission/screening/set/", {
+        type: "update",
+        class: selectedClass,
+        active: classes.find((c) => c.Class == selectedClass)?.active,
+        criteria: crit,
+      })
+      .then((res) => {
+        console.log(res.data);
+        fetchData();
+      })
+      .catch((err) => console.log(err));
+  }
+
+  const [showPop, setShowPop] = useState(false);
+  const [popCnf, setPopCnf] = useState({
+    onAccept: () => {},
+  });
+
   return (
-    <Bbox display={"flex"} borderRadius={1} height={"70vh"}>
+    <Bbox display={"flex"} borderRadius={1}>
       <ToastContainer />
+      <ReignsPopup
+        desc={`Looks like you have made some criteria changes for class ${selectedClass}. Changes which are not saved will be deleted parmanently.`}
+        open={showPop}
+        close={() => setShowPop(false)}
+        {...popCnf}
+      />
       {/* left */}
       <Box
         overflow={"auto"}
@@ -163,8 +268,20 @@ const ScreeningRuleEdit = () => {
                   borderRadius: 1,
                 }}
                 onClick={() => {
-                  setSelectedClass(cl.Class);
-                  scrollToTop();
+                  if (selectedClass != null && selectedClass != cl.Class) {
+                    if (
+                      JSON.stringify(
+                        classes.find((c) => c.Class == selectedClass).criteria
+                      ) == JSON.stringify(crit)
+                    )
+                      return setSelectedClass(cl.Class);
+                    setPopCnf({
+                      onAccept: () => setSelectedClass(cl.Class),
+                    });
+                    setShowPop(true);
+                    // setSelectedClass(cl.Class);
+                    // scrollToTop();
+                  } else setSelectedClass(cl.Class);
                 }}
               >
                 <Typography>Class {cl.Class}</Typography>
@@ -173,7 +290,13 @@ const ScreeningRuleEdit = () => {
       </Box>
 
       {/* right */}
-      <Box p={2} flex={1} display={"flex"} flexDirection={"column"}>
+      <Box
+        p={2}
+        flex={1}
+        display={"flex"}
+        flexDirection={"column"}
+        overflow={"auto"}
+      >
         <Box
           display={"flex"}
           justifyContent={"space-between"}
@@ -191,7 +314,7 @@ const ScreeningRuleEdit = () => {
               ? `Set screening rule for class ${selectedClass
                   ?.toString()
                   .replace("-", " ")}`
-              : "Select a class to edit screenung rules"}
+              : "Select a class to edit screening rules"}
           </Typography>
 
           <Tooltip
@@ -203,7 +326,8 @@ const ScreeningRuleEdit = () => {
                   {
                     type: "update",
                     class: selectedClass,
-                    active: enable,
+                    active: classes.find((c) => c.Class == selectedClass)
+                      ?.active,
                     criteria: crit,
                   },
                   null,
@@ -219,13 +343,29 @@ const ScreeningRuleEdit = () => {
           {selectedClass && (
             <FormControlLabel
               control={
-                <Switch checked={enable} onChange={(e, c) => setEnable(c)} />
+                <Switch
+                  checked={
+                    classes.find((c) => c.Class == selectedClass)?.active
+                  }
+                  onChange={(e, c) => {
+                    const temp = [...classes];
+                    temp.find((c) => c.Class == selectedClass).active = c;
+                    setClasses(temp);
+                  }}
+                />
               }
-              label={enable ? "Enabled" : "Disabled"}
+              label={
+                classes.find((c) => c.Class == selectedClass)?.active
+                  ? "Enabled"
+                  : "Disabled"
+              }
             />
           )}
           {selectedClass && crit.length < availCrits.length && (
-            <Box>
+            <Box display={"flex"} gap={1}>
+              <Button size="small" variant="contained" color="secondary">
+                Add Special Criterias
+              </Button>
               <Button size="small" variant="contained" onClick={addNew}>
                 Add New criteria
               </Button>
@@ -254,104 +394,162 @@ const ScreeningRuleEdit = () => {
                         value={ac}
                         disabled={crit.find((b) => b.criteria == ac) != null}
                       >
-                        {ac}
+                        {ac.replace("_", " ")}
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
               </Grid>
               <Grid item xs={3}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
-                    Operator
-                  </InputLabel>
-                  {/* number */}
-                  {option[c.criteria]?.type != "select" && (
-                    <Select
-                      value={c.operator}
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      label="Operator"
-                      name="operator"
-                      onChange={(e) => handleChange(e, idx)}
-                    >
-                      <MenuItem value={"eq"}>Equals To</MenuItem>
-                      <MenuItem value={"nt"}>Not Equals To</MenuItem>
-                      <MenuItem value={"gt"}>Greater Than</MenuItem>
-                      <MenuItem value={"gte"}>Greater Than Equals To</MenuItem>
-                      <MenuItem value={"lt"}>Less Than</MenuItem>
-                      <MenuItem value={"lte"}>Less Than Equals To</MenuItem>
-                    </Select>
-                  )}
-                  {/* select */}
-                  {option[c.criteria]?.type == "select" && (
-                    <Select
-                      value={c.operator}
-                      labelId="demo-simple-select-label"
-                      name="operator"
-                      onChange={(e) => handleChange(e, idx)}
-                      id="demo-simple-select"
-                      label="Operator"
-                    >
-                      <MenuItem value={"eq"}>Equals To</MenuItem>
-                      <MenuItem value={"nt"}>Not Equals To</MenuItem>
-                    </Select>
-                  )}
-                </FormControl>
+                {c.criteria && (
+                  <>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Operator
+                      </InputLabel>
+                      {/* number */}
+                      {option[c.criteria]?.type == "number" && (
+                        <Select
+                          value={c.operator}
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          label="Operator"
+                          name="operator"
+                          onChange={(e) => handleChange(e, idx)}
+                        >
+                          <MenuItem value={"eq"}>Equals To</MenuItem>
+                          <MenuItem value={"nt"}>Not Equals To</MenuItem>
+                          <MenuItem value={"gt"}>Greater Than</MenuItem>
+                          <MenuItem value={"gte"}>
+                            Greater Than Equals To
+                          </MenuItem>
+                          <MenuItem value={"lt"}>Less Than</MenuItem>
+                          <MenuItem value={"lte"}>Less Than Equals To</MenuItem>
+                          <MenuItem value={"rn"}>range</MenuItem>
+                        </Select>
+                      )}
+                      {/* select */}
+                      {option[c.criteria]?.type == "select" && (
+                        <Select
+                          value={c.operator}
+                          labelId="demo-simple-select-label"
+                          name="operator"
+                          onChange={(e) => handleChange(e, idx)}
+                          id="demo-simple-select"
+                          label="Operator"
+                        >
+                          <MenuItem value={"eq"}>Equals To</MenuItem>
+                          <MenuItem value={"nt"}>Not Equals To</MenuItem>
+                        </Select>
+                      )}
+                      {/* text */}
+                      {option[c.criteria]?.type == "text" && (
+                        <Select
+                          value={c.operator}
+                          labelId="demo-simple-select-label"
+                          name="operator"
+                          onChange={(e) => handleChange(e, idx)}
+                          id="demo-simple-select"
+                          label="Operator"
+                        >
+                          <MenuItem value={"eq"}>Can be</MenuItem>
+                          <MenuItem value={"nt"}>Can not be</MenuItem>
+                        </Select>
+                      )}
+                    </FormControl>
+                  </>
+                )}
               </Grid>
               <Grid item xs={4}>
-                {/* select */}
-                {option[c.criteria]?.type == "select" && (
-                  <FormControl fullWidth>
-                    <InputLabel>Values</InputLabel>
-                    <Select
-                      label="values"
-                      multiple
-                      name="value"
-                      value={c.value}
-                      renderValue={(selected) => selected.join(", ")}
-                      onChange={(e) => handleChange(e, idx)}
-                    >
-                      {option[c.criteria]?.options.map((item) => (
-                        <MenuItem key={item} value={item}>
-                          <Checkbox
-                            size="small"
-                            checked={c.value.indexOf(item) > -1}
-                          />
-                          <ListItemText primary={item} />
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                )}
-                {/* number */}
-                {option[c.criteria]?.type != "select" && (
-                  <TextField
-                    fullWidth
-                    type="number"
-                    name="value"
-                    label="value"
-                    value={c.value}
-                    onChange={(e) => handleChange(e, idx)}
-                  />
+                {c.operator && (
+                  <>
+                    {/* select */}
+                    {option[c.criteria]?.type == "select" && (
+                      <FormControl fullWidth>
+                        <InputLabel>Values</InputLabel>
+                        <Select
+                          label="values"
+                          multiple
+                          name="value"
+                          value={c.value}
+                          renderValue={(selected) => selected.join(", ")}
+                          onChange={(e) => handleChange(e, idx)}
+                        >
+                          {option[c.criteria]?.options.map((item) => (
+                            <MenuItem key={item} value={item}>
+                              <Checkbox
+                                size="small"
+                                checked={c.value.indexOf(item) > -1}
+                              />
+                              <ListItemText primary={item} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    )}
+                    {/* number */}
+                    {option[c.criteria]?.type != "select" && (
+                      <TextField
+                        fullWidth
+                        type="text"
+                        error={rangeHelper[idx]?.length > 0}
+                        helperText={
+                          rangeHelper[idx] ||
+                          (crit[idx].operator == "rn" ? "Ex: 10-12" : "")
+                        }
+                        onBlur={(e) => handleRangeBlur(e, idx)}
+                        name="value"
+                        label="value"
+                        value={c.value}
+                        onChange={(e) => handleChange(e, idx)}
+                      />
+                    )}
+                  </>
                 )}
               </Grid>
               <Grid item xs={1}>
-                <Box display={"flex"} alignItems={"center"} height={"100%"}>
-                  <Button
+                <Box
+                  display={"flex"}
+                  height={"100%"}
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                >
+                  <IconButton
                     variant="contained"
-                    fullWidth
                     onClick={() => remove(idx)}
-                    size="large"
+                    sx={{ color: "primary.dark" }}
                   >
-                    Remove
-                  </Button>
+                    <Icon icon={"octicon:trash-16"} fontSize={25} />
+                  </IconButton>
                 </Box>
               </Grid>
             </Grid>
           ))}
         </Box>
-        <Box mt={"auto"}>asda</Box>
+        <Box mt={"auto"} display={"flex"} justifyContent={"flex-end"}>
+          <Box display={"flex"} gap={1}>
+            <Button
+              variant="contained"
+              color="error"
+              sx={{ px: 4 }}
+              onClick={() => {
+                fetchData();
+                setCrit(
+                  classes.find((c) => c.Class == selectedClass)?.criteria
+                );
+              }}
+            >
+              Reset
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ px: 4 }}
+              onClick={SetScreeningRule}
+            >
+              Apply
+            </Button>
+          </Box>
+        </Box>
       </Box>
     </Bbox>
   );

@@ -13,18 +13,16 @@ import { Link, useLocation } from "react-router-dom";
 
 const Breadcrumb = () => {
   const location = useLocation();
-  var paths = location.pathname.split("/");
+  const path = location.pathname;
+
+  var paths = path.toString().endsWith("/")
+    ? path.slice(0, -1).split("/")
+    : path.split("/");
+
   const [bookmarked, setBookmarked] = useState(false);
 
   return (
-    <Box
-      mb={1}
-      mt={1}
-      py={0.6}
-      borderRadius={1}
-
-    >
-  
+    <Box mb={1} mt={1} py={0.6} borderRadius={1}>
       <Box
         borderRadius={2}
         display="flex"
@@ -35,7 +33,7 @@ const Breadcrumb = () => {
           separator={<Icon icon={"bi:diamond-fill"} fontSize={7} />}
           color={"#2C7BA0"}
         >
-          {paths.slice(1, paths.length - 1).map((path, idx) =>
+          {paths.slice(1, paths.length).map((path, idx) =>
             idx == 0 ? (
               <Typography
                 textTransform={"capitalize"}
