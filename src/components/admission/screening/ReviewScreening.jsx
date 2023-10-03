@@ -229,7 +229,7 @@ export default function ReviewScreening() {
           {selected != null ? (
             <Box>
               <img
-                width={300}
+                height={200}
                 src={selected.candidate_details.profile_photo}
                 alt=""
               />
