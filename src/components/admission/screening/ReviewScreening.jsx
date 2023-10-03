@@ -40,7 +40,7 @@ export default function ReviewScreening() {
         type: "screen",
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
 
         const l = Array(12)
           .fill()
@@ -68,8 +68,8 @@ export default function ReviewScreening() {
 
   const [selected, setSelected] = useState(null);
 
-  useEffect(() => console.log(checked, left, right), [checked]);
-  useEffect(() => console.log(leftChecked), [leftChecked]);
+  // useEffect(() => console.log(checked, left, right), [checked]);
+  // useEffect(() => console.log(leftChecked), [leftChecked]);
 
   const handleToggle = (value) => {
     const currentIndex = checked.indexOf(value);

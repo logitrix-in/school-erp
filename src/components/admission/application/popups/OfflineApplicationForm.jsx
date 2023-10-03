@@ -15,6 +15,7 @@ import {
   FormControl,
   FormControlLabel,
   Grid,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -27,6 +28,7 @@ import debounce from "lodash.debounce";
 import api from "../../../../config/api";
 import dayjs from "dayjs";
 import { ToastContainer, toast } from "react-toastify";
+import { LoadingButton } from "@mui/lab";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -111,6 +113,8 @@ function OfflineApplicationForm({ open, close }) {
     return formData;
   };
 
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = () => {
     const required = [
       "first_name",
@@ -119,28 +123,30 @@ function OfflineApplicationForm({ open, close }) {
       "admission_year",
       "applying_for",
     ];
-    if (
-      required.map((key, idx) => {
-        if (formData[key] == "")
-          return toast.error(`${key.replaceAll("_", " ")} is required`, {
-            position: "top-right",
-            autoClose: (idx + 3) * 500,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: false,
-            progress: undefined,
-            theme: "dark",
-          });
-      })
-    )
-      console.log(convertObjectToFormData(formData));
+
+    required.map((key, idx) => {
+      if (formData[key] == "")
+        return toast.error(`${key.replaceAll("_", " ")} is required`, {
+          position: "top-right",
+          autoClose: (idx + 3) * 500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: "dark",
+        });
+    });
+
+    console.log(convertObjectToFormData(formData));
+    setLoading(true);
     api
       .post("/admission/application/", convertObjectToFormData(formData), {
         "Content-Type": "multipart/form-data",
       })
       .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   };
 
   const nationalityCategories = useMemo(() => [
@@ -441,6 +447,11 @@ function OfflineApplicationForm({ open, close }) {
             <TextField
               fullWidth
               label="Contact Number"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">+91</InputAdornment>
+                ),
+              }}
               type="number"
               name="contact_number"
               // value={formData.contact_number}
@@ -1150,6 +1161,11 @@ function OfflineApplicationForm({ open, close }) {
               type="text"
               fullWidth
               label="Anual Income"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">₹</InputAdornment>
+                ),
+              }}
               onChange={handleChange}
               name="father_annual_income"
               value={formData.father_annual_income}
@@ -1160,6 +1176,11 @@ function OfflineApplicationForm({ open, close }) {
               type="number"
               fullWidth
               label="Contact Number"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">+91</InputAdornment>
+                ),
+              }}
               value={formData.father_contact_number}
               onChange={handleChange}
               name="father_contact_number"
@@ -1216,6 +1237,11 @@ function OfflineApplicationForm({ open, close }) {
               type="text"
               fullWidth
               label="Anual Income"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">₹</InputAdornment>
+                ),
+              }}
               onChange={handleChange}
               name="mother_annual_income"
               value={formData.mother_annual_income}
@@ -1226,6 +1252,11 @@ function OfflineApplicationForm({ open, close }) {
               type="number"
               fullWidth
               label="Contact Number"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">+91</InputAdornment>
+                ),
+              }}
               value={formData.mother_contact_number}
               onChange={handleChange}
               name="mother_contact_number"
@@ -1283,6 +1314,11 @@ function OfflineApplicationForm({ open, close }) {
               type="text"
               fullWidth
               label="Anual Income"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">₹</InputAdornment>
+                ),
+              }}
               onChange={handleChange}
               name="guardian_annual_income"
               value={formData.guardian_annual_income}
@@ -1293,6 +1329,11 @@ function OfflineApplicationForm({ open, close }) {
               type="number"
               fullWidth
               label="Contact Number"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">+91</InputAdornment>
+                ),
+              }}
               value={formData.guardian_contact_number}
               onChange={handleChange}
               name="guardian_contact_number"
@@ -1316,9 +1357,14 @@ function OfflineApplicationForm({ open, close }) {
         </Grid>
       </Box>
       <Box p={2} px={6}>
-        <Button fullWidth variant="contained" onClick={() => onSubmit()}>
+        <LoadingButton
+          loading={loading}
+          fullWidth
+          variant="contained"
+          onClick={() => onSubmit()}
+        >
           Submit
-        </Button>
+        </LoadingButton>
       </Box>
     </Dialog>
   );

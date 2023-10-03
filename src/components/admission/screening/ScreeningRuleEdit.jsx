@@ -21,12 +21,12 @@ import {
   Typography,
 } from "@mui/material";
 import api from "../../../config/api";
-import LoadingBar from "react-top-loading-bar";
 import { ToastContainer, toast } from "react-toastify";
 import { ConstructionOutlined, InfoRounded } from "@mui/icons-material";
 import { Icon } from "@iconify/react";
 import { State } from "country-state-city";
 import ReignsPopup from "../../UiComponents/ReignsPopup";
+import { LoadingButton } from "@mui/lab";
 
 const ScreeningRuleEdit = () => {
   const [classes, setClasses] = useState([]);
@@ -207,7 +207,10 @@ const ScreeningRuleEdit = () => {
     // setCrit(classes.find((c) => c.Class == selectedClass)?.criteria);
   }, [selectedClass]);
 
+  const [loading, setLoading] = useState(false);
+
   function SetScreeningRule() {
+    setLoading(true);
     api
       .post("/admission/screening/set/", {
         type: "update",
@@ -219,7 +222,11 @@ const ScreeningRuleEdit = () => {
         console.log(res.data);
         fetchData();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => {
+        fetchData()
+        setLoading(false);
+      });
   }
 
   const [showPop, setShowPop] = useState(false);
@@ -541,13 +548,14 @@ const ScreeningRuleEdit = () => {
             >
               Reset
             </Button>
-            <Button
+            <LoadingButton
+              loading={loading}
               variant="contained"
               sx={{ px: 4 }}
               onClick={SetScreeningRule}
             >
               Apply
-            </Button>
+            </LoadingButton>
           </Box>
         </Box>
       </Box>
