@@ -23,12 +23,12 @@ export const navigations = [
             },
             {
                 name:'Test Center',
-                path: 'admission/testCenter/',
+                path: 'admission/test-center/',
                 icon: 'ic:round-place'
             },
             {
                 name:'Onboarding',
-                path: 'admission/Onboarding/',
+                path: 'admission/onboarding/',
                 icon: 'material-symbols:other-admission'
             },
         ]

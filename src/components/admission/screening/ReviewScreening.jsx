@@ -1,26 +1,14 @@
-import * as React from "react";
-import Grid from "@mui/material/Grid";
+import { Box, Divider, TextField, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Checkbox from "@mui/material/Checkbox";
-import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
-import {
-  Autocomplete,
-  Box,
-  Divider,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useEffect } from "react";
-import Bbox from "../../UiComponents/Bbox";
-import { useState } from "react";
+import * as React from "react";
+import { useEffect, useState } from "react";
 import api from "../../../config/api";
-import { array } from "prop-types";
-import dayjs from "dayjs";
-import axios from "axios";
+import Bbox from "../../UiComponents/Bbox";
+import ReviewRightCard from "./component/ReviewRightCard";
 
 function not(a, b) {
   return a.filter((objA) => !b.some((objB) => objB.id === objA.id));
@@ -77,11 +65,11 @@ export default function ReviewScreening() {
             };
           });
 
-        setLeft(l.filter((l) => l.id >= 5));
-        setRight(l.filter((l) => l.id < 5));
+        // setLeft(l.filter((l) => l.id >= 5));
+        // setRight(l.filter((l) => l.id < 5));
 
-        // setLeft(res.data.not_qualified);
-        // setRight(res.data.qualified);
+        setLeft(res.data.not_qualified);
+        setRight(res.data.qualified);
       });
   }, []);
 
@@ -186,8 +174,11 @@ export default function ReviewScreening() {
       <Box display={"flex"} gap={1} alignItems={"stretch"} overflow={"hidden"}>
         <Box flex={1}>
           <Box display={"flex"} alignItems={"center"} gap={1} mb={1}>
-            <Typography fontSize={17} fontWeight={500}>Review Screening</Typography>
+            <Typography fontSize={17} fontWeight={500}>
+              Review Screening
+            </Typography>
             <TextField
+              title="search name, title, email, age"
               size="small"
               sx={{ ml: "auto" }}
               placeholder="Search"
@@ -290,44 +281,11 @@ export default function ReviewScreening() {
           p={2}
           overflow={"auto"}
           borderRadius={1}
-          // bgcolor={"#272727"}
           bgcolor={"primary.darker"}
           color={"whitesmoke"}
         >
           {selected != null ? (
-            <Box>
-              <Typography
-                fontSize={18}
-                fontWeight={500}
-                color={"primary.light"}
-              >
-                Detailed View
-              </Typography>
-              <Divider sx={{ my: 1 }} />
-              <Box display={"flex"} gap={2} mt={2}>
-                <img
-                  height={120}
-                  src={selected.candidate_details.profile_photo}
-                  alt=""
-                />
-                <Box>
-                  <Typography fontSize={"1.2rem"}>
-                    {selected.candidate_details.first_name}{" "}
-                    {selected.candidate_details.last_name}
-                  </Typography>
-                  <Typography fontSize={"0.9rem"}>
-                    {selected.candidate_details.email}
-                  </Typography>
-                  <Typography fontSize={"0.9rem"}>
-                    Age:
-                    {(
-                      new Date().getFullYear() -
-                      new Date(selected.candidate_details.dob).getFullYear()
-                    ).toString()}
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
+            <ReviewRightCard selected={selected} />
           ) : (
             <Typography>Select a candidate to view details</Typography>
           )}

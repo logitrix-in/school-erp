@@ -124,8 +124,11 @@ function OfflineApplicationForm({ open, close }) {
       "applying_for",
     ];
 
+    var flag = false;
+
     required.map((key, idx) => {
-      if (formData[key] == "")
+      if (formData[key] == "") {
+        flag = true;
         return toast.error(`${key.replaceAll("_", " ")} is required`, {
           position: "top-right",
           autoClose: (idx + 3) * 500,
@@ -136,7 +139,10 @@ function OfflineApplicationForm({ open, close }) {
           progress: undefined,
           theme: "dark",
         });
+      }
     });
+
+    if (flag) return;
 
     console.log(convertObjectToFormData(formData));
     setLoading(true);

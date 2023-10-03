@@ -31,6 +31,8 @@ import "react-date-range/dist/theme/default.css";
 import ApplicationView from "./components/admission/application/ApplicationView";
 import ScreeningRuleEdit from "./components/admission/screening/ScreeningRuleEdit";
 import ReviewScreening from "./components/admission/screening/ReviewScreening";
+import AdmissionTestCenter from "./pages/admission/AdmissionTestCenter";
+import AdmissionOnboarding from "./pages/admission/AdmissionOnboarding";
 
 const NavLayout = () => {
   const ux = useAuth();
@@ -135,6 +137,20 @@ function App() {
             <Route
               path="admission/screening/review/"
               element={<ReviewScreening />}
+            />
+
+            {/* Test Center */}
+
+            <Route
+              path="admission/test-center/"
+              element={<AdmissionTestCenter />}
+            />
+
+            {/*  */}
+
+            <Route
+              path="admission/onboarding/"
+              element={<AdmissionOnboarding />}
             />
 
             <Route path="*" element={<_404 />} />
