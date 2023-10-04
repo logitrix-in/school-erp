@@ -21,7 +21,7 @@ const ReviewRightCard = ({ selected }) => {
           alt=""
         />
         <Box display={'flex'} flexDirection={'column'} gap={0.2}>
-          <Typography fontSize={"1.2rem"}>
+          <Typography fontSize={"1.2rem"} fontWeight={500}>
             {selected.candidate_details.first_name}{" "}
             {selected.candidate_details.last_name}
           </Typography>
@@ -43,7 +43,7 @@ const ReviewRightCard = ({ selected }) => {
 
       {[
         {
-          label: "Applying for",
+          label: "Applied for",
           value: app.applying_for,
         },
         {

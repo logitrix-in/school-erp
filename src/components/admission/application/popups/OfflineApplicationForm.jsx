@@ -29,6 +29,7 @@ import api from "../../../../config/api";
 import dayjs from "dayjs";
 import { ToastContainer, toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
+import MuiPhoneNumber from "material-ui-phone-number";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -115,23 +116,60 @@ function OfflineApplicationForm({ open, close }) {
 
   const [loading, setLoading] = useState(false);
 
+  const [devMode, setDevMode] = useState(false);
+
+  const handleKeyPress = (event) => {
+    if (event.ctrlKey || event.metaKey) {
+      if (event.key === "/") {
+        toast.dismiss();
+        setDevMode((prev) => !prev);
+      }
+    }
+  };
+
+  const firstUpdate = useRef(true);
+
+  useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+    devMode
+      ? toast.dark("Dev mode On", {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+          autoClose: 500,
+          closeButton: false,
+          style: {
+            textAlign: "center",
+            color: '#5cda46',
+            background:
+              "url(data:image/jpeg;base64,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)",
+            backgroundSize: "cover",
+          },
+        })
+      : toast.error("Dev mode Off", {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          hideProgressBar: true,
+          autoClose: 500,
+          closeButton: false,
+        });
+  }, [devMode]);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
+
   const onSubmit = () => {
-    const required = [
-      "first_name",
-      "last_name",
-      "dob",
-      "admission_year",
-      "applying_for",
-    ];
-
-    var flag = false;
-
-    required.map((key, idx) => {
-      if (formData[key] == "") {
-        flag = true;
-        return toast.error(`${key.replaceAll("_", " ")} is required`, {
+    toast.dismiss()
+    if (!devMode) {
+      if (Object.values(formData).some((val, idx) => val == "")) 
+        return toast.error(`All fields are required `, {
           position: "top-right",
-          autoClose: (idx + 3) * 500,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: false,
@@ -139,12 +177,8 @@ function OfflineApplicationForm({ open, close }) {
           progress: undefined,
           theme: "dark",
         });
-      }
-    });
+    }
 
-    if (flag) return;
-
-    console.log(convertObjectToFormData(formData));
     setLoading(true);
     api
       .post("/admission/application/", convertObjectToFormData(formData), {
@@ -314,6 +348,7 @@ function OfflineApplicationForm({ open, close }) {
 
   function handleChange(e) {
     const { name, value } = e.target;
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
@@ -450,22 +485,20 @@ function OfflineApplicationForm({ open, close }) {
           </Grid>
 
           <Grid item xs={4}>
-            <TextField
+            <MuiPhoneNumber
+              defaultCountry={"in"}
+              variant="outlined"
               fullWidth
               label="Contact Number"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">+91</InputAdornment>
-                ),
-              }}
-              type="number"
               name="contact_number"
-              // value={formData.contact_number}
-              onChange={handleChange}
-              onInput={(e) => {
-                e.target.value = Math.max(0, parseInt(e.target.value))
-                  .toString()
-                  .slice(0, 10);
+              onChange={(value) => {
+                const e = {
+                  target: {
+                    name: "contact_number",
+                    value,
+                  },
+                };
+                handleChange(e);
               }}
             />
           </Grid>
@@ -547,7 +580,6 @@ function OfflineApplicationForm({ open, close }) {
           <Grid item xs={6}>
             <FormControl fullWidth>
               <DatePicker
-                defaultValue={new dayjs()}
                 label="Date of Birth"
                 onChange={(date) => {
                   const _date = new Date(date);
@@ -591,8 +623,8 @@ function OfflineApplicationForm({ open, close }) {
                 label="Critical Medical Ailment (if any)"
                 onChange={handleChange}
                 name="is_critical_ailment"
-                defaultValue={2}
-                // value={formData.gender}
+                // defaultValue={false}
+                value={formData.is_critical_ailment}
               >
                 <MenuItem value={true}>Yes</MenuItem>
                 <MenuItem value={false}>No</MenuItem>
@@ -1178,22 +1210,20 @@ function OfflineApplicationForm({ open, close }) {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField
-              type="number"
+            <MuiPhoneNumber
+              defaultCountry={"in"}
+              variant="outlined"
               fullWidth
               label="Contact Number"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">+91</InputAdornment>
-                ),
-              }}
-              value={formData.father_contact_number}
-              onChange={handleChange}
-              name="father_contact_number"
-              onInput={(e) => {
-                e.target.value = Math.max(0, parseInt(e.target.value))
-                  .toString()
-                  .slice(0, 10);
+              name="contact_number"
+              onChange={(value) => {
+                const e = {
+                  target: {
+                    name: "father_contact_number",
+                    value,
+                  },
+                };
+                handleChange(e);
               }}
             />
           </Grid>
@@ -1254,22 +1284,20 @@ function OfflineApplicationForm({ open, close }) {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField
-              type="number"
+            <MuiPhoneNumber
+              defaultCountry={"in"}
+              variant="outlined"
               fullWidth
               label="Contact Number"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">+91</InputAdornment>
-                ),
-              }}
-              value={formData.mother_contact_number}
-              onChange={handleChange}
-              name="mother_contact_number"
-              onInput={(e) => {
-                e.target.value = Math.max(0, parseInt(e.target.value))
-                  .toString()
-                  .slice(0, 10);
+              name="contact_number"
+              onChange={(value) => {
+                const e = {
+                  target: {
+                    name: "mother_contact_number",
+                    value,
+                  },
+                };
+                handleChange(e);
               }}
             />
           </Grid>
@@ -1331,22 +1359,20 @@ function OfflineApplicationForm({ open, close }) {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField
-              type="number"
+            <MuiPhoneNumber
+              defaultCountry={"in"}
+              variant="outlined"
               fullWidth
               label="Contact Number"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">+91</InputAdornment>
-                ),
-              }}
-              value={formData.guardian_contact_number}
-              onChange={handleChange}
-              name="guardian_contact_number"
-              onInput={(e) => {
-                e.target.value = Math.max(0, parseInt(e.target.value))
-                  .toString()
-                  .slice(0, 10);
+              name="contact_number"
+              onChange={(value) => {
+                const e = {
+                  target: {
+                    name: "guardian_contact_number",
+                    value,
+                  },
+                };
+                handleChange(e);
               }}
             />
           </Grid>
