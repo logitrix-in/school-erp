@@ -1,6 +1,4 @@
 import { Box } from "@mui/material";
-import "antd/es/modal/style";
-import "antd/es/slider/style";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import "react-date-range/dist/styles.css";
