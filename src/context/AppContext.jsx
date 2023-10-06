@@ -1,21 +1,19 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useState } from "react";
 
 export const AppContext = createContext();
 
-const AppContextProvider = ({children}) => {
+const AppContextProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [quickTabs, setQuickTabs] = useState({});
 
-    const [user,setUser] = useState(null);
-   
-    const value = {
-      user,
-      setUser
-    }
+  const value = {
+    user,
+    setUser,
+    setQuickTabs,
+    quickTabs,
+  };
 
-    return (
-    <AppContext.Provider value={value}>
-        {children}
-    </AppContext.Provider>
-  )
-}
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+};
 
-export default AppContextProvider
+export default AppContextProvider;

@@ -10,13 +10,14 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { navigations } from "../navigation/navigations";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { config } from "../config";
 import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
 import useAuth from "../hooks/useAuth";
+import { AppContext } from "../context/AppContext";
 const Sidebar = () => {
   const theme = useTheme();
   const location = useLocation();
@@ -35,6 +36,42 @@ const Sidebar = () => {
       setActiveTab(null);
     }
   }
+
+  const [routeCounters, setRouteCounters] = useState(
+    localStorage.getItem("most-used")
+      ? JSON.parse(localStorage.getItem("most-used"))
+      : {}
+  );
+
+  const handleRouteChange = (route) => {
+    if ("/" + route.path == location.pathname) return;
+
+    setRouteCounters((prevCounters) => ({
+      ...prevCounters,
+      [route.name]: {
+        count: (prevCounters[route.name]?.count || 0) + 1,
+        name: route.name,
+        link: route.path,
+      },
+    }));
+  };
+
+  const ctx = useContext(AppContext);
+  useEffect(() => {
+    const topRoutes = Object.entries(routeCounters)
+      .sort(([, countA], [, countB]) => countB.count - countA.count)
+      .slice(0, 5)
+      .map(([key, value]) => value);
+
+    const tabs = topRoutes.reduce((obj, item) => {
+      obj[item.name] = { ...item };
+      return obj;
+    }, {});
+
+    console.log(tabs);
+    ctx.setQuickTabs(tabs);
+    localStorage.setItem("most-used", JSON.stringify(tabs));
+  }, [routeCounters]);
 
   return (
     <>
@@ -114,6 +151,9 @@ const Sidebar = () => {
               transition={{ duration: 0.3, delay: idx * 0.2 }}
               overflow={"hidden"}
               borderRadius={1}
+              onClick={() => {
+                if (!nav.dropdown) handleRouteChange(nav);
+              }}
             >
               <ButtonBase
                 sx={(theme) => ({
@@ -183,18 +223,24 @@ const Sidebar = () => {
               </ButtonBase>
 
               {/* submenu */}
-              {(
+              {
                 <Box
                   borderLeft={"1px solid #d6d6d6"}
                   marginLeft={"1rem"}
                   overflow={"hidden"}
                   component={motion.div}
                   animate={{
-                    height: activeTab == idx ? 'auto' : 0,
+                    height: activeTab == idx ? "auto" : 0,
                   }}
                 >
                   {nav.subMenu?.map((submenu, idx) => (
-                    <Link to={submenu.path} key={idx}>
+                    <Link
+                      to={submenu.path}
+                      key={idx}
+                      onClick={() => {
+                        handleRouteChange(submenu);
+                      }}
+                    >
                       <Box
                         p={1}
                         py={1.3}
@@ -230,7 +276,7 @@ const Sidebar = () => {
                     </Link>
                   ))}
                 </Box>
-              )}
+              }
             </Box>
           ))}
         </Box>

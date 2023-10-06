@@ -1,7 +1,10 @@
 import { Box } from "@mui/material";
-import "./App.scss";
 import "antd/es/modal/style";
 import "antd/es/slider/style";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 import {
   Outlet,
   Route,
@@ -9,30 +12,27 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import _404 from "./pages/404Page";
-import Loader from "./components/Loader";
-import { useContext, useEffect, useState } from "react";
-import Sidebar from "./components/Sidebar";
-import Navbar from "./components/Navbar";
-import Dashboard from "./pages/Dashboard";
-import AdmissionApplication from "./pages/admission/AdmissionApplication";
-import AdmissionScreening from "./pages/admission/AdmissionScreening";
+import "./App.scss";
 import "./assets/scss/scrollbar.scss";
-import { config } from "./config";
-import Footer from "./components/Footer";
 import Breadcrumb from "./components/Breadcrumb";
-import axios from "axios";
+import Footer from "./components/Footer";
+import Loader from "./components/Loader";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
+import ApplicationView from "./components/admission/application/ApplicationView";
+import ReviewScreening from "./components/admission/screening/ReviewScreening";
+import ScreeningRuleEdit from "./components/admission/screening/ScreeningRuleEdit";
+import { config } from "./config";
 import { AppContext } from "./context/AppContext";
 import useAuth from "./hooks/useAuth";
-import "react-date-range/dist/styles.css";
-import "react-date-range/dist/theme/default.css";
-import ApplicationView from "./components/admission/application/ApplicationView";
-import ScreeningRuleEdit from "./components/admission/screening/ScreeningRuleEdit";
-import ReviewScreening from "./components/admission/screening/ReviewScreening";
-import AdmissionTestCenter from "./pages/admission/AdmissionTestCenter";
+import _404 from "./pages/404Page";
+import Dashboard from "./pages/Dashboard";
+import AdmissionApplication from "./pages/admission/AdmissionApplication";
 import AdmissionOnboarding from "./pages/admission/AdmissionOnboarding";
+import AdmissionScreening from "./pages/admission/AdmissionScreening";
+import AdmissionTestCenter from "./pages/admission/AdmissionTestCenter";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
 
 const NavLayout = () => {
   const ux = useAuth();
