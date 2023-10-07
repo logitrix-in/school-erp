@@ -3,7 +3,7 @@ import TestcenterDashboard from "../../components/admission/test-center/Testcent
 import OnlinetestInterview from "../../components/admission/test-center/OnlinetestInterview";
 import Evaluation from "../../components/admission/test-center/Evaluation";
 import MeritListInterview from "../../components/admission/test-center/MeritListInterview";
-import ManageTestInterview from "../../components/admission/test-center/ManageTestINterview";
+import ManageTestInterview from "../../components/admission/test-center/ManageTestInterview";
 import { Grid } from "@mui/material";
 
 const AdmissionTestCenter = () => {
