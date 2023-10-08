@@ -184,7 +184,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
                   <DatePicker
                     onChange={(e) => handleDateChange("startingDate", e, idx)}
                     sx={{ width: "100%" }}
-                    minDate={new dayjs()}
+                    // minDate={new dayjs()}
                     value={dayjs(new Date(app.startingDate))}
                     label="Open Date"
                     format="DD MMM, YYYY"
@@ -194,7 +194,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
                   <DatePicker
                     onChange={(e) => handleDateChange("closingDate", e, idx)}
                     sx={{ width: "100%" }}
-                    minDate={dayjs().add(1, "day")}
+                    // minDate={dayjs().add(1, "day")}
                     format="DD MMM, YYYY"
                     label="Close Date"
                     value={dayjs(new Date(app.closingDate))}
