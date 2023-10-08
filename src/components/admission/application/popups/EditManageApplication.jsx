@@ -41,6 +41,9 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
     "XII-Science",
     "XII-Commerce",
     "XII-Arts",
+    "Nursery",
+    "PP1",
+    "PP2",
   ];
 
   const [applications, setApplications] = useState([]);
@@ -60,7 +63,8 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
               id: d.id,
               startingDate: d.application_open,
               closingDate: d.application_close,
-              class: d.class_name
+              class: d.class_name,
+              is_active:d.is_active
             };
           })
         );
@@ -150,13 +154,16 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
             <Box width={"100%"} height={"100%"}>
               {new Array(9).fill(0).map((app, idx) => (
                 <Grid container spacing={1} key={idx}>
-                  <Grid item xs={4}>
+                  <Grid item xs={3}>
                     <Skeleton height={60} />
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={3}>
                     <Skeleton height={60} />
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={3}>
+                    <Skeleton height={60} />
+                  </Grid>
+                  <Grid item xs={3}>
                     <Skeleton height={60} />
                   </Grid>
                 </Grid>
@@ -165,27 +172,15 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
           ) : (
             applications.map((app, idx) => (
               <Grid container spacing={1} key={idx}>
-                <Grid item xs={4}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Class</InputLabel>
-                    <Select
-                      disabled
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      label="Class"
-                      value={app["class"]}
-                      name="class"
-                      onChange={(e) => handleChange(e, idx)}
-                    >
-                      {classOptions.map((val, idx) => (
-                        <MenuItem key={idx} value={val}>
-                          {val}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                <Grid item xs={3}>
+                  <TextField
+                    label="Class"
+                    value={app["class"]}
+                    fullWidth
+                    disabled
+                  />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                   <DatePicker
                     onChange={(e) => handleDateChange("startingDate", e, idx)}
                     sx={{ width: "100%" }}
@@ -195,7 +190,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
                     format="DD MMM, YYYY"
                   />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                   <DatePicker
                     onChange={(e) => handleDateChange("closingDate", e, idx)}
                     sx={{ width: "100%" }}
@@ -205,24 +200,9 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
                     value={dayjs(new Date(app.closingDate))}
                   />
                 </Grid>
-                {/* <Grid item xs={3}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Status
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      label="Status"
-                      name="applicationStatus"
-                      onChange={(e) => handleChange(e, idx)}
-                      value={app.applicationStatus}
-                    >
-                      <MenuItem value={true}>Open</MenuItem>
-                      <MenuItem value={false}>Close</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid> */}
+                <Grid item xs={3}>
+                  <TextField label="Status" value={app.is_active} disabled/>
+                </Grid>
               </Grid>
             ))
           )}

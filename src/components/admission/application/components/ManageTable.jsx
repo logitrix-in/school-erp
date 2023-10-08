@@ -40,8 +40,8 @@ function formatDate(date) {
 
 const columns = [
   { field: "class", headerName: "Class", width: 140 },
-  { field: "startingDate", headerName: "application open", width: 180 },
-  { field: "closingDate", headerName: "application close", width: 180 },
+  { field: "startingDate", headerName: "Opening date", width: 180 },
+  { field: "closingDate", headerName: "Closing date", width: 180 },
   {
     field: "applicationStatus",
     headerName: "Status",

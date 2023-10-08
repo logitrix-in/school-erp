@@ -11,6 +11,9 @@ import {
 import { Editor } from "@tinymce/tinymce-react";
 import { Delete } from "@mui/icons-material";
 import api from "../../../../config/api";
+import { LoadingButton } from "@mui/lab";
+import { ToastContainer, toast } from "react-toastify";
+import ReignsPopup from "../../../UiComponents/ReignsPopup";
 
 const Engage = ({ close, open }) => {
   const [lineups, setLineups] = useState([]);
@@ -41,11 +44,9 @@ const Engage = ({ close, open }) => {
     setState((prev) => ({ ...prev, [name]: value }));
   };
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
-
   const submit = () => {
+    if (!state.subject) return toast.error("Enter a subject");
+    setLoading(true);
     api
       .post(
         "/admission/application/smart-management/application-engagement/",
@@ -55,8 +56,31 @@ const Engage = ({ close, open }) => {
         console.log(res.data);
         fetchData();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   };
+
+  const [loading, setLoading] = useState(false);
+  const [reignsOpen, setReignsOpen] = useState(false);
+  const [selectedEngage, setSelectedEngage] = useState(null);
+
+  function acceptDelete(id) {
+    api
+      .delete(
+        "/admission/application/smart-management/application-engagement/",
+        {
+          data: {
+            id,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        fetchData();
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setReignsOpen(false));
+  }
 
   return (
     <Dialog
@@ -71,6 +95,7 @@ const Engage = ({ close, open }) => {
       onClose={() => close()}
       disableEnforceFocus={true}
     >
+      <ToastContainer autoClose={1000} />
       <Box overflow={"hidden"}>
         <Typography
           p={1}
@@ -100,42 +125,58 @@ const Engage = ({ close, open }) => {
                   display={"flex"}
                   width={"100%"}
                   p={1}
+                  mt={0.3}
                   alignItems={"center"}
+                  sx={{
+                    cursor: "pointer",
+                    "&:hover": {
+                      bgcolor: "#f2f2f294",
+                    },
+                  }}
+                  onClick={() => {
+                    editorRef && editorRef.current.setContent(lineup.content);
+                    setState((prev) => ({
+                      content: lineup.content,
+                      subject: lineup.subject,
+                      schedule_after_days: lineup.schedule_after_days,
+                    }));
+                  }}
                 >
-                  <Typography
-                    flex={1}
-                    onClick={() =>
-                      editorRef && editorRef.current.setContent(lineup.content)
-                    }
-                  >
-                    {lineup.subject}
-                  </Typography>
+                  <Typography flex={1}>{lineup.subject}</Typography>
                   <Typography variant="caption">
                     Day {lineup.schedule_after_days}
                   </Typography>
 
+                  {/* delete */}
+
+                  {selectedEngage == i && (
+                    <ReignsPopup
+                      title="Are you sure you want to delete?"
+                      desc={`(${lineup.subject}) will be deleted parmanently`}
+                      onAccept={() => acceptDelete(lineup.id)}
+                      onCancel={() => setReignsOpen(false)}
+                      open={reignsOpen}
+                    />
+                  )}
+
                   <IconButton
                     size="small"
-                    sx={{ ml: 2 }}
+                    sx={{
+                      ml: 2,
+                      ":hover svg": {
+                        color: "error.dark",
+                      },
+                    }}
                     onClick={() => {
-                      console.log(lineup.id);
-                      api
-                        .delete(
-                          "/admission/application/smart-management/application-engagement/",
-                          {
-                            data: {
-                              id: lineup.id,
-                            },
-                          }
-                        )
-                        .then((res) => {
-                          console.log(res.data);
-                          fetchData();
-                        })
-                        .catch((err) => console.log(err));
+                      setSelectedEngage(i);
+                      setReignsOpen(true);
                     }}
                   >
-                    <Delete sx={{ fontSize: 20 }} />
+                    <Delete
+                      sx={{
+                        fontSize: 20,
+                      }}
+                    />
                   </IconButton>
                 </Box>
                 <Divider />
@@ -157,7 +198,10 @@ const Engage = ({ close, open }) => {
 
             <TextField
               type="number"
-              onChange={handleChange}
+              onChange={(e) => {
+                if (e.target.value.length > 3) return;
+                handleChange(e);
+              }}
               name="schedule_after_days"
               size="small"
               value={state.schedule_after_days}
@@ -174,9 +218,8 @@ const Engage = ({ close, open }) => {
             sx={{ mt: 2 }}
             onChange={handleChange}
             name="subject"
-          >
-            Subject
-          </TextField>
+            value={state.subject}
+          />
           <Box mt={2}>
             <Editor
               apiKey="qpa9e8xcdk75avj9zmz7eawi5rzrhhdllb4kjwr4u4pgpr8f"
@@ -204,9 +247,14 @@ const Engage = ({ close, open }) => {
             />
           </Box>
           <Box display={"flex"} justifyContent={"flex-end"}>
-            <Button sx={{ mt: 1 }} variant="contained" onClick={submit}>
+            <LoadingButton
+              loading={loading}
+              sx={{ mt: 1 }}
+              variant="contained"
+              onClick={submit}
+            >
               Add
-            </Button>
+            </LoadingButton>
           </Box>
         </Box>
       </Box>

@@ -179,7 +179,8 @@ const AutoResponse = ({ open, close }) => {
               onChange={changeFunc}
             />
           )}
-          <Box mt={1} display={"flex"} justifyContent={"flex-end"}>
+          <Box mt={1} display={"flex"} gap={2} justifyContent={"flex-end"}>
+            <LoadingButton variant="outlined">Save as template</LoadingButton>
             <LoadingButton
               variant="contained"
               onClick={() => saveResponse()}

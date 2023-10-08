@@ -18,8 +18,10 @@ import dayjs from "dayjs";
 
 const ManageApplications = () => {
   const [rows, setRows] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
+
+  const [startLoading, setStartLoading] = useState(false);
+  const [closeLoading, setCloseLoading] = useState(false);
 
   function fetchData() {
     api
@@ -38,7 +40,6 @@ const ManageApplications = () => {
             };
           })
         );
-        setLoading(false);
       })
       .catch((err) => console.log(err));
   }
@@ -59,7 +60,9 @@ const ManageApplications = () => {
 
   // close all
 
-  const [closeDate, setCloseDate] = useState(new Date(dayjs().add(1, "day")).toLocaleDateString("en-CA"));
+  const [closeDate, setCloseDate] = useState(
+    new Date(dayjs().add(1, "day")).toLocaleDateString("en-CA")
+  );
 
   useEffect(() => {
     console.log(closeDate);
@@ -126,7 +129,7 @@ const ManageApplications = () => {
                 <DatePicker
                   label="Closing Date"
                   format="DD MMM, YYYY"
-                  minDate={dayjs().add(1, "day")}
+                  minDate={dayjs(new Date(openDates.start_date)).add(1, "day")}
                   defaultValue={dayjs().add(7, "day")}
                   onChange={(e) =>
                     setOpenDates((prev) => ({
@@ -135,13 +138,14 @@ const ManageApplications = () => {
                     }))
                   }
                 />
+
                 <LoadingButton
-                  loading={loading}
+                  loading={startLoading}
                   sx={{ px: 5 }}
                   variant="contained"
                   color="primary"
                   onClick={() => {
-                    setLoading(true);
+                    setStartLoading(true);
                     api
                       .post("/admission/application/manage-application/", {
                         type: "all",
@@ -152,7 +156,8 @@ const ManageApplications = () => {
                       .then((res) => {
                         console.log("opend all registration");
                         fetchData();
-                      });
+                      })
+                      .finally(() => setStartLoading(false));
                   }}
                 >
                   Open All
@@ -180,12 +185,12 @@ const ManageApplications = () => {
 
                 <LoadingButton
                   fullWidth
-                  loading={loading}
+                  loading={closeLoading}
                   sx={{ px: 5 }}
                   variant="contained"
                   color="primary"
                   onClick={() => {
-                    setLoading(true);
+                    setCloseLoading(true);
                     api
                       .post("/admission/application/manage-application/", {
                         type: "all",
@@ -195,7 +200,8 @@ const ManageApplications = () => {
                       .then((res) => {
                         console.log("closed all registration");
                         fetchData();
-                      });
+                      })
+                      .finally(() => setCloseLoading(false));
                   }}
                 >
                   Close All
@@ -227,7 +233,7 @@ const ManageApplications = () => {
                 color="secondary"
                 onClick={() => setShowDialog(true)}
               >
-                Edit
+                Edit Application
               </Button>
             </Box>
           </Box>
