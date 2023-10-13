@@ -6,20 +6,23 @@ import IconButton from "@mui/material/IconButton";
 import Slide from "@mui/material/Slide";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import nationalities from "../../../../assets/nationalities.json";
 
+import { Icon } from "@iconify/react";
+import { InfoRounded } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
   Box,
   Checkbox,
   FormControl,
   FormControlLabel,
-  FormGroup,
   Grid,
   InputAdornment,
   InputLabel,
   MenuItem,
   Select,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import axios from "axios";
@@ -97,6 +100,7 @@ function OfflineApplicationForm({ open, close }) {
     payment_date: "",
     payment_mode: "",
     primary_contact: "candidate",
+    relationType: "",
     receipt_no: "",
     type: "offline",
   });
@@ -162,46 +166,137 @@ function OfflineApplicationForm({ open, close }) {
     };
   }, []);
 
+  const required = [
+    "first_name",
+    "last_name",
+    "dob",
+    "gender",
+    // "is_critical_ailment",
+    "critical_ailment",
+    "nationality",
+    "religion",
+    "category",
+    "contact_number",
+    "email",
+    "profile_photo",
+    "applying_for",
+    "admission_year",
+    "current_class",
+    "percentage_secured",
+    "caste",
+    "school_name",
+    "board",
+    "medium",
+    "permanent_address",
+    "permanent_country",
+    "permanent_states",
+    "permanent_cities",
+    "permanent_pin_code",
+    "is_same_as_permanent_address",
+    "current_address",
+    "current_country",
+    "current_states",
+    "current_cities",
+    "current_pin_code",
+    "father_name",
+    "father_occupation",
+    "father_annual_income",
+    "father_contact_number",
+    // "father_email",
+    "mother_name",
+    "mother_occupation",
+    "mother_annual_income",
+    // "mother_email",
+    "mother_contact_number",
+    // "guardian_name",
+    // "guardian_occupation",
+    // "guardian_annual_income",
+    // "guardian_contact_number",
+    // "guardian_email",
+    "payment_date",
+    "payment_mode",
+    "primary_contact",
+    "relationType",
+    "receipt_no",
+    "type",
+  ];
+
+  function sentenceCase(str) {
+    if (str === null || str === "") return false;
+    else str = str.toString();
+
+    return str.replace(/\w\S*/g, function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+  }
+
   const onSubmit = () => {
     toast.dismiss();
-    // if (!devMode) {
-    //   if (Object.values(formData).some((val, idx) => val == ""))
-    //     return toast.error(`All fields are required `, {
-    //       position: "top-right",
-    //       autoClose: 1000,
-    //       hideProgressBar: false,
-    //       closeOnClick: true,
-    //       pauseOnHover: false,
-    //       draggable: false,
-    //       progress: undefined,
-    //       theme: "dark",
-    //     });
-    // }
+
+    if (!devMode) {
+      // check conditional required
+
+      if (
+        [
+          formData.father_email,
+          formData.mother_email,
+          formData.guardian_email,
+          formData.email,
+        ].every((val) => val == "")
+      )
+        return toast.error("At least one email is required", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: "dark",
+        });
+
+      // check required
+
+      var flag = true;
+
+      for (let i = 0; i < required.length; i++) {
+        if (formData[required[i]] == "" || formData[required[i]] == null) {
+          flag = false;
+          toast.error(
+            `${sentenceCase(required[i].replaceAll("_", " "))} are required `,
+            {
+              position: "top-right",
+              autoClose: 500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: false,
+              progress: undefined,
+              theme: "dark",
+            }
+          );
+          break;
+        }
+      }
+    }
+
+    if (!flag) return;
 
     setLoading(true);
     api
       .post("/admission/application/", convertObjectToFormData(formData), {
         "Content-Type": "multipart/form-data",
       })
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        close();
+        toast.success("Application has been submitted successfully");
+      })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   };
 
-  const nationalityCategories = useMemo(() => [
-    "Asian",
-    "European",
-    "African",
-    "North American",
-    "South American",
-    "Middle Eastern",
-    "Oceanian",
-    "Caribbean",
-    "Central American",
-    "Pacific Islander",
-    "Indigenous Peoples",
-    "Mixed or Multinational",
-  ]);
+  const nationalityCategories = nationalities;
 
   const religionOptions = useMemo(() => [
     "Christianity",
@@ -222,10 +317,28 @@ function OfflineApplicationForm({ open, close }) {
 
   const [classOptions, setClasses] = useState([]);
 
-  const admissionYearOptions = useMemo(() => ["2023-24", "2024-25", "2025-26"]);
-  const specializationOptions = useMemo(() => ["Science", "Arts", "Commerce"]);
-  const boardOptions = useMemo(() => ["CBSE", "ICSE", "State Board", "Other"]);
-  const mediumOptions = useMemo(() => ["English", "Bengali", "Hindi", "Other"]);
+  const categoryOptions = ["Unreserved", "OBC-A", "OBC-B", "SC", "ST"];
+  const admissionYearOptions = ["2023-24", "2024-25", "2025-26"];
+  const specializationOptions = [
+    "Science",
+    "Commerce",
+    "Humanities",
+    "Arts",
+    "Others",
+  ];
+  const boardOptions = ["CBSE", "ICSE", "ISC", "WBBSE", "WBCHSE", "Others"];
+  const mediumOptions = ["English", "Bengali", "Hindi", "Others"];
+  const OccupationOptions = [
+    "Service",
+    "Business",
+    "Self-Employed",
+    "Unemployed",
+    "Retired",
+    "Homemaker",
+    "Others",
+    "Not Applicable",
+  ];
+  const paymentOptions = ["Online", "Offline - Challan", "Offline - Cash"];
   // country
 
   useEffect(() => {
@@ -315,6 +428,7 @@ function OfflineApplicationForm({ open, close }) {
 
   useEffect(() => {
     console.log(formData);
+    console.log("SEE THIS --->", formData.applying_for.split("-")[1]);
   }, [formData]);
 
   const [image, setImage] = useState();
@@ -338,6 +452,22 @@ function OfflineApplicationForm({ open, close }) {
   function handleImageChange(e) {
     const selectedFile = e.target.files[0];
 
+    if (selectedFile.size > 102400)
+      return toast.error(
+        "Photograph size limit exceeded. Maximum acceptable size limit is 100 KB."
+      );
+
+    // var _URL = window.URL || window.webkitURL;
+
+    // var img;
+    // img = new Image();
+    // var objectUrl = _URL.createObjectURL(selectedFile);
+    // img.onload = function () {
+    //   console.log(this.height / this.width, 4 / 3);
+    //   _URL.revokeObjectURL(objectUrl);
+    // };
+    // img.src = objectUrl;
+
     setImage(selectedFile);
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -357,8 +487,9 @@ function OfflineApplicationForm({ open, close }) {
   }
 
   const [PAC, setPAC] = useState(false);
-
   const imageRef = useRef();
+
+  const [do_agree, setDoAgree] = useState(false);
 
   return (
     <Dialog
@@ -368,7 +499,7 @@ function OfflineApplicationForm({ open, close }) {
       TransitionComponent={Transition}
     >
       <ToastContainer />
-      <AppBar sx={{ position: "relative" }}>
+      <AppBar sx={{ position: "fixed" }}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -397,8 +528,9 @@ function OfflineApplicationForm({ open, close }) {
             </Typography>
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
             <Typography fontWeight={600}>Candidate's Image</Typography>
+            <Typography> <b>Dimension: </b> 3.5 x 4.5 cm <b>Size Limit: </b>100 KB</Typography>
           </Grid>
           <Grid
             item
@@ -524,6 +656,15 @@ function OfflineApplicationForm({ open, close }) {
               onChange={handleChange}
               label="Set as primary contact"
             />
+            <Tooltip
+              arrow
+              placement="right"
+              title="School authority will treat this contact number as the first point of contact for all further communication."
+            >
+              <IconButton>
+                <Icon icon={"ic:round-info"} fontSize={"1.6rem"} />
+              </IconButton>
+            </Tooltip>
           </Grid>
 
           <Grid item xs={12}>
@@ -582,10 +723,11 @@ function OfflineApplicationForm({ open, close }) {
                 name="category"
                 // value={formData.category}
               >
-                <MenuItem value={"gn"}>General</MenuItem>
-                <MenuItem value={"sc"}>Sc</MenuItem>
-                <MenuItem value={"st"}>St</MenuItem>
-                <MenuItem value={"obc"}>Obc</MenuItem>
+                {categoryOptions.map((cat, idx) => (
+                  <MenuItem key={idx} value={cat}>
+                    {cat}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
@@ -594,6 +736,7 @@ function OfflineApplicationForm({ open, close }) {
             <FormControl fullWidth>
               <DatePicker
                 label="Date of Birth"
+                format="DD MMM YYYY"
                 onChange={(date) => {
                   const _date = new Date(date);
                   const year = _date.getFullYear();
@@ -720,6 +863,9 @@ function OfflineApplicationForm({ open, close }) {
                 label="Current Class"
                 name="current_class"
                 onChange={handleChange}
+                disabled={["Nursery", "PP1", "PP2", "I"].some(
+                  (v) => v == formData.applying_for
+                )}
                 // value={formData.current_class}
               >
                 {classOptions.map((option, index) => (
@@ -737,39 +883,22 @@ function OfflineApplicationForm({ open, close }) {
               label="% secured in Prev. Class Final Exam"
               name="percentage_secured"
               type="number"
+              disabled={["Nursery", "PP1", "PP2", "I"].some(
+                (v) => v == formData.applying_for
+              )}
               // value={formData.percentage_secured}
               onChange={handleChange}
             />
           </Grid>
 
-          <Grid item xs={4}>
-            <FormControl fullWidth>
-              <InputLabel id="specialization-label">Specialization</InputLabel>
-              <Select
-                labelId="specialization-label"
-                id="specialization"
-                label="Specialization"
-                name="specialization"
-                onChange={handleChange}
-                // value={formData.}
-              >
-                <MenuItem value="" disabled>
-                  Select specialization
-                </MenuItem>
-                {specializationOptions.map((option, index) => (
-                  <MenuItem key={index} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={4}>
+          <Grid item xs={8}>
             <TextField
               fullWidth
               label="School Name"
               name="school_name"
+              disabled={["Nursery", "PP1", "PP2", "I"].some(
+                (v) => v == formData.applying_for
+              )}
               // value={formData.school_name}
               onChange={handleChange}
             />
@@ -780,6 +909,9 @@ function OfflineApplicationForm({ open, close }) {
               <InputLabel id="board-label">Board</InputLabel>
               <Select
                 labelId="board-label"
+                disabled={["Nursery", "PP1", "PP2", "I"].some(
+                  (v) => v == formData.applying_for
+                )}
                 id="board"
                 label="Board"
                 name="board"
@@ -793,7 +925,7 @@ function OfflineApplicationForm({ open, close }) {
                 ))}
               </Select>
             </FormControl>
-            {formData.board == "Other" && (
+            {formData.board == "Others" && (
               <TextField
                 sx={{ mt: 0.5 }}
                 fullWidth
@@ -809,6 +941,9 @@ function OfflineApplicationForm({ open, close }) {
               <InputLabel id="medium-label">Medium</InputLabel>
               <Select
                 labelId="medium-label"
+                disabled={["Nursery", "PP1", "PP2", "I"].some(
+                  (v) => v == formData.applying_for
+                )}
                 id="medium"
                 label="Medium"
                 name="medium"
@@ -822,7 +957,7 @@ function OfflineApplicationForm({ open, close }) {
                 ))}
               </Select>
             </FormControl>
-            {formData.medium == "Other" && (
+            {formData.medium == "Others" && (
               <TextField
                 sx={{ mt: 0.5 }}
                 fullWidth
@@ -850,6 +985,7 @@ function OfflineApplicationForm({ open, close }) {
             <FormControl fullWidth>
               <DatePicker
                 label="Payment Date"
+                format="DD MMM YYYY"
                 onChange={(e) => {
                   const _date = new Date(e);
                   const year = _date.getFullYear();
@@ -878,8 +1014,11 @@ function OfflineApplicationForm({ open, close }) {
                 name="payment_mode"
                 // value={formData.payment_mode}
               >
-                <MenuItem value={"offline"}>offline</MenuItem>
-                <MenuItem value={"online"}>online</MenuItem>
+                {paymentOptions.map((pay, idx) => (
+                  <MenuItem key={idx} value={pay}>
+                    {pay}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
@@ -910,12 +1049,12 @@ function OfflineApplicationForm({ open, close }) {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography fontWeight={"bold"}>Parmanent Address</Typography>
+            <Typography fontWeight={"bold"}>Permanent Address</Typography>
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Current Residential Address"
+              label="Street Name/Flat/House No/Floor/Building/Area"
               name="permanent_address"
               // value={formData.permanent_address}
               onChange={handleChange}
@@ -1032,7 +1171,7 @@ function OfflineApplicationForm({ open, close }) {
                   }}
                 />
               }
-              label="Same as Parmanent Address"
+              label="Same as Permanent Address"
             />
           </Grid>
 
@@ -1045,7 +1184,7 @@ function OfflineApplicationForm({ open, close }) {
               value={
                 PAC ? formData.permanent_address : formData.current_address
               }
-              label="Current Residential Address"
+              label="Street Name/Flat/House No/Floor/Building/Area"
             />
           </Grid>
 
@@ -1194,20 +1333,30 @@ function OfflineApplicationForm({ open, close }) {
             />
           </Grid>
           <Grid item xs={4}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Occupation</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="Occupation"
-                onChange={handleChange}
-                name="father_occupation"
-                value={formData.father_occupation}
-              >
-                <MenuItem value={"Government"}>Government</MenuItem>
-                <MenuItem value={"private"}>Private</MenuItem>
-              </Select>
-            </FormControl>
+            <Tooltip
+              arrow
+              title="Select the occupation as ‘Not Applicable’ only if the applicant’s Father is deceased."
+            >
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Occupation
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Occupation"
+                  onChange={handleChange}
+                  name="father_occupation"
+                  value={formData.father_occupation}
+                >
+                  {OccupationOptions.map((occ, idx) => (
+                    <MenuItem key={idx} value={occ}>
+                      {occ}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Tooltip>
           </Grid>
           <Grid item xs={4}>
             <TextField
@@ -1264,6 +1413,15 @@ function OfflineApplicationForm({ open, close }) {
               onChange={handleChange}
               label="Set as primary contact"
             />
+            <Tooltip
+              arrow
+              placement="right"
+              title="School authority will treat this contact number as the first point of contact for all further communication."
+            >
+              <IconButton>
+                <Icon icon={"ic:round-info"} fontSize={"1.6rem"} />
+              </IconButton>
+            </Tooltip>
           </Grid>
 
           <Grid item xs={12}>
@@ -1281,20 +1439,30 @@ function OfflineApplicationForm({ open, close }) {
             />
           </Grid>
           <Grid item xs={4}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Occupation</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="Occupation"
-                onChange={handleChange}
-                name="mother_occupation"
-                value={formData.mother_occupation}
-              >
-                <MenuItem value={"Government"}>Government</MenuItem>
-                <MenuItem value={"private"}>Private</MenuItem>
-              </Select>
-            </FormControl>
+            <Tooltip
+              arrow
+              title="Select the occupation as ‘Not Applicable’ only if the applicant’s Mother is deceased."
+            >
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Occupation
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Occupation"
+                  onChange={handleChange}
+                  name="mother_occupation"
+                  value={formData.mother_occupation}
+                >
+                  {OccupationOptions.map((occ, idx) => (
+                    <MenuItem key={idx} value={occ}>
+                      {occ}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Tooltip>
           </Grid>
           <Grid item xs={4}>
             <TextField
@@ -1349,11 +1517,29 @@ function OfflineApplicationForm({ open, close }) {
               onChange={handleChange}
               label="Set as primary contact"
             />
+            <Tooltip
+              arrow
+              placement="right"
+              title="School authority will treat this contact number as the first point of contact for all further communication."
+            >
+              <IconButton>
+                <Icon icon={"ic:round-info"} fontSize={"1.6rem"} />
+              </IconButton>
+            </Tooltip>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} display={"flex"} alignItems={"center"}>
             <Typography fontWeight={"bold"}>
               Local Guardian's Details
             </Typography>
+            <Tooltip
+              arrow
+              placement="right"
+              title="This section is mandatory only if the applicant is not residing with his/her father/mother"
+            >
+              <IconButton>
+                <InfoRounded />
+              </IconButton>
+            </Tooltip>
           </Grid>
 
           <Grid item xs={4}>
@@ -1377,8 +1563,14 @@ function OfflineApplicationForm({ open, close }) {
                 name="guardian_occupation"
                 value={formData.guardian_occupation}
               >
-                <MenuItem value={"Government"}>Government</MenuItem>
-                <MenuItem value={"private"}>Private</MenuItem>
+                {OccupationOptions.map((occ, idx) => {
+                  if (occ != "Not Applicable")
+                    return (
+                      <MenuItem key={idx} value={occ}>
+                        {occ}
+                      </MenuItem>
+                    );
+                })}
               </Select>
             </FormControl>
           </Grid>
@@ -1397,7 +1589,7 @@ function OfflineApplicationForm({ open, close }) {
               value={formData.guardian_annual_income}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <MuiPhoneNumber
               defaultCountry={"in"}
               variant="outlined"
@@ -1415,7 +1607,7 @@ function OfflineApplicationForm({ open, close }) {
               }}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <TextField
               type="email"
               fullWidth
@@ -1425,7 +1617,41 @@ function OfflineApplicationForm({ open, close }) {
               name="guardian_email"
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Relation Type
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Relation Type"
+                onChange={handleChange}
+                name="relationType"
+                value={formData.relationType}
+              >
+                {[
+                  "Uncle",
+                  "Aunt",
+                  "Sister",
+                  "Brother",
+                  "Father-in Law",
+                  "Mother-in Law",
+                  "Grandfather",
+                  "Grandmother",
+                  "Others",
+                ].map((occ, idx) => {
+                  if (occ != "Not Applicable")
+                    return (
+                      <MenuItem key={idx} value={occ}>
+                        {occ}
+                      </MenuItem>
+                    );
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} display={"flex"} alignItems={"center"}>
             <FormControlLabel
               name="primary_contact"
               value="Guardian"
@@ -1435,13 +1661,45 @@ function OfflineApplicationForm({ open, close }) {
               onChange={handleChange}
               label="Set as primary contact"
             />
+            <Tooltip
+              arrow
+              placement="right"
+              title="School authority will treat this contact number as the first point of contact for all further communication."
+            >
+              <IconButton>
+                <Icon icon={"ic:round-info"} fontSize={"1.6rem"} />
+              </IconButton>
+            </Tooltip>
           </Grid>
         </Grid>
       </Box>
-      <Box p={2} px={6}>
+      <Box padding={"0 3rem"}>
+        <FormControlLabel
+          name="do_agree"
+          control={
+            <Box sx={{ marginTop: -2 }}>
+              <Checkbox />
+            </Box>
+          }
+          value={do_agree}
+          onChange={(e) => setDoAgree(e.target.checked)}
+          label={
+            <Typography fontStyle={"italic"}>
+              I hereby declare that the information furnished above is true,
+              complete and correct to the best of my knowledge and belief. I
+              understand that in the event of my information being found false
+              or incorrect at any stage, my candidature shall be liable to
+              cancellation without notice.
+            </Typography>
+          }
+        />
+      </Box>
+      <Box p={2} px={6} display={"flex"} justifyContent={"center"}>
         <LoadingButton
+          sx={{ padding: "0.5rem 4rem" }}
+          disabled={!do_agree}
           loading={loading}
-          fullWidth
+          // fullWidth
           variant="contained"
           onClick={() => onSubmit()}
         >

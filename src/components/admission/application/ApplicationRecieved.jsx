@@ -59,7 +59,7 @@ const ApplicationRecieved = () => {
   }, [filter]);
 
   const options = {
-    labels: ["Offline ", "Online", "Marketing", "Others"],
+    labels: ["Offline ", "Online", "Advertisement ", "Others"],
     colors: ["#FF5630", "#00A76F", "#FFAB00", "#00B8D9"],
     legend: {
       show: true,
@@ -123,7 +123,17 @@ const ApplicationRecieved = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const classes = ["I", "II", "III", "IV", "12-Commerce"];
+  const [classes, setClasses] = useState([]);
+
+  useEffect(() => {
+    api
+      .get(
+        "/admission/application/manage-application/?date_format=calendar&is_active=1"
+      )
+      .then((res) => {
+        setClasses(res.data.map((d) => d.class_name));
+      });
+  }, []);
 
   const curYear = new Date().getFullYear();
 
@@ -225,6 +235,7 @@ const ApplicationRecieved = () => {
               <FormControl fullWidth>
                 <InputLabel>Class</InputLabel>
                 <Select
+                  placeholder="All"
                   multiple
                   value={curClass}
                   onChange={handleClassChange}

@@ -11,12 +11,17 @@ const ApplicationView = () => {
       .get("/admission/application/")
       .then((res) => {
         const data = res.data;
+        console.log(data);
         const values = data.map((user, idx) => {
           return {
             id: idx + 1,
             app_id: user.application_id,
-            first_name: user.candidate_details.first_name,
-            last_name: user.candidate_details.last_name,
+            primary_contact: user.candidate_details.contact_number,
+            applied_for: user.application_details.applying_for,
+            name:
+              user.candidate_details.first_name +
+              " " +
+              user.candidate_details.last_name,
             avatarUrl: user.candidate_details.profile_photo,
             email: user.candidate_details.email,
             created_at: new Date(user.created_at).toLocaleDateString(),
@@ -49,9 +54,18 @@ const ApplicationView = () => {
       ),
     },
     { field: "app_id", headerName: "Application Id", width: 130 },
-    { field: "first_name", headerName: "First Name", width: 140 },
-    { field: "last_name", headerName: "Last Name", width: 180 },
-    { field: "email", headerName: "Email", width: 180 },
+    { field: "name", headerName: "Name", width: 140 },
+    {
+      field: "primary_contact",
+      headerName: "Primary Contact Number",
+      width: 180,
+    },
+    {
+      field: "applied_for",
+      headerName: "Applied For",
+      width: 100,
+    },
+    
     { field: "created_at", headerName: "Applied On", width: 120 },
     { field: "screening_status", headerName: "Screening Status", width: 180 },
     {
@@ -59,9 +73,7 @@ const ApplicationView = () => {
       disableSelectionOnClick: true,
       headerName: "Action",
       width: 100,
-      renderCell: (params) => (
-        <Button>View</Button>
-      ),
+      renderCell: (params) => <Button>View</Button>,
     },
   ];
 

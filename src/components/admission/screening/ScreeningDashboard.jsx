@@ -198,7 +198,7 @@ const ScreeningDashboard = () => {
                   {charts.total}
                 </Typography>
                 <Typography fontSize={"1.5rem"} color={"#CDDFF4"}>
-                  Total Application Recieved
+                  Total Application Received
                 </Typography>
               </Box>
               <Box flex={1}>
