@@ -13,6 +13,7 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
+  FormGroup,
   Grid,
   InputAdornment,
   InputLabel,
@@ -66,14 +67,14 @@ function OfflineApplicationForm({ open, close }) {
     board: "",
     medium: "",
     permanent_address: "",
-    permanent_country: "",
+    permanent_country: "IN",
     permanent_states: "",
     permanent_cities: "",
     permanent_district: "",
     permanent_pin_code: "",
     is_same_as_permanent_address: "",
     current_address: "",
-    current_country: "",
+    current_country: "IN",
     current_states: "",
     current_cities: "",
     current_district: "",
@@ -95,6 +96,7 @@ function OfflineApplicationForm({ open, close }) {
     guardian_email: "",
     payment_date: "",
     payment_mode: "",
+    primary_contact: "candidate",
     receipt_no: "",
     type: "offline",
   });
@@ -139,7 +141,7 @@ function OfflineApplicationForm({ open, close }) {
           closeButton: false,
           style: {
             textAlign: "center",
-            color: '#5cda46',
+            color: "#5cda46",
             background:
               "url(data:image/jpeg;base64,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)",
             backgroundSize: "cover",
@@ -161,20 +163,20 @@ function OfflineApplicationForm({ open, close }) {
   }, []);
 
   const onSubmit = () => {
-    toast.dismiss()
-    if (!devMode) {
-      if (Object.values(formData).some((val, idx) => val == "")) 
-        return toast.error(`All fields are required `, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: false,
-          progress: undefined,
-          theme: "dark",
-        });
-    }
+    toast.dismiss();
+    // if (!devMode) {
+    //   if (Object.values(formData).some((val, idx) => val == ""))
+    //     return toast.error(`All fields are required `, {
+    //       position: "top-right",
+    //       autoClose: 1000,
+    //       hideProgressBar: false,
+    //       closeOnClick: true,
+    //       pauseOnHover: false,
+    //       draggable: false,
+    //       progress: undefined,
+    //       theme: "dark",
+    //     });
+    // }
 
     setLoading(true);
     api
@@ -344,8 +346,10 @@ function OfflineApplicationForm({ open, close }) {
   }
 
   function handleChange(e) {
-    const { name, value } = e.target;
+    var { name, value } = e.target;
 
+    if (name == "primary_contact" && value == formData.primary_contact)
+      value = "";
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
@@ -446,6 +450,7 @@ function OfflineApplicationForm({ open, close }) {
           <Grid item xs={12}>
             <Typography fontWeight={600}>Candidate's Name</Typography>
           </Grid>
+
           <Grid item xs={4}>
             <TextField
               fullWidth
@@ -507,6 +512,17 @@ function OfflineApplicationForm({ open, close }) {
               // value={formData.email}
               onChange={handleChange}
               name="email"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormControlLabel
+              name="primary_contact"
+              value="Candidate"
+              control={
+                <Checkbox checked={formData.primary_contact == "Candidate"} />
+              }
+              onChange={handleChange}
+              label="Set as primary contact"
             />
           </Grid>
 
@@ -915,6 +931,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Country"
                 name="permanent_country"
                 onChange={handleChange}
+                defaultValue={"IN"}
                 // value={formData.permanent_country}
               >
                 {countries.map((c, idx) => (
@@ -1041,6 +1058,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Country"
                 name="current_country"
                 onChange={handleChange}
+                defaultValue={"IN"}
                 value={
                   PAC ? formData.permanent_country : formData.current_country
                 }
@@ -1224,6 +1242,7 @@ function OfflineApplicationForm({ open, close }) {
               }}
             />
           </Grid>
+
           <Grid item xs={6}>
             <TextField
               type="email"
@@ -1232,6 +1251,18 @@ function OfflineApplicationForm({ open, close }) {
               value={formData.father_email}
               onChange={handleChange}
               name="father_email"
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormControlLabel
+              name="primary_contact"
+              value="Father"
+              control={
+                <Checkbox checked={formData.primary_contact == "Father"} />
+              }
+              onChange={handleChange}
+              label="Set as primary contact"
             />
           </Grid>
 
@@ -1309,6 +1340,17 @@ function OfflineApplicationForm({ open, close }) {
             />
           </Grid>
           <Grid item xs={12}>
+            <FormControlLabel
+              name="primary_contact"
+              value="Mother"
+              control={
+                <Checkbox checked={formData.primary_contact == "Mother"} />
+              }
+              onChange={handleChange}
+              label="Set as primary contact"
+            />
+          </Grid>
+          <Grid item xs={12}>
             <Typography fontWeight={"bold"}>
               Local Guardian's Details
             </Typography>
@@ -1381,6 +1423,17 @@ function OfflineApplicationForm({ open, close }) {
               value={formData.guardian_email}
               onChange={handleChange}
               name="guardian_email"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormControlLabel
+              name="primary_contact"
+              value="Guardian"
+              control={
+                <Checkbox checked={formData.primary_contact == "Guardian"} />
+              }
+              onChange={handleChange}
+              label="Set as primary contact"
             />
           </Grid>
         </Grid>

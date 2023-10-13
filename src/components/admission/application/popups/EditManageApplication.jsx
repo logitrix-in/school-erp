@@ -22,6 +22,7 @@ import { Icon } from "@iconify/react";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import Bbox from "../../../UiComponents/Bbox";
+import { ToastContainer, toast } from "react-toastify";
 
 const EditManageApplication = ({ open, close, fetchData: refetch }) => {
   const classOptions = [
@@ -64,7 +65,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
               startingDate: d.application_open,
               closingDate: d.application_close,
               class: d.class_name,
-              is_active:d.is_active
+              is_active: d.is_active,
             };
           })
         );
@@ -99,6 +100,9 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
       .put("/admission/application/manage-application/", applications)
       .then((res) => {
         setStatus("Updated Successfully");
+        toast.success("Updated Successfully", {
+          autoClose: 3000,
+        });
         console.log(res);
       });
 
@@ -118,6 +122,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
       onClose={() => close()}
       disableEnforceFocus={true}
     >
+      <ToastContainer />
       <Box overflow={"hidden"}>
         <Box bgcolor={"primary.main"} display={"flex"}>
           <Typography
@@ -129,7 +134,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
             fontSize={"1rem"}
             textAlign={"center"}
           >
-            Edit Applications
+            Edit Application Window
           </Typography>
           <IconButton
             aria-label="delete"
@@ -201,7 +206,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
                   />
                 </Grid>
                 <Grid item xs={3}>
-                  <TextField label="Status" value={app.is_active} disabled/>
+                  <TextField label="Status" value={app.is_active} disabled />
                 </Grid>
               </Grid>
             ))
@@ -216,14 +221,15 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
           alignItems={"center"}
           sx={{ borderTop: "1px solid rgba(0,0,0,0.2)" }}
         >
-          {status.length == 0 ? (
+          {/* {status.length == 0 ? (
             <Box></Box>
           ) : (
             <Box display={"flex"} gap={0.5} alignItems={"center"}>
               <Icon color="green" icon="teenyicons:tick-circle-solid" />
               <Typography>{status}</Typography>
             </Box>
-          )}
+          )} */}
+          <Box></Box>
           <Button
             startIcon={<Icon icon={"fluent:save-28-regular"} />}
             variant="contained"

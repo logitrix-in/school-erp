@@ -205,7 +205,7 @@ const Engage = ({ close, open }) => {
               name="schedule_after_days"
               size="small"
               value={state.schedule_after_days}
-              sx={{ width: "3rem" }}
+              sx={{ width: "1.65  rem" }}
               variant="standard"
             />
 

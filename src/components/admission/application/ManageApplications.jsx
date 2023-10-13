@@ -15,6 +15,7 @@ import { LoadingButton } from "@mui/lab";
 import EditManageApplication from "./popups/EditManageApplication";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import { ToastContainer, toast } from "react-toastify";
 
 const ManageApplications = () => {
   const [rows, setRows] = useState([]);
@@ -91,6 +92,8 @@ const ManageApplications = () => {
           </Box>
           <Divider />
 
+          <ToastContainer />
+
           <Box
             p={3}
             display={"flex"}
@@ -119,6 +122,10 @@ const ManageApplications = () => {
                   format="DD MMM, YYYY"
                   defaultValue={new dayjs()}
                   minDate={new dayjs()}
+                  maxDate={dayjs(new Date(openDates.end_date)).subtract(
+                    1,
+                    "day"
+                  )}
                   onChange={(e) =>
                     setOpenDates((prev) => ({
                       ...prev,
@@ -155,6 +162,7 @@ const ManageApplications = () => {
                       })
                       .then((res) => {
                         console.log("opend all registration");
+                        toast.success("Updated Successfully");
                         fetchData();
                       })
                       .finally(() => setStartLoading(false));
@@ -174,7 +182,7 @@ const ManageApplications = () => {
                 <DatePicker
                   label="Closing Date"
                   format="DD MMM, YYYY"
-                  minDate={dayjs().add(1, "day")}
+                  minDate={dayjs()}
                   defaultValue={dayjs().add(1, "day")}
                   onChange={(e) =>
                     setCloseDate((prev) =>
@@ -199,6 +207,7 @@ const ManageApplications = () => {
                       })
                       .then((res) => {
                         console.log("closed all registration");
+                        toast.success("Updated Successfully");
                         fetchData();
                       })
                       .finally(() => setCloseLoading(false));
@@ -233,7 +242,7 @@ const ManageApplications = () => {
                 color="secondary"
                 onClick={() => setShowDialog(true)}
               >
-                Edit Application
+                Edit
               </Button>
             </Box>
           </Box>
