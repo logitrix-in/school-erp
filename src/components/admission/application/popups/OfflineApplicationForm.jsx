@@ -172,7 +172,7 @@ function OfflineApplicationForm({ open, close }) {
     "dob",
     "gender",
     // "is_critical_ailment",
-    "critical_ailment",
+    // "critical_ailment",
     "nationality",
     "religion",
     "category",
@@ -183,7 +183,7 @@ function OfflineApplicationForm({ open, close }) {
     "admission_year",
     "current_class",
     "percentage_secured",
-    "caste",
+    // "caste",
     "school_name",
     "board",
     "medium",
@@ -235,6 +235,20 @@ function OfflineApplicationForm({ open, close }) {
 
     if (!devMode) {
       // check conditional required
+      if (
+        formData.is_critical_ailment && formData.critical_ailment==""
+      )
+        return toast.error("Critical Ailment is Required.", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: "dark",
+        });
+
 
       if (
         [
