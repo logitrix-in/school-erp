@@ -31,7 +31,8 @@ const TestcenterDashboard = () => {
   const [classes, setClasses] = useState([]);
   const [charts, setCharts] = useState({
     total: 0,
-    selected: 0,
+    cleared: 0,
+    failed: 0,
   });
 
   function getValues() {
@@ -42,7 +43,8 @@ const TestcenterDashboard = () => {
         console.log(data);
         setCharts({
           total: data.total_application,
-          selected: data.screened,
+          cleared: data.screened,
+          failed: data.screened_pending,
         });
       })
       .catch((error) => {
@@ -199,8 +201,8 @@ const TestcenterDashboard = () => {
             <Typography fontSize={"1.3rem"} fontWeight={400}>
               Application Recieved
             </Typography>
-            <Typography fontSize={"2rem"} fontWeight={600}>
-              1000
+            <Typography fontSize={"2.5rem"} fontWeight={600}>
+              {charts.total}
             </Typography>
           </Bbox>
 
@@ -223,20 +225,20 @@ const TestcenterDashboard = () => {
                     color={"primary.main"}
                     lineHeight={1.2}
                   >
-                    {charts.selected}
+                    {charts.cleared}
                   </Typography>
                   <Typography fontSize={"1.5rem"} color={"primary.main"}>
-                    Rejected
+                    Cleared
                   </Typography>
                 </Box>
                 <Icon
-                  icon={"iconoir:verified-user"}
+                  icon={"mingcute:user-follow-2-fill"}
                   fontSize={"7rem"}
                   color="#3B98C4"
                 />
               </Box>
               <Typography fontSize={"0.8rem"} color={"primary.main"}>
-                {((charts.selected / charts.total) * 100).toFixed(2)}% of the
+                {((charts.cleared / charts.total) * 100).toFixed(2)}% of the
                 applicants have cleared the screening proccess
               </Typography>
             </Box>
@@ -258,20 +260,20 @@ const TestcenterDashboard = () => {
                     color={"#B34A19"}
                     lineHeight={1.2}
                   >
-                    {charts.selected}
+                    {charts.failed}
                   </Typography>
                   <Typography fontSize={"1.5rem"} color={"secondary.main"}>
                     Rejected
                   </Typography>
                 </Box>
                 <Icon
-                  icon={"streamline:interface-user-block-actions-block-close-denied-deny-geometric-human-person-single-up-user"}
+                  icon={"ri:user-forbid-line"}
                   fontSize={"6rem"}
                   color="#C4673B"
                 />
               </Box>
               <Typography fontSize={"0.8rem"} color={"secondary.main"}>
-                {((charts.selected / charts.total) * 100).toFixed(2)}% of the
+                {((charts.failed / charts.total) * 100).toFixed(2)}% of the
                 applicants have failed to clear the screening proccess
               </Typography>
             </Box>
