@@ -25,16 +25,17 @@ const Evaluation = () => {
             borderRadius={2}
             p={2}
             display={"flex"}
-            gap={2}
+            gap={'5rem'}
+            justifyContent={'center'}
             flexDirection={{ xs: "column", md: "row" }}
           >
-            <Button fullWidth variant="contained" color="primary">
+            <Button fullWidth variant="outlined" color="primary" sx={{width: '18rem'}}>
               Upload Offline Test Score
             </Button>
-            <Button fullWidth variant="contained" color="primary">
+            <Button fullWidth variant="outlined" color="primary" sx={{width: '18rem'}}>
               Upload Interview Score
             </Button>
-            <Button fullWidth variant="contained" color="primary">
+            <Button fullWidth variant="contained" color="primary" sx={{width: '18rem'}}>
               Results
             </Button>
           </Box>

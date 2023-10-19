@@ -205,7 +205,8 @@ const Engage = ({ close, open }) => {
               name="schedule_after_days"
               size="small"
               value={state.schedule_after_days}
-              sx={{ width: "1.65  rem" }}
+              inputProps={{min: 0, style: { textAlign: 'center' }}}
+              sx={{ width: "1.65rem" }}
               variant="standard"
             />
 

@@ -11,17 +11,17 @@ const AdmissionTestCenter = () => {
     <>
       <TestcenterDashboard />
       <Grid container spacing={2} mt={1}>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <ManageTestInterview />
         </Grid>
-        <Grid item xs={6}>
-          <MeritListInterview />
-        </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <OnlinetestInterview />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Evaluation />
+        </Grid>
+        <Grid item xs={12}>
+          <MeritListInterview />
         </Grid>
       </Grid>
     </>

@@ -25,13 +25,14 @@ const MeritListInterview = () => {
             borderRadius={2}
             p={2}
             display={"flex"}
-            gap={2}
+            justifyContent={'center'}
+            gap={'5rem'}
             flexDirection={{ xs: "column", md: "row" }}
           >
-            <Button fullWidth variant="contained" color="secondary">
+            <Button sx={{width: '18rem'}} variant="outlined">
               Set Rule
             </Button>
-            <Button fullWidth variant="contained" color="secondary">
+            <Button sx={{width: '18rem'}} variant="contained">
               Generate Merit List
             </Button>
           </Box>

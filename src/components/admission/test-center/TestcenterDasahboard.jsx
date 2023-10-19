@@ -42,7 +42,7 @@ const TestcenterDashboard = () => {
         console.log(data);
         setCharts({
           total: data.total_application,
-          selected: 0,
+          selected: data.screened,
         });
       })
       .catch((error) => {
@@ -116,17 +116,19 @@ const TestcenterDashboard = () => {
 
         <Box
           display={"flex"}
-          gap={5}
+          gap={2}
           flexDirection={{ xs: "column", lg: "row" }}
-          alignItems={{ xs: "center" }}
+          alignItems={{ xs: "stretch" }}
           p={3}
         >
           <Box
             display={"flex"}
             flexDirection={"column"}
+            justifyContent={"center"}
             gap={"2rem"}
             bgcolor={"white"}
-            width={"30rem"}
+            // width={"30rem"}
+            flex={1}
           >
             <FormControl fullWidth>
               <InputLabel>Academic Year</InputLabel>
@@ -177,72 +179,101 @@ const TestcenterDashboard = () => {
             </FormControl>
           </Box>
 
+          <Bbox
+            p={2}
+            flex={0.7}
+            display={"flex"}
+            flexDirection={"column"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            borderRadius={1}
+            sx={{
+              background: "linear-gradient(to right, #2C7BA0, #9BD9F4)",
+            }}
+            textAlign={"center"}
+            color={"white"}
+          >
+            <Typography fontSize={"1rem"} fontWeight={300}>
+              Total
+            </Typography>
+            <Typography fontSize={"1.3rem"} fontWeight={400}>
+              Application Recieved
+            </Typography>
+            <Typography fontSize={"2rem"} fontWeight={600}>
+              1000
+            </Typography>
+          </Bbox>
+
           <Box display={"flex"} flexDirection={"column"} gap={2} flex={1}>
             <Box
               flex={1}
               borderRadius={1}
               p={2}
               display={"flex"}
-              alignItems={"center"}
-              sx={{
-                background: "linear-gradient(to right, #2C7BA0, #9BD9F4)",
-              }}
+              flexDirection={"column"}
+              boxShadow={"0 3px 12px -1px rgba(0,0,0,0.4)"}
+              border={"1px solid black"}
+              borderColor={"primary.main"}
             >
-              <Box flex={2} p={3}>
-                <Typography
-                  fontSize={"4rem"}
-                  fontWeight={500}
-                  color={"#CEE7FF"}
-                  lineHeight={1.2}
-                >
-                  {charts.total}
-                </Typography>
-                <Typography fontSize={"1.5rem"} color={"#CDDFF4"}>
-                  Total Application Recieved
-                </Typography>
-              </Box>
-              <Box flex={1}>
+              <Box display={"flex"}>
+                <Box flex={2}>
+                  <Typography
+                    fontSize={"4rem"}
+                    fontWeight={500}
+                    color={"primary.main"}
+                    lineHeight={1.2}
+                  >
+                    {charts.selected}
+                  </Typography>
+                  <Typography fontSize={"1.5rem"} color={"primary.main"}>
+                    Rejected
+                  </Typography>
+                </Box>
                 <Icon
-                  icon={"material-symbols:person"}
-                  fontSize={"10rem"}
-                  color="#2C7BA0"
+                  icon={"iconoir:verified-user"}
+                  fontSize={"7rem"}
+                  color="#3B98C4"
                 />
               </Box>
+              <Typography fontSize={"0.8rem"} color={"primary.main"}>
+                {((charts.selected / charts.total) * 100).toFixed(2)}% of the
+                applicants have cleared the screening proccess
+              </Typography>
             </Box>
             <Box
               flex={1}
               borderRadius={1}
               p={2}
               display={"flex"}
-              alignItems={"center"}
-              sx={{
-                background: "linear-gradient(to right, #E59D7A, #FAD2C0)",
-              }}
+              boxShadow={"0 3px 12px -1px rgba(0,0,0,0.4)"}
+              flexDirection={"column"}
+              border={"1px solid black"}
+              borderColor={"secondary.main"}
             >
-              <Box flex={2} p={3}>
-                <Typography
-                  fontSize={"4rem"}
-                  fontWeight={500}
-                  color={"#B34A19"}
-                  lineHeight={1.2}
-                >
-                  {charts.selected}
-                </Typography>
-                <Typography fontSize={"1.5rem"} color={"#974B27"}>
-                  Screening PendingCandidates Selected for Test/Interview
-                </Typography>
-                <Typography fontSize={"0.95rem"} color={"#1c1c1c"}>
-                  {((charts.selected / charts.total) * 100).toFixed(2)}%
-                  candidates have been selected
-                </Typography>
-              </Box>
-              <Box flex={1}>
+              <Box display={"flex"}>
+                <Box flex={2}>
+                  <Typography
+                    fontSize={"4rem"}
+                    fontWeight={500}
+                    color={"#B34A19"}
+                    lineHeight={1.2}
+                  >
+                    {charts.selected}
+                  </Typography>
+                  <Typography fontSize={"1.5rem"} color={"secondary.main"}>
+                    Rejected
+                  </Typography>
+                </Box>
                 <Icon
-                  icon={"material-symbols:person"}
-                  fontSize={"10rem"}
+                  icon={"streamline:interface-user-block-actions-block-close-denied-deny-geometric-human-person-single-up-user"}
+                  fontSize={"6rem"}
                   color="#C4673B"
                 />
               </Box>
+              <Typography fontSize={"0.8rem"} color={"secondary.main"}>
+                {((charts.selected / charts.total) * 100).toFixed(2)}% of the
+                applicants have failed to clear the screening proccess
+              </Typography>
             </Box>
           </Box>
         </Box>

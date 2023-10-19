@@ -235,9 +235,7 @@ function OfflineApplicationForm({ open, close }) {
 
     if (!devMode) {
       // check conditional required
-      if (
-        formData.is_critical_ailment && formData.critical_ailment==""
-      )
+      if (formData.is_critical_ailment && formData.critical_ailment == "")
         return toast.error("Critical Ailment is Required.", {
           position: "top-right",
           autoClose: 1000,
@@ -248,7 +246,6 @@ function OfflineApplicationForm({ open, close }) {
           progress: undefined,
           theme: "dark",
         });
-
 
       if (
         [
@@ -292,9 +289,8 @@ function OfflineApplicationForm({ open, close }) {
           break;
         }
       }
+      if (!flag) return;
     }
-
-    if (!flag) return;
 
     setLoading(true);
     api
@@ -542,9 +538,18 @@ function OfflineApplicationForm({ open, close }) {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+          <Grid
+            item
+            xs={12}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"space-between"}
+          >
             <Typography fontWeight={600}>Candidate's Image</Typography>
-            <Typography> <b>Dimension: </b> 3.5 x 4.5 cm <b>Size Limit: </b>100 KB</Typography>
+            <Typography>
+              {" "}
+              <b>Dimension: </b> 3.5 x 4.5 cm <b>Size Limit: </b>100 KB
+            </Typography>
           </Grid>
           <Grid
             item

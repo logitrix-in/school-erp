@@ -7,7 +7,7 @@ const ManageTestInterview = () => {
   return (
     <>
       <RevealCard>
-        <Bbox  borderRadius={2} bgcolor={"white"}>
+        <Bbox borderRadius={2} bgcolor={"white"}>
           <Box
             py={2}
             px={2}
@@ -16,7 +16,7 @@ const ManageTestInterview = () => {
             alignItems={"center"}
           >
             <Typography fontWeight={"700"} borderRadius={1} fontSize={"1.1rem"}>
-            Manage Test Interview
+              Manage Test Interview
             </Typography>
           </Box>
 
@@ -25,23 +25,15 @@ const ManageTestInterview = () => {
             borderRadius={2}
             p={2}
             display={"flex"}
-            gap={2}
+            gap={'5rem'}
+            justifyContent={'center'}
             flexDirection={{ xs: "column", md: "row" }}
           >
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-            >
-              Issue Admit Card
-            </Button>
-
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-            >
+            <Button variant="outlined" color="primary" sx={{width:'18rem'}}>
               Notification
+            </Button>
+            <Button variant="contained" color="primary" sx={{width:'18rem'}}>
+              Issue Admit Card
             </Button>
           </Box>
         </Bbox>

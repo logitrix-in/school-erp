@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import api from "../../../config/api";
 import Bbox from "../../UiComponents/Bbox";
 import ReviewRightCard from "./component/ReviewRightCard";
+import { LoadingButton } from "@mui/lab";
 
 function not(a, b) {
   return a.filter((objA) => !b.some((objB) => objB.id === objA.id));
@@ -22,6 +23,7 @@ export default function ReviewScreening() {
   const [checked, setChecked] = React.useState([]);
   const [left, setLeft] = React.useState([]);
   const [right, setRight] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
   useEffect(() => {
     api
@@ -80,6 +82,21 @@ export default function ReviewScreening() {
 
   // useEffect(() => console.log(checked, left, right), [checked]);
   // useEffect(() => console.log(leftChecked), [leftChecked]);
+
+  function applyScreening() {
+    setLoading(true);
+    api
+      .post("/admission/screening/final/", {
+        qualified: right,
+      })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
+
+    console.log({
+      qualified: right,
+    });
+  }
 
   const handleToggle = (value) => {
     const currentIndex = checked.indexOf(value);
@@ -185,15 +202,13 @@ export default function ReviewScreening() {
               onChange={(e) => setFilter(e.target.value)}
               value={filter}
             />
-            <Button
+            <LoadingButton
+              loading={loading}
               variant="contained"
-              onClick={() => {
-                console.log(left);
-                console.log(right);
-              }}
+              onClick={applyScreening}
             >
               Apply Screening
-            </Button>
+            </LoadingButton>
           </Box>
 
           <Box
