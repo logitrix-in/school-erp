@@ -192,12 +192,12 @@ function OfflineApplicationForm({ open, close }) {
     "permanent_states",
     "permanent_cities",
     "permanent_pin_code",
-    "is_same_as_permanent_address",
-    "current_address",
-    "current_country",
-    "current_states",
-    "current_cities",
-    "current_pin_code",
+    // "is_same_as_permanent_address",
+    // "current_address",
+    // "current_country",
+    // "current_states",
+    // "current_cities",
+    // "current_pin_code",
     "father_name",
     "father_occupation",
     "father_annual_income",
@@ -373,7 +373,7 @@ function OfflineApplicationForm({ open, close }) {
   // permanent state
   useEffect(() => {
     if (formData.permanent_country == "") return;
-    axios
+    api
       .get(
         `https://api.countrystatecity.in/v1/countries/${formData.permanent_country}/states`,
         {
