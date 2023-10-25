@@ -367,13 +367,16 @@ function OfflineApplicationForm({ open, close }) {
             "UktWSUFIa0VSazU1V1ZpZnRKN0IzNFVlWjRtWlR4bDl0Tm43RFcyNA==",
         },
       })
-      .then((res) => setCounties(res.data));
+      .then((res) => {
+        console.log(res.data);
+        setCounties(res.data);
+      });
   }, []);
 
   // permanent state
   useEffect(() => {
     if (formData.permanent_country == "") return;
-    api
+    axios
       .get(
         `https://api.countrystatecity.in/v1/countries/${formData.permanent_country}/states`,
         {
