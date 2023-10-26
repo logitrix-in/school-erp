@@ -31,6 +31,8 @@ import AdmissionScreening from "./pages/admission/AdmissionScreening";
 import AdmissionTestCenter from "./pages/admission/AdmissionTestCenter";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import { Logger } from "./config/Logger";
+import IssueAdmitCard from "./components/admission/test-center/pages/IssueAdmitCard";
 
 const NavLayout = () => {
   const ux = useAuth();
@@ -103,6 +105,7 @@ function App() {
       });
   }, []);
 
+
   return (
     <>
       {loading ? (
@@ -142,6 +145,10 @@ function App() {
             <Route
               path="admission/test-center/"
               element={<AdmissionTestCenter />}
+            />
+            <Route
+              path="admission/test-center/issue-admit-card/"
+              element={<IssueAdmitCard />}
             />
 
             {/*  */}

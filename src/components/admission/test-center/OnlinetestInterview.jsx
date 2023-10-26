@@ -31,7 +31,7 @@ const OnlinetestInterview = () => {
             flexDirection={{ xs: "column", md: "row" }}
           >
             <Button
-              sx={{width:'18rem'}}
+              fullWidth
               variant="contained"
               href={URLS.moodle}
               target="_blank"

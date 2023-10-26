@@ -549,7 +549,6 @@ function OfflineApplicationForm({ open, close }) {
           >
             <Typography fontWeight={600}>Candidate's Image</Typography>
             <Typography>
-              {" "}
               <b>Dimension: </b> 3.5 x 4.5 cm <b>Size Limit: </b>100 KB
             </Typography>
           </Grid>

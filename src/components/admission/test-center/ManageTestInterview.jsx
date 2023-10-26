@@ -1,9 +1,13 @@
-import { Box, Button, Divider, Typography } from "@mui/material";
-import React from "react";
+import { Box, Button, Dialog, Divider, Typography } from "@mui/material";
+import React, { useState } from "react";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
+import Notification from "./popups/ManageList/Notification";
+import IssueAdmitCard from "./pages/IssueAdmitCard";
+import { Link } from "react-router-dom";
 
 const ManageTestInterview = () => {
+  const [notificationOpen, setNotificationOpen] = useState(false);
   return (
     <>
       <RevealCard>
@@ -25,16 +29,38 @@ const ManageTestInterview = () => {
             borderRadius={2}
             p={2}
             display={"flex"}
-            gap={'5rem'}
-            justifyContent={'center'}
+            gap={2}
+            justifyContent={"center"}
             flexDirection={{ xs: "column", md: "row" }}
           >
-            <Button variant="outlined" color="primary" sx={{width:'18rem'}}>
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth
+              onClick={() => setNotificationOpen(true)}
+            >
               Notification
             </Button>
-            <Button variant="contained" color="primary" sx={{width:'18rem'}}>
+
+            <Dialog
+              open={notificationOpen}
+              fullWidth
+              maxWidth="md"
+              onClose={() => setNotificationOpen(false)}
+            >
+              <Notification close={() => setNotificationOpen(false)} />
+            </Dialog>
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              LinkComponent={Link}
+              to='issue-admit-card'
+            >
               Issue Admit Card
             </Button>
+
+           
           </Box>
         </Bbox>
       </RevealCard>

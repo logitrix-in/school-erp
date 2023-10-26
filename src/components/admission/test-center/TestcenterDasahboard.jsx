@@ -44,7 +44,7 @@ const TestcenterDashboard = () => {
         setCharts({
           total: data.total_application,
           cleared: data.screened,
-          failed: data.screened_pending,
+          failed: data.failed,
         });
       })
       .catch((error) => {
