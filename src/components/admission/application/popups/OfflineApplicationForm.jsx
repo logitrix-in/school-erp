@@ -441,7 +441,6 @@ function OfflineApplicationForm({ open, close }) {
 
   useEffect(() => {
     console.log(formData);
-    console.log("SEE THIS --->", formData.applying_for.split("-")[1]);
   }, [formData]);
 
   const [image, setImage] = useState();
