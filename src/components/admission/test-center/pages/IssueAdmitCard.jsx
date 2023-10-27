@@ -121,7 +121,6 @@ const IssueAdmitCard = () => {
 
   useEffect(() => {
     if (selected)
-
       setPlayload((prev) => ({
         ...prev,
         id: selected?.id,
@@ -307,7 +306,7 @@ const IssueAdmitCard = () => {
                       fullWidth
                       variant="contained"
                       size="small"
-                      onClick={() => setSelected(applicants[idx])}
+                      onClick={() => setSelected(searchResult[idx])}
                     >
                       Select
                     </Button>
