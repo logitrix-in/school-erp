@@ -377,7 +377,7 @@ const BulkManage = () => {
                   flexWrap={"wrap"}
                   gap={2}
                   mt={2}
-                  height={"50vh"}
+                  height={"40vh"}
                   overflow={"auto"}
                 >
                   {selectedClass?.batches
