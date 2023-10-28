@@ -1,7 +1,13 @@
 import {
+  Avatar,
+  Badge,
   Box,
   Button,
+  ButtonBase,
+  Card,
   Checkbox,
+  Chip,
+  Dialog,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -27,62 +33,31 @@ import api from "../../../../config/api";
 import dayjs from "dayjs";
 import { LoadingButton } from "@mui/lab";
 import { ToastContainer, toast } from "react-toastify";
+import { Mail } from "@mui/icons-material";
+import { Icon } from "@iconify/react";
 
 const BulkManage = () => {
-  const [badges, setBadges] = useState([]);
+  const [classes, setClasses] = useState(null);
+  const [selectedClass, setSelectedClass] = useState(null);
+  const [generatebatchLoading, setgeneratebatchLoading] = useState(false);
 
-  useEffect(() => {
+  function fetchData() {
     api
-      .post("/admission/test-center/issue-admit-card/create-batch/", {
-        applyingFor: "all",
-        max_candidates_per_badge: 3,
-        check_non_issued: false,
-      })
+      .get("/admission/test-center/issue-admit-card/create-batch/")
       .then((res) => {
-        console.log(res.data);
-        setBadges(res.data.badges);
+        console.log(res.data.classes);
+        setClasses(res.data.classes);
       })
       .catch((err) => console.log(err));
+  }
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
-  const [admitLoding, setAdmitLoading] = useState(false);
-  const [downloadLoding, setDownloadLoading] = useState(false);
-
-  const sendAdmit = () => {
-    setAdmitLoading(true);
-    api
-      .post("/admission/test-center/issue-admit-card/", {
-        id: playload.id,
-        date: dayjs(playload.date).format("YYYY-MM-DD"),
-        venue: playload.venue,
-        time: dayjs(playload.time).format("HH:mm"),
-        duration: dayjs(playload.duration).format("HH:mm"),
-      })
-      .then((res) => {
-        toast.success("Admit Card Sent Successfully");
-      })
-      .catch((err) => {
-        toast.error("Something Went Wrong");
-      })
-      .finally(() => {
-        setAdmitLoading(false);
-      });
-  };
-
-  const downloadAdmit = () => {
-    setDownloadLoading(true);
-    api
-      .post("/admission/test-center/download-admit-card/", { id: playload.id })
-      .then((res) => {
-        window.open(res.data.link, "_blank", "noopener,noreferrer");
-      })
-      .catch((err) => {
-        toast.error("Something Went Wrong");
-      })
-      .finally(() => {
-        setDownloadLoading(false);
-      });
-  };
+  useEffect(() => {
+    console.log(selectedClass);
+  }, [selectedClass]);
 
   function timeToDate(timeString) {
     var timeParts = timeString.split(":");
@@ -99,15 +74,7 @@ const BulkManage = () => {
     return dateObject;
   }
 
-  const [selected, setSelected] = useState(null);
-
-  const [playload, setPlayload] = useState({
-    id: "",
-    date: dayjs(new Date("30 oct 2023")),
-    venue: "",
-    time: timeToDate("00:00:00"),
-    duration: timeToDate("00:00:00"),
-  });
+  const [playload, setPlayload] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -115,20 +82,74 @@ const BulkManage = () => {
   };
 
   useEffect(() => {
-    if (selected)
-      setPlayload((prev) => ({
-        ...prev,
-        id: selected.id,
-        date: selected?.date != "" ? dayjs(selected.date) : dayjs(),
-        venue: selected?.venue,
-        time: timeToDate(selected?.start_time),
-        duration: timeToDate(selected?.duration.toString()),
-      }));
-  }, [selected]);
-
-  useEffect(() => {
     console.log(playload);
   }, [playload]);
+
+  function generateBatches() {
+    setgeneratebatchLoading(true);
+    api
+      .put("/admission/test-center/issue-admit-card/create-batch/", {
+        applyingFor: selectedClass?.applying_for,
+        max_candidates_per_badge: parseInt(batchSettings.max_number),
+        check_non_issued: batchSettings.is_issued,
+        admit_card_type: batchSettings.admit_card_type,
+      })
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data.length == 0)
+          toast.error("No Applicants in this class to generate batches");
+        else {
+          toast.success(
+            `${res.data.length} batches created for class ${selectedClass?.applying_for}`
+          );
+        }
+
+        console.log("hehe");
+        fetchData();
+        setSelectedClass(null);
+        console.log("hoho");
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setgeneratebatchLoading(false);
+      });
+  }
+
+  // handle batch settings
+
+  const [batchSettings, setBatchSettings] = useState({
+    is_issued: false,
+    max_number: 0,
+    admit_card_type: "Online Test",
+  });
+
+  useEffect(() => {
+    console.log(batchSettings);
+  }, [batchSettings]);
+
+  function handleSettingChange(name, value) {
+    setBatchSettings((prev) => ({ ...prev, [name]: value }));
+  }
+
+  // select Batch
+
+  const [selectBatch, setSelectBatch] = useState(null);
+  const [openbatchPopup, setOpenbatchPopup] = useState(false);
+  const [saveBatchButtonLoading, setSaveBatchButtonLoading] = useState(false);
+
+  useEffect(() => {
+    selectBatch &&
+      setPlayload((prev) => ({
+        ...prev,
+        applyingFor: selectedClass.applying_for,
+        batch_id: selectBatch?.batch_no,
+        exam_date: selectBatch?.exam_date,
+        start_time: selectBatch?.start_time,
+        duration: selectBatch?.duration,
+        venue: selectBatch?.venue,
+      }));
+  }, [selectBatch]);
 
   return (
     <>
@@ -144,334 +165,478 @@ const BulkManage = () => {
           Issue Admit Card
         </Typography>
 
-        <Box>
-          <FormControl>
-            <FormControlLabel
-              label="Only Issue admit card for candidates whose admit card has not been issued yet."
-              control={<Checkbox />}
-            />
-          </FormControl>
-
-          <Box mt={2} display={"flex"} gap={2} alignItems={"center"}>
-            <FormControl sx={{ width: "10rem" }}>
-              <InputLabel>Select Class</InputLabel>
-              <Select label="Select Class">
-                <MenuItem value="1">I</MenuItem>
-                <MenuItem value="2">II</MenuItem>
-              </Select>
-            </FormControl>
-            <Typography>366 candidates have been selected</Typography>
-            <Button variant="outlined">View / Edit</Button>
+        <Bbox mt={2} display={"flex"} borderRadius={1}>
+          {/* left */}
+          <Box
+            width={"15rem"}
+            height={"60vh"}
+            overflow={"auto"}
+            display={"flex"}
+            // bgcolor={'primary.lighter'}
+            gap={1}
+            flexDirection={"column"}
+            sx={{ borderRight: "1px solid rgba(0,0,0,0.1)" }}
+            p={2}
+          >
+            {classes?.map((cl, idx) => (
+              <ButtonBase
+                key={idx}
+                sx={{
+                  padding: 1,
+                  px: 2,
+                  bgcolor: `${
+                    selectedClass?.applying_for == cl.applying_for
+                      ? "primary.main"
+                      : "white"
+                  }`,
+                  color: `${
+                    selectedClass?.applying_for != cl.applying_for
+                      ? "primary.main"
+                      : "white"
+                  }`,
+                  border: "1px solid blue",
+                  borderColor: "primary.main",
+                  borderRadius: 1,
+                }}
+                onClick={() => {
+                  setSelectedClass(
+                    classes.find((c) => c.applying_for == cl.applying_for)
+                  );
+                }}
+              >
+                <Typography>Class {cl.applying_for}</Typography>
+              </ButtonBase>
+            ))}
           </Box>
-        </Box>
-        <Box mt={2} display={"flex"} gap={2} alignItems={"center"}>
-          <Typography>
-            Maximum number of candidates allowed per batch
-          </Typography>
-          <TextField type="number" sx={{ width: "6ch" }} size="small" />
-        </Box>
-        <Box mt={2} display={"flex"} gap={2} alignItems={"center"}>
-          <FormControl sx={{ width: "10rem" }}>
-            <InputLabel>Admit Card Type</InputLabel>
-            <Select label="Admit Card Type">
-              {[
-                "Online Test",
-                "Offline Test",
-                "Online Test & Interview",
-                "Offline Test & Interview",
-                "Only Interview",
-              ].map((m, i) => (
-                <MenuItem key={i} value={m}>
-                  {m}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
 
-        <Box py={1} display={"flex"} flexDirection={"column"} gap={1}>
-          {[1, 2].length > 0 && (
-            <Box
-              overflow={"auto"}
-              sx={{
-                border: "1px solid rgba(0,0,0,0.2)",
-                borderBottom: 0,
-                borderRadius: 0,
-              }}
+          {/* popup */}
+
+          {selectBatch && (
+            <Dialog
+              maxWidth="md"
+              fullWidth
+              open={openbatchPopup}
+              onClose={() => setOpenbatchPopup(false)}
             >
-              <Box display={"flex"}>
-                <Typography
-                  flex={0.5}
-                  minWidth={"50px"}
-                  p={1}
-                  sx={{
-                    borderRight: "1px solid rgba(0,0,0,0.2)",
-                    borderBottom: "1px solid rgba(0,0,0,0.2)",
-                    bgcolor: "rgba(0,0,0,0.05)",
-                    textAlign: "center",
-                  }}
-                >
-                  Batch No.
+              <Box flex={2} p={2} borderRadius={1}>
+                <Typography fontSize={"1rem"} fontWeight={500}>
+                  {selectBatch?.batch_no}
                 </Typography>
-                <Typography
-                  flex={1}
-                  minWidth={"100px"}
-                  p={1}
-                  sx={{
-                    borderRight: "1px solid rgba(0,0,0,0.2)",
-                    borderBottom: "1px solid rgba(0,0,0,0.2)",
-                    bgcolor: "rgba(0,0,0,0.05)",
-                    textAlign: "center",
-                  }}
-                >
-                  Candidates Allocated
-                </Typography>
-                <Typography
-                  flex={1}
-                  minWidth={"100px"}
-                  p={1}
-                  sx={{
-                    borderRight: "1px solid rgba(0,0,0,0.2)",
-                    borderBottom: "1px solid rgba(0,0,0,0.2)",
-                    bgcolor: "rgba(0,0,0,0.05)",
-                    textAlign: "center",
-                  }}
-                >
-                  Exam Date
-                </Typography>
-                <Typography
-                  flex={1}
-                  minWidth={"100px"}
-                  p={1}
-                  sx={{
-                    borderRight: "1px solid rgba(0,0,0,0.2)",
-                    borderBottom: "1px solid rgba(0,0,0,0.2)",
-                    bgcolor: "rgba(0,0,0,0.05)",
-                    textAlign: "center",
-                  }}
-                >
-                  Start Time
-                </Typography>
-                <Typography
-                  flex={1}
-                  minWidth={"150px"}
-                  p={1}
-                  sx={{
-                    bgcolor: "rgba(0,0,0,0.05)",
-                    borderBottom: "1px solid rgba(0,0,0,0.2)",
-                    textAlign: "center",
-                  }}
-                >
-                  Actions
-                </Typography>
-              </Box>
-
-              {badges.map((app, idx) => (
-                <Box display={"flex"} key={idx}>
-                  <Typography
-                    flex={0.5}
-                    minWidth={"50px"}
-                    p={1}
-                    sx={{
-                      borderRight: "1px solid rgba(0,0,0,0.2)",
-                      borderBottom: "1px solid rgba(0,0,0,0.2)",
-                      textAlign: "center",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    Batch {idx + 1}
-                  </Typography>
-                  <Typography
-                    flex={1}
-                    minWidth={"100px"}
-                    p={1}
-                    sx={{
-                      borderRight: "1px solid rgba(0,0,0,0.2)",
-                      borderBottom: "1px solid rgba(0,0,0,0.2)",
-                      textAlign: "center",
-                    }}
-                  >
-                    {app.candidates_allocated}
-                  </Typography>
-                  <Typography
-                    flex={1}
-                    minWidth={"100px"}
-                    p={1}
-                    sx={{
-                      borderRight: "1px solid rgba(0,0,0,0.2)",
-                      borderBottom: "1px solid rgba(0,0,0,0.2)",
-                      textAlign: "center",
-                    }}
-                  >
-                    {app?.date != ""
-                      ? dayjs(new Date(app.date)).format("DD MMM YYYY")
-                      : dayjs().format("DD MMM YYYY")}
-                  </Typography>
-                  <Typography
-                    flex={1}
-                    minWidth={"100px"}
-                    p={1}
-                    sx={{
-                      borderRight: "1px solid rgba(0,0,0,0.2)",
-                      borderBottom: "1px solid rgba(0,0,0,0.2)",
-                      textAlign: "center",
-                    }}
-                  >
-                    {dayjs(timeToDate(app.start_time)).format("hh:mm a")}
-                  </Typography>
-
-                  <Box
-                    flex={1}
-                    display={"flex"}
-                    minWidth={"150px"}
-                    gap={1}
-                    justifyContent={"center"}
-                    p={1}
-                    sx={{
-                      borderBottom: "1px solid rgba(0,0,0,0.2)",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Button
+                <Grid container spacing={1} rowSpacing={2}>
+                  <Grid item xs={3}>
+                    <DatePicker
+                      defaultValue={dayjs(
+                        new Date(selectBatch?.exam_date ?? new Date())
+                      )}
+                      onChange={(val) => {
+                        console.log(dayjs(new Date(val)).format("DD MMM YYYY"));
+                        handleChange({
+                          target: {
+                            name: "exam_date",
+                            value: dayjs(new Date(val)).format("YYYY-MM-DD"),
+                          },
+                        });
+                      }}
+                      label="Exam Date"
+                      sx={{ mt: 2, width: "100%" }}
+                      format="DD MMM YYYY"
+                    />
+                  </Grid>
+                  <Grid item xs={9}>
+                    <TextField
+                      name="venue"
+                      defaultValue={selectBatch?.venue}
+                      onChange={handleChange}
+                      label="Exam Venue"
                       fullWidth
-                      variant="contained"
-                      size="small"
-                      onClick={() =>
-                        setSelected({ ...badges[idx], id: idx + 1 })
+                      sx={{ mt: 2 }}
+                    />
+                  </Grid>
+                  <Grid item xs={4}>
+                    <TimePicker
+                      // defaultValue={dayjs(timeToDate(selectBatch?.start_time == null))}
+                      defaultValue={
+                        selectBatch?.start_time ?? false
+                          ? dayjs(timeToDate(selectBatch?.start_time))
+                          : dayjs(timeToDate("00:00:00"))
                       }
-                    >
-                      Edit
-                    </Button>
-                    <Button
+                      onChange={(val) =>
+                        handleChange({
+                          target: {
+                            name: "start_time",
+                            value: dayjs(val).format("HH:mm"),
+                          },
+                        })
+                      }
+                      sx={{ width: "100%" }}
+                      label="Select Start Time"
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <TimeField
+                      defaultValue={
+                        selectBatch?.duration != null
+                          ? dayjs(timeToDate(selectBatch?.duration))
+                          : dayjs(timeToDate("00:00:00"))
+                      }
+                      onChange={(val) => {
+                        handleChange({
+                          target: {
+                            name: "duration",
+                            value: dayjs(val).format("HH:mm"),
+                          },
+                        });
+                      }}
+                      label="Exam Duration"
+                      views={["hours", "minutes"]}
+                      format="HH:mm"
+                      ampm={false}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    display={"flex"}
+                    alignItems={"center"}
+                    gap={1}
+                  >
+                    <LoadingButton
+                      loading={saveBatchButtonLoading}
                       fullWidth
-                      color="error"
                       variant="contained"
-                      size="small"
-                      onClick={() => {}}
+                      onClick={() => {
+                        setSaveBatchButtonLoading(true);
+                        api
+                          .post(
+                            "/admission/test-center/issue-admit-card/create-batch/",
+                            playload
+                          )
+                          .then((res) => {
+                            console.log(res.data);
+                            toast.success(
+                              `${playload.batch_id} is saved successfully`
+                            );
+                          })
+                          .catch((err) => console.log(err))
+                          .finally(() => {
+                            setOpenbatchPopup(false);
+                            setSaveBatchButtonLoading(false);
+                          });
+                      }}
                     >
-                      Delete
-                    </Button>
+                      Save Batch
+                    </LoadingButton>
+                    <LoadingButton
+                      disabled
+                      fullWidth
+                      size="medium"
+                      variant="contained"
+                    >
+                      Send Admit Card
+                    </LoadingButton>
+
+                    <LoadingButton
+                      disabled
+                      size="medium"
+                      fullWidth
+                      variant="outlined"
+                    >
+                      Export Admit Card
+                    </LoadingButton>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Dialog>
+          )}
+
+          {/* right */}
+          {selectedClass &&
+            (selectedClass.batches.length > 0 ? (
+              <Box
+                p={2}
+                flex={1}
+                display={"flex"}
+                flexDirection={"column"}
+                alignItems={"flex-start"}
+              >
+                <Typography
+                  fontSize={"1rem"}
+                  borderRadius={1}
+                  color={"white"}
+                  fontWeight={400}
+                  p={0.5}
+                  px={1}
+                  bgcolor={"primary.main"}
+                  width={"100%"}
+                >
+                  Generated Batches for Class {selectedClass?.applying_for}
+                </Typography>
+
+                <Box
+                  display={"flex"}
+                  flexWrap={"wrap"}
+                  gap={2}
+                  mt={2}
+                  height={"40vh"}
+                  overflow={"auto"}
+                >
+                  {selectedClass?.batches.map((bat, idx) => (
+                    <Card
+                      key={idx}
+                      elevation={10}
+                      sx={{
+                        borderRadius: 1,
+                        border: "1px solid #eeeeee",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Box bgcolor={"secondary.main"} height={8} />
+                      <Box px={2} py={1.4} width={"18rem"}>
+                        <Typography
+                          fontSize={"1.1rem"}
+                          fontWeight={500}
+                          display={"flex"}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}
+                        >
+                          {bat.batch_no}{" "}
+                          <Chip
+                            size="small"
+                            sx={{ px: 1 }}
+                            color={bat.is_mail_sent ? "success" : "error"}
+                            icon={<Mail />}
+                            label={bat.is_mail_sent ? "Sent" : "Not Send"}
+                            variant="outlined"
+                          />
+                        </Typography>
+
+                        <Box
+                          display={"flex"}
+                          pt={0.8}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}
+                        >
+                          <Typography fontSize={"0.8rem"} fontWeight={400}>
+                            Candidates Allocated:
+                          </Typography>
+                          <Typography fontSize={"0.9rem"} fontWeight={400}>
+                            {bat.application?.length}
+                          </Typography>
+                        </Box>
+                        <Box
+                          display={"flex"}
+                          pt={0.8}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}
+                        >
+                          <Typography fontSize={"0.8rem"} fontWeight={400}>
+                            Exam Date
+                          </Typography>
+                          <Typography fontSize={"0.9rem"} fontWeight={400}>
+                            {bat.exam_date
+                              ? dayjs(new Date(bat.exam_date)).format(
+                                  "DD MMM YYYY"
+                                )
+                              : "Not Issued"}
+                          </Typography>
+                        </Box>
+                        <Box
+                          display={"flex"}
+                          pt={0.8}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}
+                        >
+                          <Typography fontSize={"0.8rem"} fontWeight={400}>
+                            Exam Time
+                          </Typography>
+                          <Typography fontSize={"0.9rem"} fontWeight={400}>
+                            {bat.start_time == null
+                              ? "Not Issued"
+                              : dayjs(timeToDate(bat.start_time)).format(
+                                  "hh:mm a"
+                                )}
+                          </Typography>
+                        </Box>
+                        <Box
+                          display={"flex"}
+                          pt={0.8}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}
+                        >
+                          <Typography fontSize={"0.8rem"} fontWeight={400}>
+                            duration
+                          </Typography>
+                          <Typography fontSize={"0.9rem"} fontWeight={400}>
+                            {bat.duration == null
+                              ? "Not Issued"
+                              : dayjs(timeToDate(bat.duration))
+                                  .format("hh:mm")
+                                  .replace(":", "h ") + "m"}
+                          </Typography>
+                        </Box>
+                        <Box
+                          display={"flex"}
+                          pt={0.8}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}
+                          mb={1}
+                        >
+                          <Typography fontSize={"0.8rem"} fontWeight={400}>
+                            Exam Venue
+                          </Typography>
+                          <Typography
+                            width={"50%"}
+                            textAlign={"right"}
+                            fontSize={"0.9rem"}
+                            fontWeight={400}
+                          >
+                            {bat.venue == null ? "Not Issued" : bat.venue}
+                          </Typography>
+                        </Box>
+                      </Box>
+
+                      <Box
+                        display={"flex"}
+                        mt={"auto"}
+                        borderTop={"1px solid #e4e4e4"}
+                      >
+                        <Button
+                          variant="contained"
+                          sx={{ borderRadius: 0 }}
+                          fullWidth
+                          onClick={() => {
+                            setOpenbatchPopup(true);
+                            setSelectBatch(bat);
+                          }}
+                        >
+                          Update
+                        </Button>
+                        <Button
+                          variant=""
+                          color="error"
+                          sx={{ borderRadius: 0, color: "red" }}
+                          fullWidth
+                        >
+                          delete
+                        </Button>
+                      </Box>
+                    </Card>
+                  ))}
+                </Box>
+                <Box sx={{ mt: 3 }} mt={"auto"} display={"flex"} gap={1}>
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    onClick={() => {
+                      api
+                        .delete(
+                          "/admission/test-center/issue-admit-card/create-batch/",
+                          {
+                            data: { applyingFor: selectedClass?.applying_for },
+                          }
+                        )
+                        .then((res) => {
+                          fetchData();
+                          setSelectedClass(null);
+                        })
+                        .catch((err) => console.log(err.response));
+                    }}
+                  >
+                    Re-Generate
+                  </Button>
+                  <Button variant="contained">Send Admit Card</Button>
+                </Box>
+              </Box>
+            ) : (
+              <Box
+                p={2}
+                flex={1}
+                display={"flex"}
+                flexDirection={"column"}
+                alignItems={"start"}
+              >
+                <Typography
+                  fontSize={"1rem"}
+                  borderRadius={1}
+                  color={"white"}
+                  fontWeight={400}
+                  p={0.5}
+                  px={1}
+                  mb={1}
+                  bgcolor={"primary.main"}
+                  width={"100%"}
+                >
+                  Class {selectedClass?.applying_for}
+                </Typography>
+                <Box>
+                  <FormControl>
+                    <FormControlLabel
+                      label="Only Issue admit card for candidates whose admit card has not been issued yet."
+                      control={<Checkbox />}
+                      onChange={(_, c) => handleSettingChange("is_issued", c)}
+                      checked={batchSettings.is_issued}
+                    />
+                  </FormControl>
+                  <Box mt={2} display={"flex"} gap={2} alignItems={"center"}>
+                    <Typography>366 candidates have been selected</Typography>
+                    <Button variant="outlined">View</Button>
                   </Box>
                 </Box>
-              ))}
-            </Box>
-          )}
-
-          {selected && (
-            <Bbox p={2} borderRadius={1}>
-              <Box
-                justifyContent={"space-between"}
-                display={"flex"}
-                width={"100%"}
-              >
-                <Typography fontSize={"1.1rem"} fontWeight={500}>
-                  Batch {selected.id}
-                </Typography>
-                <Typography fontSize={"0.9rem"} fontWeight={500}>
-                  {selected.issueDate}
-                </Typography>
-              </Box>
-              <Grid container spacing={2}>
-                <Grid item xs={3}>
-                  <DatePicker
-                    onChange={(val) =>
-                      handleChange({
-                        target: {
-                          name: "date",
-                          value: val,
-                        },
-                      })
-                    }
-                    value={playload.date}
-                    label="Exam Date"
-                    sx={{ mt: 2, width: "100%" }}
-                    format="DD MMM YYYY"
-                  />
-                </Grid>
-                <Grid item xs={9}>
+                <Box mt={2} display={"flex"} gap={2} alignItems={"center"}>
+                  <Typography>
+                    Maximum number of candidates allowed per batch
+                  </Typography>
                   <TextField
-                    name="venue"
-                    onChange={handleChange}
-                    value={playload.venue}
-                    label="Exam Venue"
-                    fullWidth
-                    sx={{ mt: 2 }}
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <TimePicker
-                    onChange={(val) =>
-                      handleChange({
-                        target: {
-                          name: "time",
-                          value: dayjs(val),
-                        },
-                      })
+                    type="number"
+                    sx={{ width: "6ch" }}
+                    size="small"
+                    onChange={(e) =>
+                      handleSettingChange("max_number", e.target.value)
                     }
-                    value={dayjs(playload.time)}
-                    sx={{ width: "100%" }}
-                    label="Select Start Time"
+                    value={batchSettings.max_number}
                   />
-                </Grid>
-                <Grid item xs={2}>
-                  <TimeField
-                    onChange={(val) => {
-                      console.log(dayjs(val));
-                      handleChange({
-                        target: {
-                          name: "duration",
-                          value: dayjs(val),
-                        },
-                      });
-                    }}
-                    label="Exam Duration"
-                    views={["hours", "minutes"]}
-                    value={dayjs(playload.duration)}
-                    format="HH:mm"
-                    ampm={false}
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                  <LoadingButton
-                    loading={admitLoding}
-                    fullWidth
-                    size="medium"
-                    variant="contained"
-                    // onClick={sendAdmit}
-                  >
-                    Save Batch
-                  </LoadingButton>
-                </Grid>
-                <Grid item xs={2}>
-                  <LoadingButton
-                    loading={admitLoding}
-                    fullWidth
-                    size="medium"
-                    variant="contained"
-                    // onClick={sendAdmit}
-                  >
-                    Send Admit Card
-                  </LoadingButton>
-                </Grid>
-                <Grid item xs={2}>
-                  <LoadingButton
-                    size="medium"
-                    fullWidth
-                    variant="outlined"
-                    // onClick={downloadAdmit}
-                  >
-                    Download Admit Card
-                  </LoadingButton>
-                </Grid>
-              </Grid>
-            </Bbox>
-          )}
-        </Box>
-        <Box display={"flex"} gap={1}>
-          <Button variant="contained">Add Batch</Button>
-          <Button variant="outlined">Reset</Button>
-        </Box>
+                </Box>
+                <Box mt={2} display={"flex"} gap={2} alignItems={"center"}>
+                  <FormControl sx={{ width: "10rem" }}>
+                    <InputLabel>Admit Card Type</InputLabel>
+                    <Select
+                      label="Admit Card Type"
+                      onChange={(e) =>
+                        handleSettingChange("admit_card_type", e.target.value)
+                      }
+                      value={batchSettings.admit_card_type}
+                    >
+                      {[
+                        "Online Test",
+                        "Offline Test",
+                        "Online Test & Interview",
+                        "Offline Test & Interview",
+                        "Only Interview",
+                      ].map((m, i) => (
+                        <MenuItem key={i} value={m}>
+                          {m}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+
+                <LoadingButton
+                  loading={generatebatchLoading}
+                  sx={{ mt: "auto" }}
+                  variant="contained"
+                  onClick={() => {
+                    generateBatches();
+                    // fetchData();
+                    // setSelectedClass(null);
+                  }}
+                >
+                  Generate Batches
+                </LoadingButton>
+              </Box>
+            ))}
+        </Bbox>
       </Bbox>
     </>
   );
