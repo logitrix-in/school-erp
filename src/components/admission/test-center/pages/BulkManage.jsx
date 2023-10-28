@@ -377,152 +377,158 @@ const BulkManage = () => {
                   flexWrap={"wrap"}
                   gap={2}
                   mt={2}
-                  height={"40vh"}
+                  height={"50vh"}
                   overflow={"auto"}
                 >
-                  {selectedClass?.batches.map((bat, idx) => (
-                    <Card
-                      key={idx}
-                      elevation={10}
-                      sx={{
-                        borderRadius: 1,
-                        border: "1px solid #eeeeee",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <Box bgcolor={"secondary.main"} height={8} />
-                      <Box px={2} py={1.4} width={"18rem"}>
-                        <Typography
-                          fontSize={"1.1rem"}
-                          fontWeight={500}
-                          display={"flex"}
-                          justifyContent={"space-between"}
-                          alignItems={"center"}
-                        >
-                          {bat.batch_no}{" "}
-                          <Chip
-                            size="small"
-                            sx={{ px: 1 }}
-                            color={bat.is_mail_sent ? "success" : "error"}
-                            icon={<Mail />}
-                            label={bat.is_mail_sent ? "Sent" : "Not Send"}
-                            variant="outlined"
-                          />
-                        </Typography>
-
-                        <Box
-                          display={"flex"}
-                          pt={0.8}
-                          justifyContent={"space-between"}
-                          alignItems={"center"}
-                        >
-                          <Typography fontSize={"0.8rem"} fontWeight={400}>
-                            Candidates Allocated:
-                          </Typography>
-                          <Typography fontSize={"0.9rem"} fontWeight={400}>
-                            {bat.application?.length}
-                          </Typography>
-                        </Box>
-                        <Box
-                          display={"flex"}
-                          pt={0.8}
-                          justifyContent={"space-between"}
-                          alignItems={"center"}
-                        >
-                          <Typography fontSize={"0.8rem"} fontWeight={400}>
-                            Exam Date
-                          </Typography>
-                          <Typography fontSize={"0.9rem"} fontWeight={400}>
-                            {bat.exam_date
-                              ? dayjs(new Date(bat.exam_date)).format(
-                                  "DD MMM YYYY"
-                                )
-                              : "Not Issued"}
-                          </Typography>
-                        </Box>
-                        <Box
-                          display={"flex"}
-                          pt={0.8}
-                          justifyContent={"space-between"}
-                          alignItems={"center"}
-                        >
-                          <Typography fontSize={"0.8rem"} fontWeight={400}>
-                            Exam Time
-                          </Typography>
-                          <Typography fontSize={"0.9rem"} fontWeight={400}>
-                            {bat.start_time == null
-                              ? "Not Issued"
-                              : dayjs(timeToDate(bat.start_time)).format(
-                                  "hh:mm a"
-                                )}
-                          </Typography>
-                        </Box>
-                        <Box
-                          display={"flex"}
-                          pt={0.8}
-                          justifyContent={"space-between"}
-                          alignItems={"center"}
-                        >
-                          <Typography fontSize={"0.8rem"} fontWeight={400}>
-                            duration
-                          </Typography>
-                          <Typography fontSize={"0.9rem"} fontWeight={400}>
-                            {bat.duration == null
-                              ? "Not Issued"
-                              : dayjs(timeToDate(bat.duration))
-                                  .format("hh:mm")
-                                  .replace(":", "h ") + "m"}
-                          </Typography>
-                        </Box>
-                        <Box
-                          display={"flex"}
-                          pt={0.8}
-                          justifyContent={"space-between"}
-                          alignItems={"center"}
-                          mb={1}
-                        >
-                          <Typography fontSize={"0.8rem"} fontWeight={400}>
-                            Exam Venue
-                          </Typography>
-                          <Typography
-                            width={"50%"}
-                            textAlign={"right"}
-                            fontSize={"0.9rem"}
-                            fontWeight={400}
-                          >
-                            {bat.venue == null ? "Not Issued" : bat.venue}
-                          </Typography>
-                        </Box>
-                      </Box>
-
-                      <Box
-                        display={"flex"}
-                        mt={"auto"}
-                        borderTop={"1px solid #e4e4e4"}
+                  {selectedClass?.batches
+                    .sort(function (a, b) {
+                      var batchNumberA = parseInt(a.batch_no.split(" ")[1]);
+                      var batchNumberB = parseInt(b.batch_no.split(" ")[1]);
+                      return batchNumberA - batchNumberB;
+                    })
+                    .map((bat, idx) => (
+                      <Card
+                        key={idx}
+                        elevation={10}
+                        sx={{
+                          borderRadius: 1,
+                          border: "1px solid #eeeeee",
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
                       >
-                        <Button
-                          variant="contained"
-                          sx={{ borderRadius: 0 }}
-                          fullWidth
-                          onClick={() => {
-                            setOpenbatchPopup(true);
-                            setSelectBatch(bat);
-                          }}
+                        <Box bgcolor={"secondary.main"} height={8} />
+                        <Box px={2} py={1.4} width={"18rem"}>
+                          <Typography
+                            fontSize={"1.1rem"}
+                            fontWeight={500}
+                            display={"flex"}
+                            justifyContent={"space-between"}
+                            alignItems={"center"}
+                          >
+                            {bat.batch_no}{" "}
+                            <Chip
+                              size="small"
+                              sx={{ px: 1 }}
+                              color={bat.is_mail_sent ? "success" : "error"}
+                              icon={<Mail />}
+                              label={bat.is_mail_sent ? "Sent" : "Not Send"}
+                              variant="outlined"
+                            />
+                          </Typography>
+
+                          <Box
+                            display={"flex"}
+                            pt={0.8}
+                            justifyContent={"space-between"}
+                            alignItems={"center"}
+                          >
+                            <Typography fontSize={"0.8rem"} fontWeight={400}>
+                              Candidates Allocated:
+                            </Typography>
+                            <Typography fontSize={"0.9rem"} fontWeight={400}>
+                              {bat.application?.length}
+                            </Typography>
+                          </Box>
+                          <Box
+                            display={"flex"}
+                            pt={0.8}
+                            justifyContent={"space-between"}
+                            alignItems={"center"}
+                          >
+                            <Typography fontSize={"0.8rem"} fontWeight={400}>
+                              Exam Date
+                            </Typography>
+                            <Typography fontSize={"0.9rem"} fontWeight={400}>
+                              {bat.exam_date
+                                ? dayjs(new Date(bat.exam_date)).format(
+                                    "DD MMM YYYY"
+                                  )
+                                : "Not Issued"}
+                            </Typography>
+                          </Box>
+                          <Box
+                            display={"flex"}
+                            pt={0.8}
+                            justifyContent={"space-between"}
+                            alignItems={"center"}
+                          >
+                            <Typography fontSize={"0.8rem"} fontWeight={400}>
+                              Exam Time
+                            </Typography>
+                            <Typography fontSize={"0.9rem"} fontWeight={400}>
+                              {bat.start_time == null
+                                ? "Not Issued"
+                                : dayjs(timeToDate(bat.start_time)).format(
+                                    "hh:mm a"
+                                  )}
+                            </Typography>
+                          </Box>
+                          <Box
+                            display={"flex"}
+                            pt={0.8}
+                            justifyContent={"space-between"}
+                            alignItems={"center"}
+                          >
+                            <Typography fontSize={"0.8rem"} fontWeight={400}>
+                              duration
+                            </Typography>
+                            <Typography fontSize={"0.9rem"} fontWeight={400}>
+                              {bat.duration == null
+                                ? "Not Issued"
+                                : dayjs(timeToDate(bat.duration))
+                                    .format("hh:mm")
+                                    .replace(":", "h ") + "m"}
+                            </Typography>
+                          </Box>
+                          <Box
+                            display={"flex"}
+                            pt={0.8}
+                            justifyContent={"space-between"}
+                            alignItems={"center"}
+                            mb={1}
+                          >
+                            <Typography fontSize={"0.8rem"} fontWeight={400}>
+                              Exam Venue
+                            </Typography>
+                            <Typography
+                              width={"50%"}
+                              textAlign={"right"}
+                              fontSize={"0.9rem"}
+                              fontWeight={400}
+                            >
+                              {bat.venue == null ? "Not Issued" : bat.venue}
+                            </Typography>
+                          </Box>
+                        </Box>
+
+                        <Box
+                          display={"flex"}
+                          mt={"auto"}
+                          borderTop={"1px solid #e4e4e4"}
                         >
-                          Update
-                        </Button>
-                        <Button
-                          variant=""
-                          color="error"
-                          sx={{ borderRadius: 0, color: "red" }}
-                          fullWidth
-                        >
-                          delete
-                        </Button>
-                      </Box>
-                    </Card>
-                  ))}
+                          <Button
+                            variant="contained"
+                            sx={{ borderRadius: 0 }}
+                            fullWidth
+                            onClick={() => {
+                              setOpenbatchPopup(true);
+                              setSelectBatch(bat);
+                            }}
+                          >
+                            Update
+                          </Button>
+                          <Button
+                            variant=""
+                            color="error"
+                            sx={{ borderRadius: 0, color: "red" }}
+                            fullWidth
+                          >
+                            delete
+                          </Button>
+                        </Box>
+                      </Card>
+                    ))}
                 </Box>
                 <Box sx={{ mt: 3 }} mt={"auto"} display={"flex"} gap={1}>
                   <Button
