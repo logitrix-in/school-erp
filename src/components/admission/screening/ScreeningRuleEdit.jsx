@@ -34,7 +34,7 @@ const ScreeningRuleEdit = () => {
 
   function fetchData() {
     api.get("/admission/screening/").then((res) => {
-      // console.log('got data');
+      // ;
       setClasses(res.data);
     });
   }
@@ -59,7 +59,7 @@ const ScreeningRuleEdit = () => {
 
   useEffect(() => {
     // fetchData();
-    console.log(classes);
+    ;
   }, [classes]);
 
   // dynamic criteria
@@ -199,11 +199,11 @@ const ScreeningRuleEdit = () => {
   }
 
   useEffect(() => {
-    // console.log(crit);
+    // ;
   }, [crit]);
 
   useEffect(() => {
-    // console.log(classes.find((c) => c.Class == selectedClass));
+    //  => c.Class == selectedClass));
     // setCrit(classes.find((c) => c.Class == selectedClass)?.criteria);
   }, [selectedClass]);
 
@@ -219,10 +219,10 @@ const ScreeningRuleEdit = () => {
         criteria: crit,
       })
       .then((res) => {
-        console.log(res.data);
+        ;
         fetchData();
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {})
       .finally(() => {
         fetchData()
         setLoading(false);

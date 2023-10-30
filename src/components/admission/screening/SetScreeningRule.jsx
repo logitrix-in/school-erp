@@ -14,7 +14,7 @@ const SetScreeningRule = () => {
     api
       .get("/admission/screening/")
       .then((res) => setApplication(res.data))
-      .catch((err) => console.log(err));
+      .catch((err) =>{} );
   }, []);
 
   return (

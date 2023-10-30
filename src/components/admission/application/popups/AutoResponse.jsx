@@ -31,7 +31,6 @@ const AutoResponse = ({ open, close }) => {
     api
       .get("/admission/application/smart-management/auto-response/")
       .then((res) => {
-        console.log(res.data.map((app) => app.content));
         const data = res.data.map((app) => app.content);
         setEnabled(res.data.map((app) => app.status));
         setContent(data);
@@ -76,9 +75,6 @@ const AutoResponse = ({ open, close }) => {
     fetchdata();
   }, []);
 
-  useEffect(() => {
-    console.log(content);
-  }, [content]);
 
   const statusChange = (e) => {
     var temp = [...enabled];

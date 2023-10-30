@@ -18,15 +18,10 @@ const Email = () => {
   const [recipentTo, setRecipentTo] = useState("all");
 
   const editorRef = useRef(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
 
   return (
     <Box>
-      <Box display={'flex'} gap={2}>
+      <Box display={"flex"} gap={2}>
         <FormControl size="small">
           <InputLabel>Recipent</InputLabel>
           <Select label="Recipent" onChange={() => {}} defaultValue={30}>
@@ -41,7 +36,7 @@ const Email = () => {
           color="secondary"
           value={recipentTo}
           exclusive
-          sx={{mr:'auto'}}
+          sx={{ mr: "auto" }}
           onChange={(e, val) => val != null && setRecipentTo(val)}
         >
           <ToggleButton value="all">{"all(491)"}</ToggleButton>
@@ -66,7 +61,9 @@ const Email = () => {
           </Select>
         </FormControl>
 
-        <Button variant="contained" color="secondary">Templates</Button>
+        <Button variant="contained" color="secondary">
+          Templates
+        </Button>
       </Box>
       <Box height={20} />
       <TextField placeholder="Subject" fullWidth size="small" sx={{ mb: 2 }} />

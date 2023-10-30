@@ -29,7 +29,7 @@ const ManageApplications = () => {
       .get("/admission/application/manage-application/")
       .then((res) => {
         const data = res.data;
-        console.log(data);
+        ;
         setRows(
           data.map((d) => {
             return {
@@ -42,7 +42,7 @@ const ManageApplications = () => {
           })
         );
       })
-      .catch((err) => console.log(err));
+      .catch((err) =>{} );
   }
   useEffect(() => {
     fetchData();
@@ -56,7 +56,7 @@ const ManageApplications = () => {
   });
 
   useEffect(() => {
-    console.log(openDates);
+    ;
   }, [openDates]);
 
   // close all
@@ -66,7 +66,7 @@ const ManageApplications = () => {
   );
 
   useEffect(() => {
-    console.log(closeDate);
+    ;
   }, [closeDate]);
 
   return (
@@ -161,7 +161,7 @@ const ManageApplications = () => {
                         end_date: openDates.end_date,
                       })
                       .then((res) => {
-                        console.log("opend all registration");
+                        ;
                         toast.success("Updated Successfully");
                         fetchData();
                       })
@@ -206,7 +206,7 @@ const ManageApplications = () => {
                         end_date: closeDate,
                       })
                       .then((res) => {
-                        console.log("closed all registration");
+                        ;
                         toast.success("Updated Successfully");
                         fetchData();
                       })

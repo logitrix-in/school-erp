@@ -91,8 +91,8 @@ const Navbar = () => {
               onClick={() => {
                 api
                   .delete("/login/")
-                  .then((res) => console.log("logged out"))
-                  .catch(console.log("logged out"))
+                  .then((res) => {})
+                  .catch()
                   .finally(() => {
                     navigate("/login/");
                     user.setUser(null);

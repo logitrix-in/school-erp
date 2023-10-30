@@ -32,8 +32,9 @@ import AdmissionTestCenter from "./pages/admission/AdmissionTestCenter";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import { Logger } from "./config/Logger";
-import IssueAdmitCard from "./components/admission/test-center/pages/IssueAdmitCard";
-import BulkManage from "./components/admission/test-center/pages/BulkManage";
+import IssueAdmitCard from "./components/admission/test-center/pages/ManageList/IssueAdmitCard";
+import BulkManage from "./components/admission/test-center/pages/ManageList/BulkManage";
+import UploadOfflineScore from "./components/admission/test-center/pages/Evalution/UploadOfflineScore";
 
 const NavLayout = () => {
   const ux = useAuth();
@@ -142,6 +143,7 @@ function App() {
 
             {/* Test Center */}
 
+            {/* -- Manage Test Interview */}
             <Route
               path="admission/test-center/"
               element={<AdmissionTestCenter />}
@@ -153,6 +155,13 @@ function App() {
             <Route
               path="admission/test-center/issue-admit-card/bulk-manage/"
               element={<BulkManage />}
+            />
+
+            {/* -- Evalution */}
+
+            <Route
+              path="admission/test-center/Evalution/upload-offline-test-score/"
+              element={<UploadOfflineScore />}
             />
 
             {/*  */}

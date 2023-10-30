@@ -39,14 +39,14 @@ const ScreeningDashboard = () => {
       .put("/admission/screening/", filter)
       .then((response) => {
         const data = response.data;
-        console.log(data);
+        ;
         setCharts({
           total: data.total_application,
           screenedPending: data.screened_pending,
         });
       })
       .catch((error) => {
-        console.log(error);
+        ;
       });
   }
 
@@ -56,7 +56,7 @@ const ScreeningDashboard = () => {
   }, []);
 
   useEffect(() => {
-    console.log(filter);
+    ;
     getValues();
   }, [filter]);
 
@@ -66,7 +66,7 @@ const ScreeningDashboard = () => {
   useEffect(() => {
     api.get("/admission/application/manage-application/").then((res) => {
       const classes = res.data.map((d) => d.class_name);
-      console.log(classes);
+      ;
       setClasses(classes);
     });
   }, []);
@@ -90,8 +90,6 @@ const ScreeningDashboard = () => {
     const {
       target: { value },
     } = e;
-
-    console.log(typeof value === "string" ? value.split(",") : value);
     setClass(typeof value === "string" ? value.split(",") : value);
   };
 

@@ -41,7 +41,7 @@ const ApplicationRecieved = () => {
         setSeries(values);
       })
       .catch((error) => {
-        console.log(error);
+        ;
       });
   }
 
@@ -161,7 +161,6 @@ const ApplicationRecieved = () => {
       target: { value },
     } = e;
 
-    console.log(typeof value === "string" ? value.split(",") : value);
     setClass(typeof value === "string" ? value.split(",") : value);
   };
 

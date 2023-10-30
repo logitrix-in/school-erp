@@ -11,7 +11,7 @@ const ApplicationView = () => {
       .get("/admission/application/")
       .then((res) => {
         const data = res.data;
-        console.log(data);
+        ;
         const values = data.map((user, idx) => {
           return {
             id: idx + 1,
@@ -28,14 +28,14 @@ const ApplicationView = () => {
             screening_status: user.status,
           };
         });
-        console.log(values);
+        ;
         setApplication(values);
       })
       .catch((err) => console.error(err));
   }, []);
 
   useEffect(() => {
-    console.log(applications);
+    ;
   }, [applications]);
 
   const columns = [

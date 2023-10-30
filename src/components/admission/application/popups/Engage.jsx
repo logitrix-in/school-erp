@@ -22,7 +22,7 @@ const Engage = ({ close, open }) => {
     api
       .get("/admission/application/smart-management/application-engagement/")
       .then((res) => setLineups(res.data))
-      .catch((err) => console.log(err));
+      .catch((err) =>{} );
   }
 
   useEffect(() => {
@@ -53,10 +53,10 @@ const Engage = ({ close, open }) => {
         state
       )
       .then((res) => {
-        console.log(res.data);
+        ;
         fetchData();
       })
-      .catch((err) => console.log(err))
+      .catch((err) =>{} )
       .finally(() => setLoading(false));
   };
 
@@ -75,10 +75,10 @@ const Engage = ({ close, open }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        ;
         fetchData();
       })
-      .catch((err) => console.log(err))
+      .catch((err) =>{} )
       .finally(() => setReignsOpen(false));
   }
 

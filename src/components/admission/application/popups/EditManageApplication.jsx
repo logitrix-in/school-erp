@@ -57,7 +57,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
       .get("/admission/application/manage-application/?date_format=calendar")
       .then((res) => {
         const data = res.data;
-        console.log(data);
+        ;
         setApplications(
           data.map((d) => {
             return {
@@ -72,7 +72,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
         refetch();
         setLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) =>{} );
   }
 
   useEffect(() => {
@@ -83,7 +83,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
     const { name, value } = e.target;
     const data = [...applications];
     data[row][name] = value;
-    console.log(data);
+    ;
     setApplications(data);
   }
 
@@ -91,7 +91,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
     const data = [...applications];
 
     data[row][name] = new Date(val).toLocaleDateString("en-CA");
-    console.log(data);
+    ;
     setApplications(data);
   }
 
@@ -103,7 +103,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
         toast.success("Updated Successfully", {
           autoClose: 3000,
         });
-        console.log(res);
+        ;
       });
 
     fetchData();

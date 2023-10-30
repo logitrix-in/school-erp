@@ -3,7 +3,7 @@ import { AppContext } from "../context/AppContext";
 
 const useAuth = () => {
   const context = useContext(AppContext);
-  console.log(context);
+  ;
   return { user: context.user, setUser: context.setUser };
 };
 

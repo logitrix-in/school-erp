@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
 import Notification from "./popups/ManageList/Notification";
-import IssueAdmitCard from "./pages/IssueAdmitCard";
 import { Link } from "react-router-dom";
 
 const ManageTestInterview = () => {

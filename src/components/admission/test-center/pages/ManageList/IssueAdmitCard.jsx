@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Bbox from "../../../UiComponents/Bbox";
+import Bbox from "../../../../UiComponents/Bbox";
 import { Link } from "react-router-dom";
 import {
   DateField,
@@ -22,7 +22,7 @@ import {
   TimeField,
   TimePicker,
 } from "@mui/x-date-pickers";
-import api from "../../../../config/api";
+import api from "../../../../../config/api";
 import dayjs from "dayjs";
 import { LoadingButton } from "@mui/lab";
 import { ToastContainer, toast } from "react-toastify";
@@ -33,7 +33,6 @@ const IssueAdmitCard = () => {
 
   const fetchData = () =>
     api.get("/admission/test-center/issue-admit-card/").then((res) => {
-      console.log(res.data.admit_card);
       setApplicants(res.data.admit_card);
     });
   useEffect(() => {
@@ -59,11 +58,9 @@ const IssueAdmitCard = () => {
         duration: dayjs(playload.duration).format("HH:mm"),
       })
       .then((res) => {
-        console.log(res.data);
         toast.success(res.data.message);
       })
       .catch((err) => {
-        console.log(err);
         toast.error("Something Went Wrong");
       })
       .finally(() => {
@@ -85,11 +82,9 @@ const IssueAdmitCard = () => {
     api
       .post("/admission/test-center/download-admit-card/", { id: playload.id })
       .then((res) => {
-        console.log(res.data);
         window.open(res.data.link, "_blank", "noopener,noreferrer");
       })
       .catch((err) => {
-        console.log(err);
         toast.error("Something Went Wrong");
       })
       .finally(() => {
@@ -112,7 +107,6 @@ const IssueAdmitCard = () => {
   };
 
   function timeToDate(timeString) {
-    console.log(timeString);
     var timeParts = timeString.split(":");
     var hours = parseInt(timeParts[0], 10);
     var minutes = parseInt(timeParts[1], 10);
@@ -141,13 +135,9 @@ const IssueAdmitCard = () => {
     setPlayload((prev) => ({ ...prev, [name]: value }));
   };
 
-  useEffect(() => {
-    console.log(playload);
-  }, [playload]);
+  useEffect(() => {}, [playload]);
 
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
+  useEffect(() => {}, [selected]);
 
   const deleteItem = (id) => {
     const updatedItems = selected.filter((item) => item.id !== id);
@@ -344,7 +334,6 @@ const IssueAdmitCard = () => {
                               : true,
                           })
                           .then((res) => {
-                            console.log(res.data);
                             fetchData();
                             // setSearchResult([]);
                             setSideOpen(false);
@@ -717,7 +706,6 @@ const IssueAdmitCard = () => {
                     <TimeField
                       disabled={resend}
                       onChange={(val) => {
-                        console.log(dayjs(val));
                         handleChange({
                           target: {
                             name: "duration",

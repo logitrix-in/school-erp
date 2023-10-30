@@ -22,7 +22,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Bbox from "../../../UiComponents/Bbox";
+import Bbox from "../../../../UiComponents/Bbox";
 import {
   DateField,
   DatePicker,
@@ -30,7 +30,7 @@ import {
   TimeField,
   TimePicker,
 } from "@mui/x-date-pickers";
-import api from "../../../../config/api";
+import api from "../../../../../config/api";
 import dayjs from "dayjs";
 import { LoadingButton } from "@mui/lab";
 import { Icons, ToastContainer, toast } from "react-toastify";
@@ -46,7 +46,6 @@ const BulkManage = () => {
     api
       .get("/admission/test-center/issue-admit-card/create-batch/")
       .then((res) => {
-        console.log(res.data.classes);
         setClasses(res.data.classes);
         if (selectedClass)
           setSelectedClass(
@@ -55,16 +54,14 @@ const BulkManage = () => {
             )
           );
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
   }
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    console.log(selectedClass);
-  }, [selectedClass]);
+  useEffect(() => {}, [selectedClass]);
 
   function timeToDate(timeString) {
     var timeParts = timeString.split(":");
@@ -88,9 +85,7 @@ const BulkManage = () => {
     setPlayload((prev) => ({ ...prev, [name]: value }));
   };
 
-  useEffect(() => {
-    console.log(playload);
-  }, [playload]);
+  useEffect(() => {}, [playload]);
 
   function generateBatches() {
     setgeneratebatchLoading(true);
@@ -102,8 +97,6 @@ const BulkManage = () => {
         admit_card_type: batchSettings.admit_card_type,
       })
       .then((res) => {
-        console.log(res.data);
-
         if (res.data.length == 0)
           toast.error("No Applicants in this class to generate batches");
         else {
@@ -112,12 +105,10 @@ const BulkManage = () => {
           );
         }
 
-        console.log("hehe");
         fetchData();
         // setSelectedClass(null);
-        console.log("hoho");
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {})
       .finally(() => {
         setgeneratebatchLoading(false);
       });
@@ -131,9 +122,7 @@ const BulkManage = () => {
     admit_card_type: "Online Test",
   });
 
-  useEffect(() => {
-    console.log(batchSettings);
-  }, [batchSettings]);
+  useEffect(() => {}, [batchSettings]);
 
   function handleSettingChange(name, value) {
     setBatchSettings((prev) => ({ ...prev, [name]: value }));
@@ -146,20 +135,25 @@ const BulkManage = () => {
   const [saveBatchButtonLoading, setSaveBatchButtonLoading] = useState(false);
 
   useEffect(() => {
-    console.log(selectBatch);
     selectBatch &&
       setPlayload((prev) => ({
         ...prev,
         applyingFor: selectedClass.applying_for,
         batch_id: selectBatch?.batch_no,
-        exam_date: selectBatch?.exam_date,
-        start_time: selectBatch?.start_time,
-        end_time: selectBatch?.end_time,
-        venue: selectBatch?.venue,
+        exam_date:
+          selectBatch?.exam_date ?? dayjs(new Date()).format("YYYY-MM-DD"),
+        start_time: selectBatch?.start_time ?? "00:00:00",
+        end_time: selectBatch?.end_time ?? "00:00:00",
+        venue: selectBatch?.venue ?? "",
       }));
   }, [selectBatch]);
 
   const [disabledLoading, setDisabledLoading] = useState(false);
+
+  // batch send admit card
+
+  const [batchAdmitSentLoding, setBatchAdmitSendLoading] = useState(null);
+  const [sendAllAdmitLoading, setAllAdmitLoading] = useState(false);
 
   return (
     <>
@@ -239,7 +233,6 @@ const BulkManage = () => {
                         new Date(selectBatch?.exam_date ?? new Date())
                       )}
                       onChange={(val) => {
-                        console.log(dayjs(new Date(val)).format("DD MMM YYYY"));
                         handleChange({
                           target: {
                             name: "exam_date",
@@ -320,15 +313,13 @@ const BulkManage = () => {
                             playload
                           )
                           .then((res) => {
-                            console.log(res.data);
                             toast.success(
                               `${playload.batch_id} is saved successfully`
                             );
                             fetchData();
                           })
-                          .catch((err) => console.log(err))
+                          .catch((err) => {})
                           .finally(() => {
-                            setOpenbatchPopup(false);
                             setSaveBatchButtonLoading(false);
                           });
                       }}
@@ -336,12 +327,43 @@ const BulkManage = () => {
                       Save Batch
                     </LoadingButton>
                     <LoadingButton
-                      disabled
+                      loading={batchAdmitSentLoding == selectBatch?.batch_no}
+                      onClick={() => {
+                        setBatchAdmitSendLoading(selectBatch?.batch_no);
+                        api
+                          .post(
+                            "/admission/test-center/issue-admit-card/create-batch/",
+                            playload
+                          )
+                          .then((res) => {
+                            api
+                              .post(
+                                `/admission/test-center/send-admit-card/${selectedClass?.applying_for}/${selectBatch?.batch_no}/?resend=${selectBatch?.is_mail_sent}`
+                              )
+                              .then((res) => {
+                                toast.success(res.data.message);
+                                fetchData();
+                                setBatchAdmitSendLoading(null);
+                                setOpenbatchPopup(false);
+                              })
+                              .catch((err) => {
+                                toast.error(
+                                  err.response.data.message ||
+                                    "Some error occurred"
+                                );
+                              });
+                          })
+                          .catch((err) => {})
+                          .finally(() => {
+                            setSaveBatchButtonLoading(false);
+                          });
+                      }}
                       fullWidth
                       size="medium"
                       variant="contained"
+                      color={selectBatch.is_mail_sent ? "warning" : "primary"}
                     >
-                      Send Admit Card
+                      {selectBatch.is_mail_sent ? "resend" : "Send Admit Card"}
                     </LoadingButton>
 
                     <LoadingButton
@@ -404,6 +426,7 @@ const BulkManage = () => {
                           border: "1px solid #eeeeee",
                           display: "flex",
                           flexDirection: "column",
+                          height: "fit-content",
                         }}
                       >
                         <Box
@@ -446,14 +469,14 @@ const BulkManage = () => {
                               />
                             </Box>
                           )}
-                          <Typography
-                            fontSize={"1.1rem"}
-                            fontWeight={500}
+                          <Box
                             display={"flex"}
                             justifyContent={"space-between"}
                             alignItems={"center"}
                           >
-                            {bat.batch_no}{" "}
+                            <Typography fontSize={"1.1rem"} fontWeight={500}>
+                              {bat.batch_no}{" "}
+                            </Typography>
                             <Chip
                               size="small"
                               sx={{ px: 1 }}
@@ -474,7 +497,7 @@ const BulkManage = () => {
                               }
                               variant="outlined"
                             />
-                          </Typography>
+                          </Box>
 
                           <Box
                             display={"flex"}
@@ -552,6 +575,9 @@ const BulkManage = () => {
                             </Typography>
                             <Typography
                               width={"50%"}
+                              overflow={"hidden"}
+                              whiteSpace={"nowrap"}
+                              textOverflow={"ellipsis"}
                               textAlign={"right"}
                               fontSize={"0.9rem"}
                               fontWeight={400}
@@ -599,7 +625,7 @@ const BulkManage = () => {
                                   toast.info(res.data.message);
                                   fetchData();
                                 })
-                                .catch((err) => console.log(err))
+                                .catch((err) => {})
                                 .finally(() => setDisabledLoading(false));
                             }}
                           >
@@ -625,29 +651,35 @@ const BulkManage = () => {
                           fetchData();
                           // setSelectedClass(null);
                         })
-                        .catch((err) => console.log(err.response));
+                        .catch((err) => {});
                     }}
                   >
                     Reset
                   </Button>
-                  <Button
+                  <LoadingButton
+                    loading={sendAllAdmitLoading}
                     variant="contained"
                     disabled={selectedClass.batches.every((b) => b.is_disabled)}
-                    onClick={() =>
+                    onClick={() => {
+                      setAllAdmitLoading(true);
                       api
                         .post(
                           `/admission/test-center/send-admit-card/${selectedClass?.applying_for}/all/`
                         )
                         .then((res) => {
                           toast.success(res.data.message);
+                          setAllAdmitLoading(false);
+                          fetchData();
                         })
                         .catch((err) => {
-                          toast.error(err.response.data.message || "Some error occurred");
-                        })
-                    }
+                          toast.error(
+                            err.response.data.message || "Some error occurred"
+                          );
+                        });
+                    }}
                   >
                     Send Admit Card
-                  </Button>
+                  </LoadingButton>
                 </Box>
               </Box>
             ) : (

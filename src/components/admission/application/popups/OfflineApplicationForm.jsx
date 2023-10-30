@@ -298,11 +298,11 @@ function OfflineApplicationForm({ open, close }) {
         "Content-Type": "multipart/form-data",
       })
       .then((res) => {
-        console.log(res);
+        ;
         close();
         toast.success("Application has been submitted successfully");
       })
-      .catch((err) => console.log(err))
+      .catch((err) =>{})
       .finally(() => setLoading(false));
   };
 
@@ -368,7 +368,7 @@ function OfflineApplicationForm({ open, close }) {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        ;
         setCounties(res.data);
       });
   }, []);
@@ -440,7 +440,7 @@ function OfflineApplicationForm({ open, close }) {
   }, [formData.current_states]);
 
   useEffect(() => {
-    console.log(formData);
+    ;
   }, [formData]);
 
   const [image, setImage] = useState();
@@ -452,7 +452,7 @@ function OfflineApplicationForm({ open, close }) {
 
       reader.onload = (event) => {
         setImagePreview(event.target.result);
-        console.log(event.target.result);
+        ;
       };
 
       reader.readAsDataURL(image);
@@ -475,7 +475,7 @@ function OfflineApplicationForm({ open, close }) {
     // img = new Image();
     // var objectUrl = _URL.createObjectURL(selectedFile);
     // img.onload = function () {
-    //   console.log(this.height / this.width, 4 / 3);
+    //   ;
     //   _URL.revokeObjectURL(objectUrl);
     // };
     // img.src = objectUrl;

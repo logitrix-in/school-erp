@@ -35,11 +35,11 @@ const MultipleApplication = ({ close, open }) => {
     api
       .get("/admission/application/smart-management/mutiple-application/")
       .then((res) => setApplications(res.data))
-      .catch((err) => console.log(err));
+      .catch((err) =>{} );
   }, []);
 
   useEffect(() => {
-    console.log(applications);
+    ;
   }, [applications]);
 
   function submit() {
@@ -50,11 +50,11 @@ const MultipleApplication = ({ close, open }) => {
         applications
       )
       .then((res) => {
-        console.log(res);
+        ;
         setLoading(false);
         setIsSaved(true);
       })
-      .catch((err) => console.log(err.response.data));
+      .catch((err) =>{} );
   }
 
   return (

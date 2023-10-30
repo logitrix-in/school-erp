@@ -2,6 +2,7 @@ import { Box, Button, Divider, Typography } from "@mui/material";
 import React from "react";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
+import { Link } from "react-router-dom";
 
 const Evaluation = () => {
   return (
@@ -26,16 +27,22 @@ const Evaluation = () => {
             p={2}
             display={"flex"}
             gap={2}
-            justifyContent={'center'}
+            justifyContent={"center"}
             flexDirection={{ xs: "column", md: "row" }}
           >
-            <Button fullWidth variant="outlined" color="primary" >
+            <Button
+              fullWidth
+              variant="outlined"
+              color="primary"
+              LinkComponent={Link}
+              to="Evalution/upload-offline-test-score/"
+            >
               Upload Offline Test Score
             </Button>
-            <Button fullWidth variant="outlined" color="primary" >
+            <Button fullWidth variant="outlined" color="primary">
               Upload Interview Score
             </Button>
-            <Button fullWidth variant="contained" color="primary" >
+            <Button fullWidth variant="contained" color="primary">
               Results
             </Button>
           </Box>

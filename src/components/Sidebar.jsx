@@ -68,7 +68,7 @@ const Sidebar = () => {
       return obj;
     }, {});
 
-    console.log(tabs);
+    ;
     ctx.setQuickTabs(tabs);
     localStorage.setItem("most-used", JSON.stringify(tabs));
   }, [routeCounters]);

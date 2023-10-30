@@ -6,7 +6,7 @@ const ReviewRightCard = ({ selected }) => {
   const app = selected.application_details;
   const add = selected.address_details.permanent_address;
 
-  console.log({ can, app, add });
+  ;
 
   return (
     <Box>
