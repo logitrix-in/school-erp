@@ -7,6 +7,7 @@ import {
   Card,
   Checkbox,
   Chip,
+  CircularProgress,
   Dialog,
   FormControl,
   FormControlLabel,
@@ -32,7 +33,7 @@ import {
 import api from "../../../../config/api";
 import dayjs from "dayjs";
 import { LoadingButton } from "@mui/lab";
-import { ToastContainer, toast } from "react-toastify";
+import { Icons, ToastContainer, toast } from "react-toastify";
 import { Mail } from "@mui/icons-material";
 import { Icon } from "@iconify/react";
 
@@ -47,6 +48,12 @@ const BulkManage = () => {
       .then((res) => {
         console.log(res.data.classes);
         setClasses(res.data.classes);
+        if (selectedClass)
+          setSelectedClass(
+            res.data.classes.find(
+              (c) => c.applying_for == selectedClass.applying_for
+            )
+          );
       })
       .catch((err) => console.log(err));
   }
@@ -107,7 +114,7 @@ const BulkManage = () => {
 
         console.log("hehe");
         fetchData();
-        setSelectedClass(null);
+        // setSelectedClass(null);
         console.log("hoho");
       })
       .catch((err) => console.log(err))
@@ -139,6 +146,7 @@ const BulkManage = () => {
   const [saveBatchButtonLoading, setSaveBatchButtonLoading] = useState(false);
 
   useEffect(() => {
+    console.log(selectBatch);
     selectBatch &&
       setPlayload((prev) => ({
         ...prev,
@@ -146,10 +154,12 @@ const BulkManage = () => {
         batch_id: selectBatch?.batch_no,
         exam_date: selectBatch?.exam_date,
         start_time: selectBatch?.start_time,
-        duration: selectBatch?.duration,
+        end_time: selectBatch?.end_time,
         venue: selectBatch?.venue,
       }));
   }, [selectBatch]);
+
+  const [disabledLoading, setDisabledLoading] = useState(false);
 
   return (
     <>
@@ -169,7 +179,7 @@ const BulkManage = () => {
           {/* left */}
           <Box
             width={"15rem"}
-            height={"60vh"}
+            height={"65vh"}
             overflow={"auto"}
             display={"flex"}
             // bgcolor={'primary.lighter'}
@@ -264,7 +274,7 @@ const BulkManage = () => {
                         handleChange({
                           target: {
                             name: "start_time",
-                            value: dayjs(val).format("HH:mm"),
+                            value: dayjs(val).format("HH:mm:ss"),
                           },
                         })
                       }
@@ -272,25 +282,23 @@ const BulkManage = () => {
                       label="Select Start Time"
                     />
                   </Grid>
-                  <Grid item xs={2}>
-                    <TimeField
+                  <Grid item xs={4}>
+                    <TimePicker
                       defaultValue={
-                        selectBatch?.duration != null
-                          ? dayjs(timeToDate(selectBatch?.duration))
+                        selectBatch?.end_time ?? false
+                          ? dayjs(timeToDate(selectBatch?.start_time))
                           : dayjs(timeToDate("00:00:00"))
                       }
-                      onChange={(val) => {
+                      onChange={(val) =>
                         handleChange({
                           target: {
-                            name: "duration",
-                            value: dayjs(val).format("HH:mm"),
+                            name: "end_time",
+                            value: dayjs(val).format("HH:mm:ss"),
                           },
-                        });
-                      }}
-                      label="Exam Duration"
-                      views={["hours", "minutes"]}
-                      format="HH:mm"
-                      ampm={false}
+                        })
+                      }
+                      sx={{ width: "100%" }}
+                      label="Select End Time"
                     />
                   </Grid>
                   <Grid
@@ -316,6 +324,7 @@ const BulkManage = () => {
                             toast.success(
                               `${playload.batch_id} is saved successfully`
                             );
+                            fetchData();
                           })
                           .catch((err) => console.log(err))
                           .finally(() => {
@@ -350,8 +359,8 @@ const BulkManage = () => {
           )}
 
           {/* right */}
-          {selectedClass &&
-            (selectedClass.batches.length > 0 ? (
+          {selectedClass ? (
+            selectedClass.batches.length > 0 ? (
               <Box
                 p={2}
                 flex={1}
@@ -371,14 +380,14 @@ const BulkManage = () => {
                 >
                   Generated Batches for Class {selectedClass?.applying_for}
                 </Typography>
-
                 <Box
                   display={"flex"}
                   flexWrap={"wrap"}
                   gap={2}
-                  mt={2}
-                  height={"40vh"}
+                  mt={1}
+                  height={"47vh"}
                   overflow={"auto"}
+                  pb={2}
                 >
                   {selectedClass?.batches
                     .sort(function (a, b) {
@@ -397,8 +406,46 @@ const BulkManage = () => {
                           flexDirection: "column",
                         }}
                       >
-                        <Box bgcolor={"secondary.main"} height={8} />
-                        <Box px={2} py={1.4} width={"18rem"}>
+                        <Box
+                          bgcolor={
+                            bat?.is_disabled
+                              ? "#8e8e8e"
+                              : bat.is_mail_sent == null
+                              ? "warning.main"
+                              : bat.is_mail_sent
+                              ? "success.main"
+                              : "error.main"
+                          }
+                          height={8}
+                        />
+                        <Box
+                          px={2}
+                          py={1.4}
+                          width={"18rem"}
+                          position={"relative"}
+                        >
+                          {bat.is_disabled && (
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                backgroundColor: "rgba(195, 192, 192, 0.1)",
+                                backdropFilter: "blur(2px)",
+                              }}
+                            >
+                              <Icon
+                                fontSize={"4rem"}
+                                icon="ic:outline-block"
+                                color="#8e8e8e"
+                              />
+                            </Box>
+                          )}
                           <Typography
                             fontSize={"1.1rem"}
                             fontWeight={500}
@@ -410,9 +457,21 @@ const BulkManage = () => {
                             <Chip
                               size="small"
                               sx={{ px: 1 }}
-                              color={bat.is_mail_sent ? "success" : "error"}
+                              color={
+                                bat.is_mail_sent == null
+                                  ? "warning"
+                                  : bat.is_mail_sent
+                                  ? "success"
+                                  : "error"
+                              }
                               icon={<Mail />}
-                              label={bat.is_mail_sent ? "Sent" : "Not Send"}
+                              label={
+                                bat.is_mail_sent == null
+                                  ? "Pending"
+                                  : bat.is_mail_sent
+                                  ? "Sent"
+                                  : "Not Send"
+                              }
                               variant="outlined"
                             />
                           </Typography>
@@ -454,7 +513,7 @@ const BulkManage = () => {
                             alignItems={"center"}
                           >
                             <Typography fontSize={"0.8rem"} fontWeight={400}>
-                              Exam Time
+                              Exam Start
                             </Typography>
                             <Typography fontSize={"0.9rem"} fontWeight={400}>
                               {bat.start_time == null
@@ -471,14 +530,14 @@ const BulkManage = () => {
                             alignItems={"center"}
                           >
                             <Typography fontSize={"0.8rem"} fontWeight={400}>
-                              duration
+                              Exam End
                             </Typography>
                             <Typography fontSize={"0.9rem"} fontWeight={400}>
-                              {bat.duration == null
+                              {bat.end_time == null
                                 ? "Not Issued"
-                                : dayjs(timeToDate(bat.duration))
-                                    .format("hh:mm")
-                                    .replace(":", "h ") + "m"}
+                                : dayjs(timeToDate(bat.end_time)).format(
+                                    "hh:mm a"
+                                  )}
                             </Typography>
                           </Box>
                           <Box
@@ -510,27 +569,47 @@ const BulkManage = () => {
                           <Button
                             variant="contained"
                             sx={{ borderRadius: 0 }}
+                            disabled={bat?.is_disabled}
                             fullWidth
                             onClick={() => {
                               setOpenbatchPopup(true);
                               setSelectBatch(bat);
                             }}
                           >
-                            Update
+                            Enter Details
                           </Button>
-                          <Button
-                            variant=""
+                          <LoadingButton
+                            loading={disabledLoading == bat.batch_no}
                             color="error"
-                            sx={{ borderRadius: 0, color: "red" }}
+                            sx={{
+                              borderRadius: 0,
+                              color: bat.is_disabled ? "primary.main" : "red",
+                            }}
                             fullWidth
+                            onClick={() => {
+                              setDisabledLoading(bat.batch_no);
+                              api
+                                .patch(
+                                  "/admission/test-center/issue-admit-card/create-batch/",
+                                  {
+                                    id: bat.id,
+                                  }
+                                )
+                                .then((res) => {
+                                  toast.info(res.data.message);
+                                  fetchData();
+                                })
+                                .catch((err) => console.log(err))
+                                .finally(() => setDisabledLoading(false));
+                            }}
                           >
-                            delete
-                          </Button>
+                            {bat.is_disabled ? "Enable" : "Disable"}
+                          </LoadingButton>
                         </Box>
                       </Card>
                     ))}
                 </Box>
-                <Box sx={{ mt: 3 }} mt={"auto"} display={"flex"} gap={1}>
+                <Box mt={"auto"} display={"flex"} gap={1}>
                   <Button
                     variant="outlined"
                     color="info"
@@ -544,14 +623,31 @@ const BulkManage = () => {
                         )
                         .then((res) => {
                           fetchData();
-                          setSelectedClass(null);
+                          // setSelectedClass(null);
                         })
                         .catch((err) => console.log(err.response));
                     }}
                   >
-                    Re-Generate
+                    Reset
                   </Button>
-                  <Button variant="contained">Send Admit Card</Button>
+                  <Button
+                    variant="contained"
+                    disabled={selectedClass.batches.every((b) => b.is_disabled)}
+                    onClick={() =>
+                      api
+                        .post(
+                          `/admission/test-center/send-admit-card/${selectedClass?.applying_for}/all/`
+                        )
+                        .then((res) => {
+                          toast.success(res.data.message);
+                        })
+                        .catch((err) => {
+                          toast.error(err.response.data.message || "Some error occurred");
+                        })
+                    }
+                  >
+                    Send Admit Card
+                  </Button>
                 </Box>
               </Box>
             ) : (
@@ -641,7 +737,20 @@ const BulkManage = () => {
                   Generate Batches
                 </LoadingButton>
               </Box>
-            ))}
+            )
+          ) : (
+            <Box
+              height={"65vh"}
+              flex={1}
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
+              <Typography fontSize={"1.3rem"} color={"gray"}>
+                Select a class to generate batches
+              </Typography>
+            </Box>
+          )}
         </Bbox>
       </Bbox>
     </>

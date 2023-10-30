@@ -57,7 +57,7 @@ const ManageTestInterview = () => {
               LinkComponent={Link}
               to='issue-admit-card'
             >
-              Issue Admit Card
+              Admit Card
             </Button>
 
            
