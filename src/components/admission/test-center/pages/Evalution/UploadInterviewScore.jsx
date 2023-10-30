@@ -5,7 +5,7 @@ import { Box, Button, LinearProgress, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import api from "../../../../../config/api";
 
-const UploadOfflineScore = () => {
+const UploadInterviewScore = () => {
   const [json, setJson] = useState(null);
   const [dragging, setDragging] = useState(null);
   const [loadingJSON, setLoadingJSON] = useState(false);
@@ -81,7 +81,7 @@ const UploadOfflineScore = () => {
                 >
                   <Typography fontSize={"1.4rem"} color={"grey"}>
                     {!dragging
-                      ? "Drag and Drop Offline Report Excel Here"
+                      ? "Drag and Drop Interview Score Excel Here"
                       : "Drop Here"}
                   </Typography>
                 </Box>
@@ -122,4 +122,4 @@ const UploadOfflineScore = () => {
   );
 };
 
-export default UploadOfflineScore;
+export default UploadInterviewScore;

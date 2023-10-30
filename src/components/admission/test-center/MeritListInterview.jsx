@@ -2,6 +2,7 @@ import { Box, Button, Divider, Typography } from "@mui/material";
 import React from "react";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
+import { Link } from "react-router-dom";
 
 const MeritListInterview = () => {
   return (
@@ -29,10 +30,10 @@ const MeritListInterview = () => {
             gap={2}
             flexDirection={{ xs: "column", md: "row" }}
           >
-            <Button fullWidth variant="outlined">
+            <Button fullWidth variant="outlined" LinkComponent={Link} to={'set-rule/'}>
               Set Rule
             </Button>
-            <Button fullWidth variant="contained">
+            <Button fullWidth variant="contained" LinkComponent={Link} to={'generate-merit-list/'}>
               Generate Merit List
             </Button>
           </Box>

@@ -35,6 +35,9 @@ import { Logger } from "./config/Logger";
 import IssueAdmitCard from "./components/admission/test-center/pages/ManageList/IssueAdmitCard";
 import BulkManage from "./components/admission/test-center/pages/ManageList/BulkManage";
 import UploadOfflineScore from "./components/admission/test-center/pages/Evalution/UploadOfflineScore";
+import UploadInterviewScore from "./components/admission/test-center/pages/Evalution/UploadInterviewScore";
+import SetMeritListRule from "./components/admission/test-center/pages/MeritList/SetMeritListRule";
+import GenerateMeritList from "./components/admission/test-center/pages/MeritList/GenerateMeritList";
 
 const NavLayout = () => {
   const ux = useAuth();
@@ -160,8 +163,24 @@ function App() {
             {/* -- Evalution */}
 
             <Route
-              path="admission/test-center/Evalution/upload-offline-test-score/"
+              path="admission/test-center/upload-offline-test-score/"
               element={<UploadOfflineScore />}
+            />
+            <Route
+              path="admission/test-center/upload-interview-score/"
+              element={<UploadInterviewScore />}
+            />
+
+            {/* -- Merit List */}
+
+            <Route
+              path="admission/test-center/set-rule/"
+              element={<SetMeritListRule />}
+            />
+
+            <Route
+              path="admission/test-center/  "
+              element={<GenerateMeritList />}
             />
 
             {/*  */}
