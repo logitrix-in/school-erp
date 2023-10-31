@@ -179,7 +179,7 @@ function App() {
             />
 
             <Route
-              path="admission/test-center/  "
+              path="admission/test-center/generate-merit-list/"
               element={<GenerateMeritList />}
             />
 

@@ -9,7 +9,7 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
-  Typography
+  Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import React, { useEffect, useState } from "react";
@@ -39,15 +39,12 @@ const ScreeningDashboard = () => {
       .put("/admission/screening/", filter)
       .then((response) => {
         const data = response.data;
-        ;
         setCharts({
           total: data.total_application,
           screenedPending: data.screened_pending,
         });
       })
-      .catch((error) => {
-        ;
-      });
+      .catch((error) => {});
   }
 
   useEffect(() => {
@@ -56,7 +53,6 @@ const ScreeningDashboard = () => {
   }, []);
 
   useEffect(() => {
-    ;
     getValues();
   }, [filter]);
 
@@ -66,7 +62,6 @@ const ScreeningDashboard = () => {
   useEffect(() => {
     api.get("/admission/application/manage-application/").then((res) => {
       const classes = res.data.map((d) => d.class_name);
-      ;
       setClasses(classes);
     });
   }, []);
@@ -114,17 +109,20 @@ const ScreeningDashboard = () => {
 
         <Box
           display={"flex"}
-          gap={5}
+          gap={2}
           flexDirection={{ xs: "column", lg: "row" }}
           alignItems={{ xs: "center" }}
           p={3}
         >
-          <Box
+          <Bbox
+            borderRadius={1}
+            p={3}
+            py={5}
             display={"flex"}
             flexDirection={"column"}
             gap={"2rem"}
             bgcolor={"white"}
-            width={"30rem"}
+            width={{ xs: "100%", lg: "30rem" }}
           >
             <FormControl fullWidth>
               <InputLabel>Academic Year</InputLabel>
@@ -173,7 +171,7 @@ const ScreeningDashboard = () => {
                 ))}
               </Select>
             </FormControl>
-          </Box>
+          </Bbox>
 
           <Box display={"flex"} flexDirection={"column"} gap={2} flex={1}>
             <Box
