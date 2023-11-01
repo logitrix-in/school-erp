@@ -10,25 +10,62 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { Icon } from "@iconify/react";
+import api from "../../../config/api";
+import { ToastContainer, toast } from "react-toastify";
 
 const Evaluation = () => {
   const [resultOpen, setResultOpen] = useState(false);
 
   const columns = [
-    { field: "id", headerName: "Application Id", width: 150 },
-    { field: "name", headerName: "Name", width: 200 },
-    { field: "test_marks", headerName: "Test Marks", width: 100 },
-    { field: "interview_marks", headerName: "Interview Marks", width: 130 },
+    { field: "id", headerName: "Application Id", width: 150, editable: true },
+    { field: "name", headerName: "Name", width: 180 },
+    {
+      field: "test_marks",
+      headerName: "Test Marks",
+      width: 100,
+      align: "center",
+    },
+    {
+      field: "interview_marks",
+      headerName: "Interview Marks",
+      width: 130,
+      align: "center",
+    },
     { field: "gender", headerName: "Gender", width: 100 },
     { field: "caste", headerName: "Caste", width: 90 },
-    { field: "total", headerName: "Total Marks", width: 90 },
+    {
+      field: "total",
+      headerName: "Total Marks",
+      width: 90,
+      align: "center",
+      valueGetter: (params) => {
+        return params.row.column1;
+      },
+    },
   ];
+
+  useEffect(() => {
+    api
+      .post("/admission/test-center/evaluation/merit-list/", {
+        applyingFor: "all",
+      })
+      .then((res) => {
+        setRows(res.data.data);
+      })
+      .catch((err) => {
+        setRows([]);
+        toast.error(err.response.data.message);
+      });
+  }, []);
+
+  const [rows, setRows] = useState();
+
   return (
     <>
       <RevealCard>
@@ -80,40 +117,60 @@ const Evaluation = () => {
             >
               Results
             </Button>
+
+            {/* Result */}
             <Dialog
               maxWidth="md"
               fullWidth
               open={resultOpen}
               onClose={() => setResultOpen(false)}
             >
+              <ToastContainer />
               <Box
                 display={"flex"}
                 justifyContent={"space-between"}
                 alignItems={"center"}
                 p={1}
                 px={2}
-                bgcolor={'primary.main'}
+                bgcolor={"primary.main"}
               >
-                <Typography fontSize={"1rem"} fontWeight={500} color={'white'}>
+                <Typography fontSize={"1rem"} fontWeight={500} color={"white"}>
                   View Results
                 </Typography>
                 <IconButton onClick={() => setResultOpen(false)}>
-                  <Icon icon={"ion:close"} color="white"/>
+                  <Icon icon={"ion:close"} color="white" />
                 </IconButton>
               </Box>
               <Box p={2} className="col" gap={2}>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">Class</InputLabel>
-                  <Select label="Class">
-                    <MenuItem value={0}>All</MenuItem>
-                    <MenuItem value={10}>I</MenuItem>
-                    <MenuItem value={20}>II</MenuItem>
-                    <MenuItem value={30}>III</MenuItem>
+                  <Select
+                    label="Class"
+                    defaultValue={"all"}
+                    onChange={(e) => {
+                      api
+                        .post("/admission/test-center/evaluation/merit-list/", {
+                          applyingFor: e.target.value,
+                        })
+                        .then((res) => {
+                          toast.info(res.data.message);
+                          setRows(res.data.data);
+                        })
+                        .catch((err) => {
+                          setRows([]);
+                          toast.error(err.response.data.message);
+                        });
+                    }}
+                  >
+                    <MenuItem value={"all"}>All</MenuItem>
+                    <MenuItem value={"I"}>I</MenuItem>
+                    <MenuItem value={"II"}>II</MenuItem>
+                    <MenuItem value={"III"}>III</MenuItem>
                   </Select>
                 </FormControl>
                 <Box height="55vh">
                   <DataGrid
-                    rows={[]}
+                    rows={rows}
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5, 10, 20]}

@@ -6,8 +6,12 @@ import {
   Checkbox,
   Collapse,
   Divider,
+  FormControl,
   FormControlLabel,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   Slider,
   Stack,
   TextField,
@@ -18,11 +22,19 @@ import {
   ArrowDropUpOutlined,
 } from "@mui/icons-material";
 import { Icon } from "@iconify/react";
+import api from "../../../../../config/api";
+import { ToastContainer, toast } from "react-toastify";
 
 const SetMeritListRule = () => {
   const [IncludeTest, setIncludeTest] = useState(true);
   const [includeInterview, setIncludeInterview] = useState(true);
   const [weightage, setWeightage] = useState(50);
+
+  const [meritListNum, setMeritListNum] = useState(0);
+  const [waitingListNum, setWaitingListNum] = useState(0);
+  const [Class, setClass] = useState("all");
+
+  const [meritList, setMeritList] = useState([]);
 
   const [genderDiversityEnable, setGenderDiversityEnable] = useState(false);
   const [culturalDiversityEnable, setCulturalDiversityEnable] = useState(false);
@@ -55,8 +67,6 @@ const SetMeritListRule = () => {
     }
   };
 
-  useEffect(() => console.log(priority), [priority]);
-
   return (
     <Bbox borderRadius={1}>
       <Typography fontSize={"1rem"} fontWeight={500} p={2}>
@@ -64,18 +74,41 @@ const SetMeritListRule = () => {
       </Typography>
       <Divider />
       <Box p={2}>
+        <FormControl sx={{mb:2, width:'10rem'}}>
+          <InputLabel id="demo-simple-select-label">Class</InputLabel>
+          <Select
+            label="Class"
+            value={Class}
+            onChange={(e) => setClass(e.target.value)}
+          >
+            <MenuItem value={"all"}>All</MenuItem>
+            <MenuItem value={"I"}>I</MenuItem>
+            <MenuItem value={"II"}>II</MenuItem>
+            <MenuItem value={"III"}>III</MenuItem>
+          </Select>
+        </FormControl>
         <Box display={"flex"} gap={3}>
           <Box display={"flex"} gap={1} alignItems={"center"}>
             <Typography>
               Number of Candidates to be considered for Merit List
             </Typography>
-            <TextField sx={{ width: "5rem" }} size="small" />
+            <TextField
+              value={meritListNum}
+              onChange={(e) => setMeritListNum(e.target.value)}
+              sx={{ width: "5rem" }}
+              size="small"
+            />
           </Box>
           <Box display={"flex"} gap={1} alignItems={"center"}>
             <Typography>
               Number of Candidates to be considered for Waiting List
             </Typography>
-            <TextField sx={{ width: "5rem" }} size="small" />
+            <TextField
+              value={waitingListNum}
+              onChange={(e) => setWaitingListNum(e.target.value)}
+              sx={{ width: "5rem" }}
+              size="small"
+            />
           </Box>
         </Box>
         <Typography
@@ -128,7 +161,7 @@ const SetMeritListRule = () => {
           </Box>
         </Box>
 
-        <Box mt={2} p={1} px={2} bgcolor={"#eeeeee"} borderRadius={1} mb={1}>
+        {/* <Box mt={2} p={1} px={2} bgcolor={"#eeeeee"} borderRadius={1} mb={1}>
           <FormControlLabel
             control={<Checkbox />}
             onChange={(_, v) => {
@@ -207,6 +240,7 @@ const SetMeritListRule = () => {
             }
           />
         </Box>
+
         <Collapse
           sx={{ mb: 1 }}
           orientation="vertical"
@@ -259,6 +293,7 @@ const SetMeritListRule = () => {
             </Box>
           </Box>
         </Collapse>
+
         <Box p={1} px={2} bgcolor={"#eeeeee"} borderRadius={1}>
           <FormControlLabel
             control={<Checkbox />}
@@ -277,6 +312,7 @@ const SetMeritListRule = () => {
             }
           />
         </Box>
+
         <Collapse
           sx={{ mt: 1 }}
           orientation="vertical"
@@ -385,9 +421,55 @@ const SetMeritListRule = () => {
               </Typography>
             </Box>
           ))}
-        </Bbox>
+        </Bbox> */}
+        <ToastContainer />
+        <Button
+          variant="contained"
+          sx={{ mt: 2 }}
+          onClick={() => {
+            const payload = {
+              applyingFor: Class,
+              numCountMerit: meritListNum,
+              numCountWaiting: waitingListNum,
+              weightage:
+                IncludeTest && includeInterview
+                  ? {
+                      test: 100 - weightage,
+                      interview: weightage,
+                    }
+                  : null,
+              include_offline: IncludeTest,
+              include_online: includeInterview,
+            };
 
-        <Button variant="contained" sx={{mt:2}}>Save Merit List Rules</Button>
+            console.log(payload);
+
+            toast.info(
+              JSON.stringify(
+                {
+                  payload,
+                },
+                null,
+                4
+              )
+            );
+            api
+              .put("/admission/test-center/evaluation/merit-list/", {
+                applyingFor: payload,
+              })
+              .then((res) => {
+                console.log(res.data);
+                toast.success(res.data);
+                // toast.info(res.data.message);
+              })
+              .catch((err) => {
+                console.log(err.response);
+                toast.error(err.response.data.message);
+              });
+          }}
+        >
+          Save Merit List Rules
+        </Button>
       </Box>
     </Bbox>
   );
