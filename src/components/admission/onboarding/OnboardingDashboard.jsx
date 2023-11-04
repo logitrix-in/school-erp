@@ -1,9 +1,12 @@
 import { Icon } from "@iconify/react";
 import {
   Box,
+  Button,
   Checkbox,
   Divider,
   FormControl,
+  Grid,
+  IconButton,
   InputLabel,
   ListItemText,
   MenuItem,
@@ -17,7 +20,7 @@ import api from "../../../config/api";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
 
-const TestcenterDashboard = () => {
+const OnboardingDashboard = () => {
   const curYear = new Date().getFullYear();
   const academicYear = `${curYear}-${(curYear + 1).toString().slice(2, 4)}`;
 
@@ -31,8 +34,7 @@ const TestcenterDashboard = () => {
   const [classes, setClasses] = useState([]);
   const [charts, setCharts] = useState({
     total: 0,
-    cleared: 0,
-    failed: 0,
+    screenedPending: 0,
   });
 
   function getValues() {
@@ -40,16 +42,12 @@ const TestcenterDashboard = () => {
       .put("/admission/screening/", filter)
       .then((response) => {
         const data = response.data;
-        ;
         setCharts({
           total: data.total_application,
-          cleared: data.screened,
-          failed: data.failed,
+          screenedPending: data.screened_pending,
         });
       })
-      .catch((error) => {
-        ;
-      });
+      .catch((error) => {});
   }
 
   useEffect(() => {
@@ -58,7 +56,6 @@ const TestcenterDashboard = () => {
   }, []);
 
   useEffect(() => {
-    ;
     getValues();
   }, [filter]);
 
@@ -68,7 +65,6 @@ const TestcenterDashboard = () => {
   useEffect(() => {
     api.get("/admission/application/manage-application/").then((res) => {
       const classes = res.data.map((d) => d.class_name);
-      ;
       setClasses(classes);
     });
   }, []);
@@ -116,20 +112,22 @@ const TestcenterDashboard = () => {
 
         <Box
           display={"flex"}
-          gap={2}
+          gap={3}
           flexDirection={{ xs: "column", lg: "row" }}
-          alignItems={{ xs: "stretch" }}
+          alignItems={{ xs: "center" }}
           p={3}
+          pb={2}
         >
-          <Box
+          <Bbox
+            borderRadius={1}
+            p={3}
+            flex={1}
+            py={5}
             display={"flex"}
             flexDirection={"column"}
-            justifyContent={"center"}
-            alignItems={'stretch'}
             gap={"2rem"}
             bgcolor={"white"}
-            // width={"30rem"}
-            flex={1}
+            width={{ xs: "100%", lg: "30rem" }}
           >
             <FormControl fullWidth>
               <InputLabel>Academic Year</InputLabel>
@@ -147,15 +145,15 @@ const TestcenterDashboard = () => {
 
             <Box display={"flex"} gap={2}>
               <DatePicker
-                sx={{width:'100%'}}
+                sx={{ width: "100%" }}
                 label="Start Date"
                 onChange={(e) => setStartDate(e)}
                 format="DD MMM, YYYY"
-                />
+              />
               <DatePicker
-                sx={{width:'100%'}}
                 format="DD MMM, YYYY"
                 label="End Date"
+                sx={{ width: "100%" }}
                 onChange={(e) => setEndDate(e)}
               />
             </Box>
@@ -180,109 +178,86 @@ const TestcenterDashboard = () => {
                 ))}
               </Select>
             </FormControl>
-          </Box>
-
-          <Bbox
-            p={2}
-            flex={0.7}
-            display={"flex"}
-            flexDirection={"column"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            borderRadius={1}
-            sx={{
-              background: "linear-gradient(to right, #2C7BA0, #9BD9F4)",
-            }}
-            textAlign={"center"}
-            color={"white"}
-          >
-            <Typography fontSize={"1rem"} fontWeight={300}>
-              Total
-            </Typography>
-            <Typography fontSize={"1.3rem"} fontWeight={400}>
-              Application Recieved
-            </Typography>
-            <Typography fontSize={"2.5rem"} fontWeight={600}>
-              {charts.total}
-            </Typography>
           </Bbox>
 
-          <Box display={"flex"} flexDirection={"column"} gap={2} flex={1}>
-            <Box
-              flex={1}
-              borderRadius={1}
-              p={2}
-              display={"flex"}
-              flexDirection={"column"}
-              boxShadow={"0 3px 12px -1px rgba(0,0,0,0.4)"}
-              border={"1px solid black"}
-              borderColor={"primary.main"}
-            >
-              <Box display={"flex"}>
-                <Box flex={2}>
-                  <Typography
+          <Grid container spacing={2} flex={2}>
+            <Grid item xs={6}>
+              <Bbox
+                height={"9rem"}
+                bgcolor={"primary.light"}
+                borderRadius={1}
+                p={2}
+                display="flex"
+                justifyContent="center"
+                alignItems="stretch"
+                position={"relative"}
+              >
+                <Box display={"flex"} alignItems={"center"} gap={3}>
+                  <Box>
+                    <Typography
+                      fontSize={"1.6rem"}
+                      color={"primary.dark"}
+                      fontWeight={600}
+                    >
+                      256
+                    </Typography>
+                    <Typography color={"primary.main"}>
+                      Candidates selected for Test/Interview
+                    </Typography>
+                  </Box>
+
+                  <Icon
+                    icon={"fluent:note-edit-24-filled"}
+                    color="#3B98C4"
                     fontSize={"4rem"}
-                    fontWeight={500}
-                    color={"primary.main"}
-                    lineHeight={1.2}
-                  >
-                    {charts.cleared}
-                  </Typography>
-                  <Typography fontSize={"1.5rem"} color={"primary.main"}>
-                    Cleared
-                  </Typography>
+                  />
                 </Box>
-                <Icon
-                  icon={"mingcute:user-follow-2-fill"}
-                  fontSize={"7rem"}
-                  color="#3B98C4"
-                />
-              </Box>
-              <Typography fontSize={"0.8rem"} color={"primary.main"}>
-                {((charts.cleared / charts.total) * 100).toFixed(2)}% of the
-                applicants have cleared the screening proccess
-              </Typography>
-            </Box>
-            <Box
-              flex={1}
-              borderRadius={1}
-              p={2}
-              display={"flex"}
-              boxShadow={"0 3px 12px -1px rgba(0,0,0,0.4)"}
-              flexDirection={"column"}
-              border={"1px solid black"}
-              borderColor={"secondary.main"}
-            >
-              <Box display={"flex"}>
-                <Box flex={2}>
-                  <Typography
-                    fontSize={"4rem"}
-                    fontWeight={500}
-                    color={"#B34A19"}
-                    lineHeight={1.2}
-                  >
-                    {charts.failed}
-                  </Typography>
-                  <Typography fontSize={"1.5rem"} color={"secondary.main"}>
-                    Rejected
-                  </Typography>
+                <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
+                  <IconButton onClick={() => alert("clicked")}>
+                    <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
+                  </IconButton>
                 </Box>
-                <Icon
-                  icon={"ri:user-forbid-line"}
-                  fontSize={"6rem"}
-                  color="#C4673B"
-                />
-              </Box>
-              <Typography fontSize={"0.8rem"} color={"secondary.main"}>
-                {((charts.failed / charts.total) * 100).toFixed(2)}% of the
-                applicants have failed to clear the screening proccess
-              </Typography>
-            </Box>
-          </Box>
+              </Bbox>
+            </Grid>
+            <Grid item xs={6}>
+              <Bbox
+                height={"9rem"}
+                bgcolor={"secondary.light"}
+                borderRadius={1}
+                p={2}
+              ></Bbox>
+            </Grid>
+            <Grid item xs={6}>
+              <Bbox
+                height={"9rem"}
+                bgcolor={"secondary.light"}
+                borderRadius={1}
+                p={2}
+              ></Bbox>
+            </Grid>
+            <Grid item xs={6}>
+              <Bbox
+                height={"9rem"}
+                bgcolor={"primary.light"}
+                borderRadius={1}
+                p={2}
+              ></Bbox>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box ml={3} mb={3}>
+          <Button
+            sx={{ px: 5 }}
+            size="small"
+            color="secondary"
+            variant="contained"
+          >
+            Add / Remove candidate to/from Merit List
+          </Button>
         </Box>
       </Bbox>
     </RevealCard>
   );
 };
 
-export default TestcenterDashboard;
+export default OnboardingDashboard;
