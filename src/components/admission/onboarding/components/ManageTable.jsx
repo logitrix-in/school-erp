@@ -13,7 +13,7 @@ export default function DataTable() {
   const candidateColumn = [
     {
       field: "name",
-      headerName: "Name", 
+      headerName: "Name",
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -65,32 +65,48 @@ export default function DataTable() {
     },
   ];
 
+  const classRows = [
+    { id: 1, class: "I", pending: 32, action: "button" },
+    { id: 2, class: "II", pending: 50, action: "button" },
+  ];
+
   useEffect(() => {
     setColumn(classColumn);
-    setRows([
-      { id: 1, class: "I", pending: 32, action: "button" },
-      { id: 2, class: "II", pending: 50, action: "button" },
-    ]);
+    setRows(classRows);
   }, []);
 
   return (
-    <div style={{ width: "50%", height: 370 }}>
-      <DataGrid
-        density="standard"
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
+    <div style={{ width: "50%" }}>
+      <div style={{ height: 370 }}>
+        <DataGrid
+          density="standard"
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[
+            Math.round((rows.length * 1) / 4),
+            Math.round((rows.length * 2) / 4),
+            Math.round((rows.length * 3) / 4),
+            rows.length,
+          ]}
+        />
+      </div>
+      <Button
+        variant="contained"
+        sx={{ mt: 1 }}
+        size="small"
+        onClick={() => {
+          setCurMode("class");
+          setColumn(classColumn);
+          setRows(classRows);
         }}
-        pageSizeOptions={[
-          Math.round((rows.length * 1) / 4),
-          Math.round((rows.length * 2) / 4),
-          Math.round((rows.length * 3) / 4),
-          rows.length,
-        ]}
-      />
+      >
+        Back
+      </Button>
     </div>
   );
 }
