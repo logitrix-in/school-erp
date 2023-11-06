@@ -38,6 +38,9 @@ import UploadOfflineScore from "./components/admission/test-center/pages/Evaluti
 import UploadInterviewScore from "./components/admission/test-center/pages/Evalution/UploadInterviewScore";
 import SetMeritListRule from "./components/admission/test-center/pages/MeritList/SetMeritListRule";
 import GenerateMeritList from "./components/admission/test-center/pages/MeritList/GenerateMeritList";
+import ManageOnboarding from "./components/admission/onboarding/pages/ManageOnboarding";
+import OnboardingMeritList from "./components/admission/onboarding/pages/OnboardingMeritList";
+import OnboardingWaitingList from "./components/admission/onboarding/pages/OnboardingWaitingList";
 
 const NavLayout = () => {
   const ux = useAuth();
@@ -183,11 +186,30 @@ function App() {
               element={<GenerateMeritList />}
             />
 
-            {/*  */}
+            {/* Onboarding */}
 
             <Route
               path="admission/onboarding/"
               element={<AdmissionOnboarding />}
+            />
+
+            {/* -- Manage */}
+
+            <Route
+              path="admission/onboarding/manage/"
+              element={<ManageOnboarding />}
+            />
+
+            {/* -- Merit List */}
+            <Route
+              path="admission/onboarding/manage/merit-list/"
+              element={<OnboardingMeritList />}
+            />
+
+            {/* -- Waiting List */}
+            <Route
+              path="admission/onboarding/manage/waiting-list/"
+              element={<OnboardingWaitingList />}
             />
 
             <Route path="*" element={<_404 />} />

@@ -50,21 +50,7 @@ const Evaluation = () => {
     },
   ];
 
-  useEffect(() => {
-    api
-      .post("/admission/test-center/evaluation/merit-list/", {
-        applyingFor: "all",
-      })
-      .then((res) => {
-        setRows(res.data.data);
-      })
-      .catch((err) => {
-        setRows([]);
-        toast.error(err.response.data.message);
-      });
-  }, []);
-
-  const [rows, setRows] = useState();
+  const [rows, setRows] = useState([]);
 
   return (
     <>
@@ -113,7 +99,20 @@ const Evaluation = () => {
               fullWidth
               variant="contained"
               color="primary"
-              onClick={() => setResultOpen(true)}
+              onClick={() => {
+                setResultOpen(true);
+                api
+                  .post("/admission/test-center/evaluation/merit-list/", {
+                    applyingFor: "all",
+                  })
+                  .then((res) => {
+                    setRows(res.data.data);
+                  })
+                  .catch((err) => {
+                    setRows([]);
+                    toast.error(err.response.data.message);
+                  });
+              }}
             >
               Results
             </Button>

@@ -74,7 +74,7 @@ const SetMeritListRule = () => {
       </Typography>
       <Divider />
       <Box p={2}>
-        <FormControl sx={{mb:2, width:'10rem'}}>
+        <FormControl sx={{ mb: 2, width: "10rem" }}>
           <InputLabel id="demo-simple-select-label">Class</InputLabel>
           <Select
             label="Class"
@@ -444,19 +444,17 @@ const SetMeritListRule = () => {
 
             console.log(payload);
 
-            toast.info(
-              JSON.stringify(
-                {
-                  payload,
-                },
-                null,
-                4
-              )
-            );
+            // toast.info(
+            //   JSON.stringify(
+            //     {
+            //       payload,
+            //     },
+            //     null,
+            //     4
+            //   )
+            // );
             api
-              .put("/admission/test-center/evaluation/merit-list/", {
-                applyingFor: payload,
-              })
+              .put("/admission/test-center/evaluation/merit-list/", payload)
               .then((res) => {
                 console.log(res.data);
                 toast.success(res.data);

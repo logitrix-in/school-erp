@@ -18,7 +18,7 @@ const InReviewOnboarding = () => {
           alignItems={"center"}
         >
           <Typography fontWeight={"700"} borderRadius={1} fontSize={"1.1rem"}>
-            Manage Onboarding
+            Onboarding In-Review
           </Typography>
         </Box>
         <Divider />

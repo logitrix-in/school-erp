@@ -1,39 +1,78 @@
 import { Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import * as React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 
-const columns = [
-  {
-    field: "class",
-    headerName: "Class",
-    flex: 1,
-    align: "center",
-    headerAlign: "center",
-  },
-  {
-    field: "pending",
-    headerName: "Pending",
-    flex: 1,
-    align: "center",
-    headerAlign: "center",
-  },
-  {
-    field: "action",
-    headerName: "Action",
-    flex: 1,
-    align: "center",
-    headerAlign: "center",
-    renderCell: () => (
-      <Button variant="contained" size="small">
-        Review
-      </Button>
-    ),
-  },
-];
+export default function DataTable() {
+  const [rows, setRows] = useState([]);
+  const [columns, setColumn] = useState([]);
 
-export default function DataTable({
-  rows = [{ id: 1, class: "I", pending: 32, action: "button" },{ id: 2, class: "II", pending: 50, action: "button" }],
-}) {
+  const [curMode, setCurMode] = useState("class");
+
+  const candidateColumn = [
+    {
+      field: "name",
+      headerName: "Name", 
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "appId",
+      headerName: "Application Id",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+  ];
+
+  const classColumn = [
+    {
+      field: "class",
+      headerName: "Class",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "pending",
+      headerName: "Pending",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => {
+            setRows([
+              { id: 1, name: "Arnab Chatterjee", appId: "ACS10003032" },
+            ]);
+            setColumn(candidateColumn);
+          }}
+        >
+          Review
+        </Button>
+      ),
+    },
+  ];
+
+  useEffect(() => {
+    setColumn(classColumn);
+    setRows([
+      { id: 1, class: "I", pending: 32, action: "button" },
+      { id: 2, class: "II", pending: 50, action: "button" },
+    ]);
+  }, []);
+
   return (
     <div style={{ width: "50%", height: 370 }}>
       <DataGrid

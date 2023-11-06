@@ -21,6 +21,12 @@ import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
 
 const OnboardingDashboard = () => {
+  useEffect(() => {
+    api
+      .get("/admission/test-center/onboarding/")
+      .then((res) => (charts.value = res.data));
+  }, []);
+
   const curYear = new Date().getFullYear();
   const academicYear = `${curYear}-${(curYear + 1).toString().slice(2, 4)}`;
 
@@ -32,22 +38,19 @@ const OnboardingDashboard = () => {
   });
 
   const [classes, setClasses] = useState([]);
-  const [charts, setCharts] = useState({
-    total: 0,
-    screenedPending: 0,
-  });
+  const [charts, setCharts] = useState({});
 
   function getValues() {
     api
-      .put("/admission/screening/", filter)
+      .get("/admission/test-center/onboarding/")
       .then((response) => {
         const data = response.data;
-        setCharts({
-          total: data.total_application,
-          screenedPending: data.screened_pending,
-        });
+        setCharts(data);
+        console.log(data);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.log(error.response);
+      });
   }
 
   useEffect(() => {
@@ -90,6 +93,8 @@ const OnboardingDashboard = () => {
     } = e;
     setClass(typeof value === "string" ? value.split(",") : value);
   };
+
+  // cards
 
   return (
     <RevealCard>
@@ -186,20 +191,21 @@ const OnboardingDashboard = () => {
                 height={"9rem"}
                 bgcolor={"primary.light"}
                 borderRadius={1}
-                p={2}
+                p={3}
+                px={10}
                 display="flex"
-                justifyContent="center"
+                justifyContent="flex-start"
                 alignItems="stretch"
                 position={"relative"}
               >
-                <Box display={"flex"} alignItems={"center"} gap={3}>
+                <Box display={"flex"} alignItems={"center"} flex={1} justifyContent={'space-between'} gap={3}>
                   <Box>
                     <Typography
                       fontSize={"1.6rem"}
                       color={"primary.dark"}
                       fontWeight={600}
                     >
-                      256
+                      {charts.interview}
                     </Typography>
                     <Typography color={"primary.main"}>
                       Candidates selected for Test/Interview
@@ -224,24 +230,117 @@ const OnboardingDashboard = () => {
                 height={"9rem"}
                 bgcolor={"secondary.light"}
                 borderRadius={1}
-                p={2}
-              ></Bbox>
+                p={3}
+                px={10}
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="stretch"
+                position={"relative"}
+              >
+                <Box display={"flex"} flex={1} justifyContent={'space-between'} alignItems={"center"} gap={3}>
+                  <Box>
+                    <Typography
+                      fontSize={"1.6rem"}
+                      color={"secondary.dark"}
+                      fontWeight={600}
+                    >
+                      {charts.in_merit}
+                    </Typography>
+                    <Typography color={"secondary.main"}>
+                      Candidates in Merit
+                    </Typography>
+                  </Box>
+
+                  <Icon
+                    icon={"clarity:list-solid"}
+                    color="#91431F"
+                    fontSize={"4rem"}
+                  />
+                </Box>
+                <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
+                  <IconButton onClick={() => alert("clicked")}>
+                    <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
+                  </IconButton>
+                </Box>
+              </Bbox>
             </Grid>
             <Grid item xs={6}>
               <Bbox
                 height={"9rem"}
                 bgcolor={"secondary.light"}
                 borderRadius={1}
-                p={2}
-              ></Bbox>
+                p={3}
+                px={10}
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="stretch"
+                position={"relative"}
+              >
+                <Box display={"flex"} alignItems={"center"} justifyContent={'space-between'} flex={1} gap={3}>
+                  <Box>
+                    <Typography
+                      fontSize={"1.6rem"}
+                      color={"secondary.dark"}
+                      fontWeight={600}
+                    >
+                      {charts.in_review}
+                    </Typography>
+                    <Typography color={"secondary.main"}>
+                      Onboarding In-Review
+                    </Typography>
+                  </Box>
+
+                  <Icon
+                    icon={"mdi:file-document-box-search"}
+                    color="#91431F"
+                    fontSize={"4rem"}
+                  />
+                </Box>
+                <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
+                  <IconButton onClick={() => alert("clicked")}>
+                    <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
+                  </IconButton>
+                </Box>
+              </Bbox>
             </Grid>
             <Grid item xs={6}>
               <Bbox
                 height={"9rem"}
                 bgcolor={"primary.light"}
                 borderRadius={1}
-                p={2}
-              ></Bbox>
+                p={3}
+                px={10}
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="stretch"
+                position={"relative"}
+              >
+                <Box display={"flex"} alignItems={"center"} justifyContent={'space-between'} flex={1} gap={3}>
+                  <Box>
+                    <Typography
+                      fontSize={"1.6rem"}
+                      color={"primary.dark"}
+                      fontWeight={600}
+                    >
+                       {charts.completed}
+                    </Typography>
+                    <Typography color={"primary.main"}>
+                      Onboarding Completed
+                    </Typography>
+                  </Box>
+
+                  <Icon
+                    icon={"teenyicons:tick-circle-solid"}
+                    color="#3B98C4"
+                    fontSize={"4rem"}
+                  />
+                </Box>
+                <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
+                  <IconButton onClick={() => alert("clicked")}>
+                    <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
+                  </IconButton>
+                </Box>
+              </Bbox>
             </Grid>
           </Grid>
         </Box>
