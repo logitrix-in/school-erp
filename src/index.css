@@ -20,3 +20,7 @@ a {
   opacity: 0.5; /* Set the opacity to fade the row */
   pointer-events: none; /* Disable interactions for the row */
 }
+
+.apexcharts-legend {
+  border-top: 1px solid #eeeeee !important;
+}
