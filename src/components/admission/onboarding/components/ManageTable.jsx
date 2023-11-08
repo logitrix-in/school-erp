@@ -12,19 +12,19 @@ export default function DataTable() {
 
   const candidateColumn = [
     {
-      field: "name",
-      headerName: "Name",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-    },
-    {
       field: "appId",
       headerName: "Application Id",
       flex: 1,
       align: "center",
       headerAlign: "center",
     },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    }
   ];
 
   const classColumn = [
@@ -57,6 +57,7 @@ export default function DataTable() {
               { id: 1, name: "Arnab Chatterjee", appId: "ACS10003032" },
             ]);
             setColumn(candidateColumn);
+            setCurMode("candidates");
           }}
         >
           Review
@@ -73,6 +74,7 @@ export default function DataTable() {
   useEffect(() => {
     setColumn(classColumn);
     setRows(classRows);
+    setCurMode("class");
   }, []);
 
   return (
@@ -95,18 +97,20 @@ export default function DataTable() {
           ]}
         />
       </div>
-      <Button
-        variant="contained"
-        sx={{ mt: 1 }}
-        size="small"
-        onClick={() => {
-          setCurMode("class");
-          setColumn(classColumn);
-          setRows(classRows);
-        }}
-      >
-        Back
-      </Button>
+      {curMode != "class" && (
+        <Button
+          variant="contained"
+          sx={{ mt: 1 }}
+          size="small"
+          onClick={() => {
+            setCurMode("class");
+            setColumn(classColumn);
+            setRows(classRows);
+          }}
+        >
+          Back
+        </Button>
+      )}
     </div>
   );
 }

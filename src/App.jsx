@@ -41,6 +41,7 @@ import GenerateMeritList from "./components/admission/test-center/pages/MeritLis
 import ManageOnboarding from "./components/admission/onboarding/pages/ManageOnboarding";
 import OnboardingMeritList from "./components/admission/onboarding/pages/OnboardingMeritList";
 import OnboardingWaitingList from "./components/admission/onboarding/pages/OnboardingWaitingList";
+import OnboardingForm from "./pages/OnboardingForm";
 
 const NavLayout = () => {
   const ux = useAuth();
@@ -216,6 +217,7 @@ function App() {
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/onboarding-form" element={<OnboardingForm />} />
         </Routes>
       )}
     </>
