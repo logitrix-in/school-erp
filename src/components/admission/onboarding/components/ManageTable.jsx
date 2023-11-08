@@ -24,7 +24,25 @@ export default function DataTable() {
       flex: 1,
       align: "center",
       headerAlign: "center",
-    }
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => {
+            alert(params.row.appId);
+          }}
+        >
+          Review
+        </Button>
+      ),
+    },
   ];
 
   const classColumn = [
@@ -81,6 +99,7 @@ export default function DataTable() {
     <div style={{ width: "50%" }}>
       <div style={{ height: 370 }}>
         <DataGrid
+          rowSelection={false}
           density="standard"
           rows={rows}
           columns={columns}

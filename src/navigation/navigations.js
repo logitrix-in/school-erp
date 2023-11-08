@@ -31,6 +31,11 @@ export const navigations = [
                 path: 'admission/onboarding/',
                 icon: 'material-symbols:other-admission'
             },
+            {
+                name:'Post Onboarding',
+                path: 'admission/post-onboarding/',
+                icon: 'material-symbols:other-admission'
+            },
         ]
     },
     {

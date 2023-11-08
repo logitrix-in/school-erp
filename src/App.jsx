@@ -42,6 +42,7 @@ import ManageOnboarding from "./components/admission/onboarding/pages/ManageOnbo
 import OnboardingMeritList from "./components/admission/onboarding/pages/OnboardingMeritList";
 import OnboardingWaitingList from "./components/admission/onboarding/pages/OnboardingWaitingList";
 import OnboardingForm from "./pages/OnboardingForm";
+import AdmissionPostOnboarding from "./pages/admission/AdmissionPostOnboarding";
 
 const NavLayout = () => {
   const ux = useAuth();
@@ -211,6 +212,13 @@ function App() {
             <Route
               path="admission/onboarding/manage/waiting-list/"
               element={<OnboardingWaitingList />}
+            />
+
+            {/* Post Onboarding */}
+
+            <Route
+              path={"admission/post-onboarding/"}
+              element={<AdmissionPostOnboarding />}
             />
 
             <Route path="*" element={<_404 />} />
