@@ -30,9 +30,11 @@ const SetMeritListRule = () => {
   const [includeInterview, setIncludeInterview] = useState(true);
   const [weightage, setWeightage] = useState(50);
 
-  const [meritListNum, setMeritListNum] = useState(0);
+  const [meritListNum, setMeritListNum] = useState(1);
   const [waitingListNum, setWaitingListNum] = useState(0);
-  const [Class, setClass] = useState("all");
+  const [Class, setClass] = useState("I");
+
+  const [classes, setClasses] = useState([]);
 
   const [meritList, setMeritList] = useState([]);
 
@@ -67,6 +69,10 @@ const SetMeritListRule = () => {
     }
   };
 
+  useEffect(() => {
+    api.get("/admission/get-all-classes").then((res) => setClasses(res.data));
+  }, []);
+
   return (
     <Bbox borderRadius={1}>
       <Typography fontSize={"1rem"} fontWeight={500} p={2}>
@@ -81,10 +87,11 @@ const SetMeritListRule = () => {
             value={Class}
             onChange={(e) => setClass(e.target.value)}
           >
-            <MenuItem value={"all"}>All</MenuItem>
-            <MenuItem value={"I"}>I</MenuItem>
-            <MenuItem value={"II"}>II</MenuItem>
-            <MenuItem value={"III"}>III</MenuItem>
+            {classes.map((cl, idx) => (
+              <MenuItem key={idx} value={cl}>
+                {cl}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <Box display={"flex"} gap={3}>

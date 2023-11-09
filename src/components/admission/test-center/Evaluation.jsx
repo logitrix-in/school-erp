@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   Divider,
   FormControl,
@@ -18,12 +19,13 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Icon } from "@iconify/react";
 import api from "../../../config/api";
 import { ToastContainer, toast } from "react-toastify";
+import useClasses from "../../../hooks/useClasses";
 
 const Evaluation = () => {
   const [resultOpen, setResultOpen] = useState(false);
 
   const columns = [
-    { field: "id", headerName: "Application Id", width: 150, editable: true },
+    { field: "id", headerName: "Application Id", width: 150 },
     { field: "name", headerName: "Name", width: 180 },
     {
       field: "test_marks",
@@ -44,13 +46,14 @@ const Evaluation = () => {
       headerName: "Total Marks",
       width: 90,
       align: "center",
-      valueGetter: (params) => {
-        return params.row.column1;
-      },
     },
   ];
 
   const [rows, setRows] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+
+  const { classes } = useClasses();
 
   return (
     <>
@@ -145,36 +148,50 @@ const Evaluation = () => {
                   <InputLabel id="demo-simple-select-label">Class</InputLabel>
                   <Select
                     label="Class"
-                    defaultValue={"all"}
+                    defaultValue={"I"}
                     onChange={(e) => {
+                      setLoading(true);
                       api
-                        .post("/admission/test-center/evaluation/merit-list/", {
+                        .post("/admission/test-center/evaluation/result/", {
                           applyingFor: e.target.value,
                         })
                         .then((res) => {
                           toast.info(res.data.message);
+                          console.log(res.data);
                           setRows(res.data.data);
                         })
                         .catch((err) => {
                           setRows([]);
+                          console.log(err);
                           toast.error(err.response.data.message);
-                        });
+                        })
+                        .finally(() => setLoading(false));
                     }}
                   >
-                    <MenuItem value={"all"}>All</MenuItem>
-                    <MenuItem value={"I"}>I</MenuItem>
-                    <MenuItem value={"II"}>II</MenuItem>
-                    <MenuItem value={"III"}>III</MenuItem>
+                    {classes?.map((cl, i) => (
+                      <MenuItem key={i} value={cl}>{cl}</MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
-                <Box height="55vh">
-                  <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5, 10, 20]}
-                    disableSelectionOnClick
-                  />
+                <Box
+                  height="55vh"
+                  bgcolor={loading ? "#eeeeee" : "#ffffff"}
+                  borderRadius={1}
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                >
+                  {loading ? (
+                    <CircularProgress />
+                  ) : (
+                    <DataGrid
+                      rows={rows}
+                      columns={columns}
+                      pageSize={5}
+                      rowsPerPageOptions={[5, 10, 20]}
+                      disableSelectionOnClick
+                    />
+                  )}
                 </Box>
               </Box>
             </Dialog>

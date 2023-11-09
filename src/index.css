@@ -24,3 +24,7 @@ a {
 .apexcharts-legend {
   border-top: 1px solid #eeeeee !important;
 }
+
+.MuiDataGrid-columnHeaderTitle {
+  text-transform: capitalize !important;
+}

@@ -25,7 +25,6 @@ const AdmissionPostOnboarding = () => {
       show: true,
       position: "bottom",
       fontSize: "14px",
-      floating: false,
       itemMargin: {
         horizontal: 10,
         vertical: 20,
@@ -41,21 +40,16 @@ const AdmissionPostOnboarding = () => {
           delay: 1000,
         },
       },
-      toolbar: {
-        // show: true,
-      },
       dropShadow: {
         enabled: true,
         top: 0,
         left: 0,
         blur: 10,
-        // color: "#000000",
         opacity: 0.1,
       },
     },
     dataLabels: {
       enabled: true,
-      offset: -10,
     },
     plotOptions: {
       pie: {
@@ -67,9 +61,12 @@ const AdmissionPostOnboarding = () => {
               show: true,
               showAlways: false,
               label: [
-                `${series?.[0]}/${series?.reduce((accumulator, currentValue) => {
-                  return accumulator + currentValue;
-                }, 0)}`,
+                `${series?.[0]}/${series?.reduce(
+                  (accumulator, currentValue) => {
+                    return accumulator + currentValue;
+                  },
+                  0
+                )}`,
                 "Installed",
                 "Successfully",
               ],
@@ -134,23 +131,38 @@ const AdmissionPostOnboarding = () => {
             </Select>
           </FormControl>
 
-          <Box display={"flex"} mt={1} justifyContent={"center"} gap={2}>
-            <Bbox borderRadius={1}>
-              <Chart
-                options={options}
-                series={series}
-                type="donut"
-                height={400}
-              />
-            </Bbox>
-            <Bbox borderRadius={1}>
-              <Chart
-                options={options}
-                series={series}
-                type="donut"
-                height={400}
-              />
-            </Bbox>
+          <Box display={"flex"} mt={3} justifyContent={"center"} gap={2}>
+            <Box display={"flex"} flex={1} justifyContent={"flex-end"}>
+              <Bbox borderRadius={1}>
+                <Typography p={2} fontWeight={500}>
+                  Student App Installation Compliance
+                </Typography>
+                <Divider />
+                <Box>
+                  <Chart
+                    options={options}
+                    series={series}
+                    type="donut"
+                    height={400}
+                  />
+                </Box>
+              </Bbox>
+            </Box>
+
+            <Box display={"flex"} flex={1}>
+              <Bbox borderRadius={1}>
+                <Typography p={2} fontWeight={500}>
+                  Parent App Installation Compliance
+                </Typography>
+                <Divider />
+                <Chart
+                  options={options}
+                  series={series}
+                  type="donut"
+                  height={400}
+                />
+              </Bbox>
+            </Box>
           </Box>
 
           <Grid container spacing={2} sx={{ mt: 1 }}>
