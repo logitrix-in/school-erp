@@ -19,10 +19,11 @@ import {
 import api from "../../../../../config/api";
 import { DataGrid } from "@mui/x-data-grid";
 import { LoadingButton } from "@mui/lab";
+import { ToastContainer, toast } from "react-toastify";
 
 const GenerateMeritList = () => {
   const initPayload = {
-    applyingFor: "IV",
+    applyingFor: "III",
     "Candidate Name": false,
     "Applicant No": true,
     "Test Score": true,
@@ -65,6 +66,8 @@ const GenerateMeritList = () => {
 
   const [generateLoading, setGenerateLoading] = useState(false);
 
+  const [publishLoading, setPublishLoading] = useState(false);
+
   return (
     <Bbox borderRadius={1}>
       <Typography fontSize={"1rem"} fontWeight={500} p={2}>
@@ -86,7 +89,7 @@ const GenerateMeritList = () => {
                   setPayload(
                     res.data?.criteria.find(
                       (cl) => cl.applyingFor == e.target.value
-                    )
+                    ) ?? { ...initPayload, applyingFor: e.target.value }
                   );
                 });
             }}
@@ -158,7 +161,7 @@ const GenerateMeritList = () => {
                 console.log(res.data);
                 setData(res.data.data);
               })
-              .catch((err) => console.log(err))
+              .catch((err) => toast.error(err.message))
               .finally(() => setGenerateLoading(false));
           }}
         >
@@ -167,17 +170,41 @@ const GenerateMeritList = () => {
 
         <Box mt={3}>
           {data && (
-            <DataGrid
-              rows={data.map((e, i) => ({ ...e, id: i }))}
-              columns={Object.keys(data[0]).map((e, i) => ({
-                field: e,
-                headerName: e.replaceAll("_", " "),
-                flex: 1,
-              }))}
-            />
+            <Box>
+              <DataGrid
+                rows={data.map((e, i) => ({ ...e, id: i }))}
+                columns={Object.keys(data[0]).map((e, i) => ({
+                  field: e,
+                  headerName: e.replaceAll("_", " "),
+                  flex: 1,
+                }))}
+              />
+              <LoadingButton
+                loading={publishLoading}
+                variant="contained"
+                sx={{ width: "15rem", mt: 2 }}
+                onClick={() => {
+                  setPublishLoading(true);
+                  api
+                    .post(
+                      "/admission/test-center/evaluation/merit-list/publish/",
+                      { applyingFor: payload.applyingFor }
+                    )
+                    .then((res) => {
+                      toast.success(res.data.message);
+                      console.log(res.data);
+                    })
+                    .catch((err) => console.log(err))
+                    .finally(() => setPublishLoading(false));
+                }}
+              >
+                Publish
+              </LoadingButton>
+            </Box>
           )}
         </Box>
       </Box>
+      <ToastContainer />
     </Bbox>
   );
 };

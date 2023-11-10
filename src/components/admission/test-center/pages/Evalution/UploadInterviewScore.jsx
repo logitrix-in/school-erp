@@ -4,28 +4,32 @@ import { FileUploader } from "react-drag-drop-files";
 import { Box, Button, LinearProgress, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import api from "../../../../../config/api";
+import { ToastContainer, toast } from "react-toastify";
+import { LoadingButton } from "@mui/lab";
 
 const UploadInterviewScore = () => {
   const [json, setJson] = useState(null);
   const [dragging, setDragging] = useState(null);
   const [loadingJSON, setLoadingJSON] = useState(false);
+  const [savedFile, setFile] = useState(null);
+  const [loadingSave, setLoadingSave] = useState(false);
 
   const fileTypes = ["csv"];
 
   const csvToJson = (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    setFile(file);
     if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-
       // Send formData to the server using fetch or axios
       api
         .post(
-          "/admission/test-center/evaluation/upload-offline-test-result/",
+          "/admission/test-center/evaluation/upload-interview-score/",
           formData
         )
         .then((res) => {
           console.log(res.data);
-          setJson(res.data.data);
+          setJson(res.data.data.map((data, id) => ({ ...data, id: id })));
           setLoadingJSON(false);
         })
         .catch((error) => {
@@ -41,9 +45,14 @@ const UploadInterviewScore = () => {
   }, [json]);
 
   const columns = [
-    { field: "id", headerName: "Application Id", width: 200 },
+    {
+      field: "application_id",
+      headerName: "Application Id",
+      width: 200,
+    },
     { field: "name", headerName: "Name", width: 200 },
-    { field: "marks", headerName: "Marks", width: 200 },
+    { field: "obtained_marks", headerName: "Marks", width: 200 },
+    { field: "total_marks", headerName: "Marks", width: 200 },
   ];
 
   return (
@@ -106,16 +115,43 @@ const UploadInterviewScore = () => {
               columns={columns}
               pageSize={5}
               rowsPerPageOptions={[5, 10, 20]}
-              disableSelectionOnClick
+              disableRowSelectionOnClick
             />
           </Box>
-          <Button
-            variant="contained"
-            sx={{ mt: 1 }}
-            onClick={() => setJson(null)}
-          >
-            Reupload
-          </Button>
+          <ToastContainer />
+          <Box sx={{ mt: 1 }} display={"flex"} alignItems={"center"}>
+            <Button variant="contained" onClick={() => setJson(null)}>
+              Reupload
+            </Button>
+            <LoadingButton
+              loading={loadingSave}
+              sx={{ ml: 1 }}
+              onClick={() => {
+                const formData = new FormData();
+                console.log(json);
+                formData.append("file_data", JSON.stringify(json));
+                formData.append("file", savedFile);
+                setLoadingSave(true);
+                api
+                  .post(
+                    "/admission/test-center/evaluation/upload-interview-score/save/",
+                    formData
+                  )
+                  .then((res) => {
+                    console.log(res.data.message);
+                    toast.success(res.data.message);
+                  })
+                  .catch((error) => {
+                    toast.error(error.response.message);
+                  })
+                  .finally(() => {
+                    setLoadingSave(false);
+                  });
+              }}
+            >
+              Save
+            </LoadingButton>
+          </Box>
         </Box>
       )}
     </Bbox>
