@@ -9,8 +9,10 @@ import {
   Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import useClasses from "../../../../hooks/useClasses";
+import api from "../../../../config/api";
 
 const ManageOnboarding = () => {
   const columns = [
@@ -65,6 +67,11 @@ const ManageOnboarding = () => {
     },
   ];
 
+  const { classes } = useClasses();
+
+  const [selectedClass, setClass] = useState("I");
+  const [data, setData] = useState(null);
+
   return (
     <Box>
       <Box display={"flex"} flexDirection={"column"} gap={1}>
@@ -88,10 +95,32 @@ const ManageOnboarding = () => {
           </FormControl>
           <FormControl sx={{ width: "10rem", ml: 1 }}>
             <InputLabel>Class</InputLabel>
-            <Select label="Admission Year">
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+            <Select
+              label="Class"
+              onChange={(e) => {
+                setClass(e.target.value);
+                api
+                  .get(`/admission/test-center/onboarding/overview/`, {
+                    params: {
+                      admission_year: "2023-24",
+                      applyingFor: e.target.value,
+                    },
+                  })
+                  .then((res) => {
+                    setData(res.data);
+                    console.log(res.data);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }}
+              value={selectedClass}
+            >
+              {classes.map((cl, idx) => (
+                <MenuItem key={idx} value={cl}>
+                  {cl}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>
@@ -99,18 +128,7 @@ const ManageOnboarding = () => {
           <DataGrid
             disableRowSelectionOnClick
             hideFooter={true}
-            rows={[
-              {
-                id: 1,
-                class: "Class A",
-                vacancy: 10,
-                MLStatus: "Accepted",
-                WLStatus: "Pending",
-                OnboardingPending: 5,
-                OnboardingRejected: 2,
-                OnboardingSuccessful: 3,
-              },
-            ]}
+            rows={[{ ...data, id: 1 }]}
             columns={columns}
           />
         </Box>

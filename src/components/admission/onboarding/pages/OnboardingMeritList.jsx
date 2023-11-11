@@ -12,6 +12,9 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import { signal } from "@preact/signals-react";
 import React, { useState } from "react";
+import useClasses from "../../../../hooks/useClasses";
+import api from "../../../../config/api";
+import { et } from "date-fns/locale";
 
 const isInitiating = signal(false);
 const initiatingFor = signal("");
@@ -100,6 +103,11 @@ const OnboardingMeritList = () => {
     console.log("Selected Rows:", newSelectionModel);
   };
 
+  const { classes } = useClasses();
+
+  const [selectedClass, setClass] = useState("I");
+  const [data, setData] = useState(null);
+
   return (
     <Box>
       <Box display={"flex"} flexDirection={"column"} gap={1}>
@@ -123,10 +131,41 @@ const OnboardingMeritList = () => {
           </FormControl>
           <FormControl sx={{ width: "10rem", ml: 1 }}>
             <InputLabel>Class</InputLabel>
-            <Select label="Admission Year">
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+            <Select
+              label="Admission Year"
+              value={selectedClass}
+              onChange={(e) => {
+                setClass(e.target.value);
+                api
+                  .get(
+                    "/admission/test-center/onboarding/initiate/online/data/",
+                    {
+                      params: {
+                        applyingFor: e.target.value,
+                        admission_year: "2023-24",
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    console.log(res.data);
+                    setData(
+                      res.data.map((app, idx) => ({
+                        id: idx,
+                        key:idx,
+                        rank: idx+1,
+                        ApplicationID: app?.application_no,
+                        CandidateName: app?.name,
+                        OnboardingStatus: app?.status,
+                      }))
+                    );
+                  });
+              }}
+            >
+              {classes.map((cl, idx) => (
+                <MenuItem key={idx} value={cl}>
+                  {cl}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>
@@ -165,39 +204,14 @@ const OnboardingMeritList = () => {
           <DataGrid
             checkboxSelection // Enable checkbox selection for the entire DataGrid
             disableSelectionOnClick
-            getRowId={(row) => row.ApplicationID}
+            // getRowId={(row) => row.ApplicationID}
             initialState={{
               pagination: { paginationModel: { pageSize: 10 } },
             }}
             pageSizeOptions={[5, 10, 25]}
             rowSelectionModel={selectionModel}
             onRowSelectionModelChange={handleSelectionModelChange}
-            rows={[
-              {
-                id: 1,
-                rank: 1,
-                ApplicationID: "ACS102211",
-                CandidateName: "John Doe",
-                OnboardingStatus: "Approved",
-                OnboardingPending: 0,
-              },
-              {
-                id: 2,
-                rank: 2,
-                ApplicationID: "ACS102269",
-                CandidateName: "Hello World",
-                OnboardingStatus: "Rejected",
-                OnboardingPending: 0,
-              },
-              {
-                id: 3,
-                rank: 3,
-                ApplicationID: "ACS102280",
-                CandidateName: "No Idea",
-                OnboardingStatus: "Not Initiated",
-                OnboardingPending: 0,
-              },
-            ]}
+            rows={data ?? []}
             columns={MeritListColumn}
             isRowSelectable={(row) => row.row.OnboardingStatus != "Rejected"}
           />

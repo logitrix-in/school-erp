@@ -2,6 +2,7 @@ import { Icon } from "@iconify/react";
 import {
   Box,
   Button,
+  Card,
   Checkbox,
   Divider,
   FormControl,
@@ -12,6 +13,7 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
+  TextField,
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -19,6 +21,8 @@ import React, { useEffect, useState } from "react";
 import api from "../../../config/api";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
+import { LoadingButton } from "@mui/lab";
+import { ToastContainer, toast } from "react-toastify";
 
 const OnboardingDashboard = () => {
   useEffect(() => {
@@ -198,7 +202,13 @@ const OnboardingDashboard = () => {
                 alignItems="stretch"
                 position={"relative"}
               >
-                <Box display={"flex"} alignItems={"center"} flex={1} justifyContent={'space-between'} gap={3}>
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  flex={1}
+                  justifyContent={"space-between"}
+                  gap={3}
+                >
                   <Box>
                     <Typography
                       fontSize={"1.6rem"}
@@ -237,7 +247,13 @@ const OnboardingDashboard = () => {
                 alignItems="stretch"
                 position={"relative"}
               >
-                <Box display={"flex"} flex={1} justifyContent={'space-between'} alignItems={"center"} gap={3}>
+                <Box
+                  display={"flex"}
+                  flex={1}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                  gap={3}
+                >
                   <Box>
                     <Typography
                       fontSize={"1.6rem"}
@@ -276,7 +292,13 @@ const OnboardingDashboard = () => {
                 alignItems="stretch"
                 position={"relative"}
               >
-                <Box display={"flex"} alignItems={"center"} justifyContent={'space-between'} flex={1} gap={3}>
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                  flex={1}
+                  gap={3}
+                >
                   <Box>
                     <Typography
                       fontSize={"1.6rem"}
@@ -315,14 +337,20 @@ const OnboardingDashboard = () => {
                 alignItems="stretch"
                 position={"relative"}
               >
-                <Box display={"flex"} alignItems={"center"} justifyContent={'space-between'} flex={1} gap={3}>
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                  flex={1}
+                  gap={3}
+                >
                   <Box>
                     <Typography
                       fontSize={"1.6rem"}
                       color={"primary.dark"}
                       fontWeight={600}
                     >
-                       {charts.completed}
+                      {charts.completed}
                     </Typography>
                     <Typography color={"primary.main"}>
                       Onboarding Completed
@@ -344,18 +372,128 @@ const OnboardingDashboard = () => {
             </Grid>
           </Grid>
         </Box>
-        <Box ml={3} mb={3}>
-          <Button
-            sx={{ px: 5 }}
-            size="small"
-            color="secondary"
-            variant="contained"
-          >
-            Add / Remove candidate to/from Merit List
-          </Button>
-        </Box>
+        <AddRemove />
       </Bbox>
+      <ToastContainer />
     </RevealCard>
+  );
+};
+
+const AddRemove = () => {
+  const [isSearch, setIsSearch] = useState(false);
+  const [appId, setAddId] = useState(null);
+  const [cand, setCand] = useState(null);
+
+  const [loading, setLoading] = useState(false);
+
+  const fetchCand = () => {
+    api
+      .get(`/admission/application/search-by-id/?id=${appId}`)
+      .then((res) => {
+        console.log(res.data);
+        setCand(res.data);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+  return (
+    <Box ml={3} mb={3}>
+      {!isSearch ? (
+        <Button
+          sx={{ px: 5 }}
+          size="small"
+          color="secondary"
+          variant="contained"
+          onClick={() => {
+            setIsSearch(true);
+          }}
+        >
+          Add / Remove candidate to/from Merit List
+        </Button>
+      ) : (
+        <Box>
+          <Box display={"flex"} gap={1}>
+            <TextField
+              size="small"
+              label="Enter Application Id"
+              onChange={(e) => setAddId(e.target.value)}
+            />
+            <Button
+              variant="contained"
+              onClick={() => {
+                fetchCand();
+              }}
+            >
+              Find Application
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setCand(null);
+                setAddId(null);
+                setIsSearch(false);
+              }}
+            >
+              Back
+            </Button>
+          </Box>
+          {cand && (
+            <Card
+              sx={{ p: 1, mt: 2, width: "25rem", bgcolor: "primary.light" }}
+              elevation={5}
+            >
+              <Box display={"flex"} gap={1}>
+                <img
+                  height={100}
+                  src={cand?.candidate_details.profile_photo}
+                  style={{ borderRadius: 5 }}
+                />
+                <Box
+                  display={"flex"}
+                  flexDirection={"column"}
+                  alignItems={"flex-start"}
+                >
+                  <Typography fontWeight={500} fontSize={"1rem"}>
+                    {cand?.candidate_details.first_name}{" "}
+                    {cand?.candidate_details.last_name}
+                  </Typography>
+                  <Typography>{cand?.candidate_details.email}</Typography>
+                  <LoadingButton
+                    loading={loading}
+                    color={cand.in_merit_list ? "error" : "primary"}
+                    variant="contained"
+                    size="small"
+                    sx={{ mt: "auto" }}
+                    onClick={() => {
+                      setLoading(true);
+                      api
+                        .post(
+                          "/admission/test-center/evaluation/merit-list/external/",
+                          {
+                            id: cand.application_id,
+                            applyingFor: cand.application_details.applying_for,
+                            in_merit_list: !cand.in_merit_list,
+                          }
+                        )
+                        .then((res) => {
+                          toast.info(res.data.message);
+                          fetchCand();
+                        })
+                        .catch((err) => console.log(err))
+                        .finally(() => {});
+                    }}
+                  >
+                    {cand.in_merit_list ? "Remove" : "Add"}
+                  </LoadingButton>
+                </Box>
+              </Box>
+            </Card>
+          )}
+        </Box>
+      )}
+    </Box>
   );
 };
 

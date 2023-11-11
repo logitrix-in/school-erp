@@ -159,6 +159,10 @@ const GenerateMeritList = () => {
               .post("/admission/test-center/evaluation/merit-list/", payload)
               .then((res) => {
                 console.log(res.data);
+                if (res.data.data.length <= 0) {
+                  console.log("hi");
+                  toast.error("No Candidates in Merit List");
+                }
                 setData(res.data.data);
               })
               .catch((err) => toast.error(err.message))
@@ -169,7 +173,7 @@ const GenerateMeritList = () => {
         </LoadingButton>
 
         <Box mt={3}>
-          {data && (
+          {data != null && data.length > 0 && (
             <Box>
               <DataGrid
                 rows={data.map((e, i) => ({ ...e, id: i }))}
