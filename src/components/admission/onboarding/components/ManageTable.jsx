@@ -3,6 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import * as React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function DataTable() {
   const [rows, setRows] = useState([]);
@@ -35,9 +36,8 @@ export default function DataTable() {
         <Button
           variant="contained"
           size="small"
-          onClick={() => {
-            alert(params.row.appId);
-          }}
+          LinkComponent={Link}
+          to={`${params.row.appId}/`}
         >
           Review
         </Button>
@@ -45,6 +45,7 @@ export default function DataTable() {
     },
   ];
 
+  const classRow = [{ id: 1, name: "Arnab Chatterjee", appId: "ACS24030001" }];
   const classColumn = [
     {
       field: "class",
@@ -71,9 +72,7 @@ export default function DataTable() {
           variant="contained"
           size="small"
           onClick={() => {
-            setRows([
-              { id: 1, name: "Arnab Chatterjee", appId: "ACS10003032" },
-            ]);
+            setRows(classRow);
             setColumn(candidateColumn);
             setCurMode("candidates");
           }}

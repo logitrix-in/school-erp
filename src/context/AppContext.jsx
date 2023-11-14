@@ -27,7 +27,10 @@ const AppContextProvider = ({ children }) => {
   useEffect(() => {
     api
       .get("/admission/get-all-classes")
-      .then((res) => setClasses(res.data))
+      .then((res) => {
+        setClasses(res.data);
+        console.log(res.data);
+      })
       .catch((err) => console.log(err));
   }, []);
 

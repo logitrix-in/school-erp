@@ -12,26 +12,20 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import {
-  DataGrid,
-  GridToolbar,
-  GridToolbarContainer,
-  GridToolbarExport,
-} from "@mui/x-data-grid";
-import { signal } from "@preact/signals-react";
+import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import useClasses from "../../../../hooks/useClasses";
 import api from "../../../../config/api";
 import { ToastContainer, toast } from "react-toastify";
 
-const isInitiating = signal(false);
-const initiatingFor = signal("");
+const OnboardingMeritList = () => {
+  const [isInitiating, setIsInitiating] = useState(false);
+  const [initiatingFor, setInitiatingFor] = useState("");
 
-const email = signal(true);
-const message = signal(false);
-const whatsapp = signal(false);
+  const [email, setEmail] = useState(false);
+  const [message, setMessage] = useState(false);
+  const [whatsapp, setWhatsapp] = useState(false);
 
-const OnboardingWaitingList = () => {
   const columns = [
     {
       field: "class",
@@ -126,7 +120,7 @@ const OnboardingWaitingList = () => {
     api
       .get(`/admission/test-center/onboarding/overview/?type=waiting_list`, {
         params: {
-          admission_year: selectedAcademicYear,
+          admission_year: "2023-24",
           applyingFor: selectedClass,
         },
       })
@@ -141,7 +135,7 @@ const OnboardingWaitingList = () => {
       .get("/admission/test-center/onboarding/initiate/online/data/", {
         params: {
           applyingFor: selectedClass,
-          admission_year: selectedAcademicYear,
+          admission_year: "2023-24",
         },
       })
       .then((res) => {
@@ -292,15 +286,15 @@ const OnboardingWaitingList = () => {
               </Box>
             </Box>
             <Box mb={2}>
-              {!isInitiating.value ? (
+              {!isInitiating ? (
                 <Box display={"flex"} gap={1}>
                   <Button
                     variant="contained"
                     onClick={() => {
-                      initiatingFor.value = "online";
-                      isInitiating.value = !isInitiating.value;
+                      setInitiatingFor("online");
+                      setIsInitiating(true);
 
-                      console.log(isInitiating.value);
+                      console.log(isInitiating);
                     }}
                   >
                     Initiate Online Onboarding Request
@@ -308,9 +302,9 @@ const OnboardingWaitingList = () => {
                   <Button
                     variant="contained"
                     onClick={() => {
-                      initiatingFor.value = "offline";
-                      isInitiating.value = !isInitiating.value;
-                      console.log(isInitiating.value);
+                      setInitiatingFor("offline");
+                      setIsInitiating(true);
+                      console.log(isInitiating);
                     }}
                   >
                     Initiate Offline Onboarding Request
@@ -323,7 +317,7 @@ const OnboardingWaitingList = () => {
                     fontWeight={500}
                     mt={1}
                   >
-                    Initiate {initiatingFor.value} Onboarding for{" "}
+                    Initiate {initiatingFor} Onboarding for{" "}
                     {selectionModel.length} students
                   </Typography>
                   <FormControlLabel
@@ -333,12 +327,12 @@ const OnboardingWaitingList = () => {
                   />
                   <FormControlLabel
                     control={<Checkbox />}
-                    onChange={(_, v) => (message.value = v)}
+                    onChange={(_, v) => setMessage(v)}
                     label="SMS"
                   />
                   <FormControlLabel
                     control={<Checkbox />}
-                    onChange={(_, v) => (whatsapp.value = v)}
+                    onChange={(_, v) => setWhatsapp(v)}
                     label="Whatsapp"
                   />
                   <Button
@@ -348,10 +342,10 @@ const OnboardingWaitingList = () => {
                     onClick={() => {
                       const payload = {
                         onboarding: "waiting-list",
-                        type: initiatingFor.value,
+                        type: initiatingFor,
                         email: true,
-                        sms: message.value,
-                        whatsapp: whatsapp.value,
+                        sms: message,
+                        whatsapp: whatsapp,
                         app_ids: selectionModel,
                       };
 
@@ -368,10 +362,8 @@ const OnboardingWaitingList = () => {
                   >
                     Initiate
                   </Button>
+                  <Button onClick={() => setIsInitiating(false)}>Back</Button>
                   <ToastContainer />
-                  <Button onClick={() => (isInitiating.value = false)}>
-                    Back
-                  </Button>
                 </Box>
               )}
             </Box>
@@ -387,4 +379,4 @@ const OnboardingWaitingList = () => {
   );
 };
 
-export default OnboardingWaitingList;
+export default OnboardingMeritList;

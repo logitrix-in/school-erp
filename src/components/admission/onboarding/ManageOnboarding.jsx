@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
 import { Box, Button, Divider, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import Notify from "./popup/Notify";
-import { signal } from "@preact/signals-react";
 
-const notifyOpen = signal(false);
 const ManageOnboarding = () => {
+  const [notifyOpen, setNotifyOpen] = useState(false);
+
   return (
     <RevealCard>
       <Bbox borderRadius={2} overflow={"hidden"}>
@@ -38,15 +38,12 @@ const ManageOnboarding = () => {
           <Button
             fullWidth
             variant="outlined"
-            onClick={() => (notifyOpen.value = true)}
+            onClick={() => setNotifyOpen(true)}
           >
             Notify
           </Button>
 
-          <Notify
-            open={notifyOpen.value}
-            close={() => (notifyOpen.value = false)}
-          />
+          <Notify open={notifyOpen} close={() => setNotifyOpen(false)} />
         </Box>
       </Bbox>
     </RevealCard>

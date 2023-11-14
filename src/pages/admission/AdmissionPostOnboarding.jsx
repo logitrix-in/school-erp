@@ -12,6 +12,9 @@ import {
 import React, { useEffect, useState } from "react";
 import Bbox from "../../components/UiComponents/Bbox";
 import Chart from "react-apexcharts";
+import { Link } from "react-router-dom";
+import Notify from "../../components/admission/post onboarding/popup/Notify";
+import Engage from "../../components/admission/post onboarding/popup/Engage";
 
 const AdmissionPostOnboarding = () => {
   const [acYear, setAcYear] = useState("2023-24");
@@ -82,6 +85,8 @@ const AdmissionPostOnboarding = () => {
     },
   };
 
+  const [notifyOpen, setNotpen] = useState(false);
+  const [engageOpen, setEngageOpen] = useState(false);
   return (
     <Box display={"flex"} flexDirection={"column"} gap={2}>
       <Bbox borderRadius={1}>
@@ -96,14 +101,21 @@ const AdmissionPostOnboarding = () => {
         </Typography>
         <Divider />
         <Box p={3} display={"flex"} gap={1}>
-          <Button fullWidth variant="contained">
-            Engage
-          </Button>
-          <Button fullWidth variant="outlined">
+          <Button fullWidth variant="contained" onClick={() => setNotpen(true)}>
             Notify
+          </Button>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={() => setEngageOpen(true)}
+          >
+            Engage
           </Button>
         </Box>
       </Bbox>
+
+      <Notify open={notifyOpen} close={() => setNotpen(false)} />
+      <Engage open={engageOpen} close={() => setEngageOpen(false)} />
 
       <Bbox borderRadius={1}>
         <Typography
@@ -211,7 +223,12 @@ const AdmissionPostOnboarding = () => {
             </Select>
           </FormControl>
 
-          <Button variant="contained" color="secondary">
+          <Button
+            variant="contained"
+            color="secondary"
+            LinkComponent={Link}
+            to={"manage-ticket/"}
+          >
             Set Rule
           </Button>
         </Box>

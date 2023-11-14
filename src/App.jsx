@@ -43,6 +43,9 @@ import OnboardingMeritList from "./components/admission/onboarding/pages/Onboard
 import OnboardingWaitingList from "./components/admission/onboarding/pages/OnboardingWaitingList";
 import OnboardingForm from "./pages/OnboardingForm";
 import AdmissionPostOnboarding from "./pages/admission/AdmissionPostOnboarding";
+import ManageTickets from "./components/admission/post onboarding/ManageTickets";
+import DetailedView from "./components/admission/application/DetailedView";
+import OnboardingApproval from "./components/admission/onboarding/pages/OnboardingApproval";
 
 const NavLayout = () => {
   const ux = useAuth();
@@ -134,6 +137,11 @@ function App() {
               element={<ApplicationView />}
             />
 
+            <Route
+              path="admission/application/view/:id/"
+              element={<DetailedView />}
+            />
+
             {/* screening */}
             <Route
               path="admission/screening/"
@@ -214,11 +222,25 @@ function App() {
               element={<OnboardingWaitingList />}
             />
 
+            {/* -- Approval */}
+
+            <Route
+              path="admission/onboarding/:id"
+              element={<OnboardingApproval />}
+            />
+
             {/* Post Onboarding */}
 
             <Route
               path={"admission/post-onboarding/"}
               element={<AdmissionPostOnboarding />}
+            />
+
+            {/* -- Ticket */}
+
+            <Route
+              path={"admission/post-onboarding/manage-ticket/"}
+              element={<ManageTickets />}
             />
 
             <Route path="*" element={<_404 />} />

@@ -2,6 +2,7 @@ import { Button, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import api from "../../../config/api";
 import { DataGrid } from "@mui/x-data-grid";
+import { Link } from "react-router-dom";
 
 const ApplicationView = () => {
   const [applications, setApplication] = useState(null);
@@ -11,7 +12,6 @@ const ApplicationView = () => {
       .get("/admission/application/")
       .then((res) => {
         const data = res.data;
-        ;
         const values = data.map((user, idx) => {
           return {
             id: idx + 1,
@@ -28,15 +28,12 @@ const ApplicationView = () => {
             screening_status: user.status,
           };
         });
-        ;
         setApplication(values);
       })
       .catch((err) => console.error(err));
   }, []);
 
-  useEffect(() => {
-    ;
-  }, [applications]);
+  useEffect(() => {}, [applications]);
 
   const columns = [
     { field: "id", headerName: "#", width: 70 },
@@ -65,7 +62,7 @@ const ApplicationView = () => {
       headerName: "Applied For",
       width: 100,
     },
-    
+
     { field: "created_at", headerName: "Applied On", width: 120 },
     { field: "screening_status", headerName: "Screening Status", width: 180 },
     {
@@ -73,7 +70,11 @@ const ApplicationView = () => {
       disableSelectionOnClick: true,
       headerName: "Action",
       width: 100,
-      renderCell: (params) => <Button>View</Button>,
+      renderCell: (params) => (
+        <Button LinkComponent={Link} to={`${params?.row.app_id}/`}>
+          View
+        </Button>
+      ),
     },
   ];
 
@@ -93,17 +94,6 @@ const ApplicationView = () => {
             getCellClassName={boldCell}
             rows={rows}
             columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 7 },
-              },
-            }}
-            pageSizeOptions={[
-              Math.round((rows.length * 1) / 4),
-              Math.round((rows.length * 2) / 4),
-              Math.round((rows.length * 3) / 4),
-              rows.length,
-            ]}
           />
         </div>
       ) : (
