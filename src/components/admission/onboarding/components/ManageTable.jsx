@@ -4,16 +4,16 @@ import * as React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import api from "../../../../config/api";
+import { ErrorOutlineSharp } from "@mui/icons-material";
 
 export default function DataTable() {
-  const [rows, setRows] = useState([]);
-  const [columns, setColumn] = useState([]);
-
   const [curMode, setCurMode] = useState("class");
 
+  // candidate
   const candidateColumn = [
     {
-      field: "appId",
+      field: "application_no",
       headerName: "Application Id",
       flex: 1,
       align: "center",
@@ -37,15 +37,19 @@ export default function DataTable() {
           variant="contained"
           size="small"
           LinkComponent={Link}
-          to={`${params.row.appId}/`}
+          to={`${params.row.application_no}/`}
+          // onClick={() => console.log(params)}
         >
           Review
         </Button>
       ),
     },
   ];
+  const candidateRows = [
+    { id: 1, name: "Arnab Chatterjee", appId: "ACS24030001" },
+  ];
 
-  const classRow = [{ id: 1, name: "Arnab Chatterjee", appId: "ACS24030001" }];
+  // class
   const classColumn = [
     {
       field: "class",
@@ -72,8 +76,9 @@ export default function DataTable() {
           variant="contained"
           size="small"
           onClick={() => {
-            setRows(classRow);
+            console.log(params.row?.candidates);
             setColumn(candidateColumn);
+            setRows(params.row?.candidates);
             setCurMode("candidates");
           }}
         >
@@ -82,20 +87,24 @@ export default function DataTable() {
       ),
     },
   ];
+  const [classRows, setClassRow] = useState([]);
 
-  const classRows = [
-    { id: 1, class: "I", pending: 32, action: "button" },
-    { id: 2, class: "II", pending: 50, action: "button" },
-  ];
-
+  // table setters
+  const [rows, setRows] = useState([]);
+  const [columns, setColumn] = useState(classColumn);
   useEffect(() => {
-    setColumn(classColumn);
-    setRows(classRows);
-    setCurMode("class");
+    api
+      .get("/admission/test-center/onboarding/overview/table/")
+      .then((res) => {
+        console.log(res.data.map((c, i) => ({ ...c, id: i })));
+        setClassRow(res.data.map((c, i) => ({ ...c, id: i })));
+        setRows(res.data.map((c, i) => ({ ...c, id: i })));
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
-    <div style={{ width: "50%" }}>
+    <div style={{ width: "max(50%, 30rem)" }}>
       <div style={{ height: 370 }}>
         <DataGrid
           rowSelection={false}

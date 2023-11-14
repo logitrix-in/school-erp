@@ -40,16 +40,11 @@ const ApplicationRecieved = () => {
 
         setSeries(values);
       })
-      .catch((error) => {
-        ;
-      });
+      .catch((error) => {});
   }
 
   useEffect(() => {
     getChart();
-    // setInterval(() => {
-    //   getChart();
-    // }, 100000000);
 
     return () => clearInterval();
   }, []);
@@ -227,8 +222,9 @@ const ApplicationRecieved = () => {
                 <DatePicker
                   label="Start Date"
                   onChange={(e) => setStartDate(e)}
+                  format="DD MMM YYYY"
                 />
-                <DatePicker label="End Date" onChange={(e) => setEndDate(e)} />
+                <DatePicker format="DD MMM YYYY" label="End Date" onChange={(e) => setEndDate(e)} />
               </Box>
 
               <FormControl fullWidth>

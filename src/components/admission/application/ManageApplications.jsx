@@ -29,7 +29,6 @@ const ManageApplications = () => {
       .get("/admission/application/manage-application/")
       .then((res) => {
         const data = res.data;
-        ;
         setRows(
           data.map((d) => {
             return {
@@ -42,7 +41,7 @@ const ManageApplications = () => {
           })
         );
       })
-      .catch((err) =>{} );
+      .catch((err) => {});
   }
   useEffect(() => {
     fetchData();
@@ -55,9 +54,7 @@ const ManageApplications = () => {
     end_date: new Date(dayjs().add(7, "day")).toLocaleDateString("en-CA"),
   });
 
-  useEffect(() => {
-    ;
-  }, [openDates]);
+  useEffect(() => {}, [openDates]);
 
   // close all
 
@@ -65,9 +62,7 @@ const ManageApplications = () => {
     new Date(dayjs().add(1, "day")).toLocaleDateString("en-CA")
   );
 
-  useEffect(() => {
-    ;
-  }, [closeDate]);
+  useEffect(() => {}, [closeDate]);
 
   return (
     <>
@@ -119,7 +114,7 @@ const ManageApplications = () => {
               >
                 <DatePicker
                   label="Opening Date"
-                  format="DD MMM, YYYY"
+                  format="DD MMM YYYY"
                   defaultValue={new dayjs()}
                   minDate={new dayjs()}
                   maxDate={dayjs(new Date(openDates.end_date)).subtract(
@@ -135,7 +130,7 @@ const ManageApplications = () => {
                 />
                 <DatePicker
                   label="Closing Date"
-                  format="DD MMM, YYYY"
+                  format="DD MMM YYYY"
                   minDate={dayjs(new Date(openDates.start_date)).add(1, "day")}
                   defaultValue={dayjs().add(7, "day")}
                   onChange={(e) =>
@@ -161,7 +156,6 @@ const ManageApplications = () => {
                         end_date: openDates.end_date,
                       })
                       .then((res) => {
-                        ;
                         toast.success("Updated Successfully");
                         fetchData();
                       })
@@ -181,7 +175,7 @@ const ManageApplications = () => {
               >
                 <DatePicker
                   label="Closing Date"
-                  format="DD MMM, YYYY"
+                  format="DD MMM YYYY"
                   minDate={dayjs()}
                   defaultValue={dayjs().add(1, "day")}
                   onChange={(e) =>
@@ -206,7 +200,6 @@ const ManageApplications = () => {
                         end_date: closeDate,
                       })
                       .then((res) => {
-                        ;
                         toast.success("Updated Successfully");
                         fetchData();
                       })

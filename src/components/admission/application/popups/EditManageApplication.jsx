@@ -192,7 +192,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
                     // minDate={new dayjs()}
                     value={dayjs(new Date(app.startingDate))}
                     label="Open Date"
-                    format="DD MMM, YYYY"
+                    format="DD MMM YYYY"
                   />
                 </Grid>
                 <Grid item xs={3}>
@@ -200,7 +200,7 @@ const EditManageApplication = ({ open, close, fetchData: refetch }) => {
                     onChange={(e) => handleDateChange("closingDate", e, idx)}
                     sx={{ width: "100%" }}
                     minDate={dayjs(new Date(app.startingDate))}
-                    format="DD MMM, YYYY"
+                    format="DD MMM YYYY"
                     label="Close Date"
                     value={dayjs(new Date(app.closingDate))}
                   />

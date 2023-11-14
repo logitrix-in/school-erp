@@ -24,7 +24,7 @@ const OnboardingApproval = () => {
   }, []);
 
   const renderDetails = (obj) => {
-    return Object.entries(obj).map(([key, value]) => {
+    return Object.entries(obj).map(([key, value], i) => {
       if (key == "id") return;
       if (value == null) return;
       if (key == "is_same_as_permanent_address") return;
@@ -37,7 +37,7 @@ const OnboardingApproval = () => {
 
       if (typeof value === "object" && value !== null) {
         return (
-          <Grid item xs={12}>
+          <Grid item xs={12} key={i}>
             <Box key={key}>
               <Typography
                 p={1}
@@ -60,7 +60,7 @@ const OnboardingApproval = () => {
         );
       } else {
         return (
-          <Grid item xs={4}>
+          <Grid item xs={4} key={i}>
             <Box display={"flex"} alignItems={"center"} key={key}>
               <Typography
                 borderRadius={1}
@@ -77,10 +77,14 @@ const OnboardingApproval = () => {
                     View
                   </Link>
                 ) : (
-                  <Typography fontSize={"1rem"}>{value}</Typography>
+                  <Typography fontSize={"1rem"} textOverflow={"ellipsis"}>
+                    {value}
+                  </Typography>
                 )
               ) : (
-                <Typography fontSize={"1rem"}>{value}</Typography>
+                <Typography fontSize={"1rem"} textOverflow={"ellipsis"}>
+                  {value}
+                </Typography>
               )}
             </Box>
           </Grid>
@@ -92,8 +96,37 @@ const OnboardingApproval = () => {
   return (
     <Box>
       <Box display={"flex"} gap={1} justifyContent={"flex-end"}>
-        <Button variant="contained">Approve</Button>
-        <Button variant="contained" color="error">
+        <Button
+          variant="contained"
+          onClick={() => {
+            api
+              .post("/admission/test-center/onboarding/overview/review/", {
+                id: obj.application_id,
+                status: "approve",
+              })
+              .then((res) => {
+                console.log(res.data);
+              })
+              .catch((err) => console.log(err));
+          }}
+        >
+          Approve
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => {
+            api
+              .post("/admission/test-center/onboarding/overview/review/", {
+                id: obj.application_id,
+                status: "reject",
+              })
+              .then((res) => {
+                console.log(res.data);
+              })
+              .catch((err) => console.log(err));
+          }}
+        >
           Reject
         </Button>
       </Box>

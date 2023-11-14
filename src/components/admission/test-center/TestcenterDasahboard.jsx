@@ -150,11 +150,11 @@ const TestcenterDashboard = () => {
                 sx={{width:'100%'}}
                 label="Start Date"
                 onChange={(e) => setStartDate(e)}
-                format="DD MMM, YYYY"
+                format="DD MMM YYYY"
                 />
               <DatePicker
                 sx={{width:'100%'}}
-                format="DD MMM, YYYY"
+                format="DD MMM YYYY"
                 label="End Date"
                 onChange={(e) => setEndDate(e)}
               />
