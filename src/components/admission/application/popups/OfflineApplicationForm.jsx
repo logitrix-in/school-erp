@@ -22,6 +22,8 @@ import {
   MenuItem,
   Select,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -31,6 +33,7 @@ import MuiPhoneNumber from "material-ui-phone-number";
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import api from "../../../../config/api";
+import dayjs from "dayjs";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -55,7 +58,7 @@ function OfflineApplicationForm({ open, close }) {
     gender: "",
     is_critical_ailment: false,
     critical_ailment: "",
-    nationality: "",
+    nationality: "Indian",
     religion: "",
     category: "",
     contact_number: "",
@@ -298,11 +301,10 @@ function OfflineApplicationForm({ open, close }) {
         "Content-Type": "multipart/form-data",
       })
       .then((res) => {
-        ;
         close();
         toast.success("Application has been submitted successfully");
       })
-      .catch((err) =>{})
+      .catch((err) => {})
       .finally(() => setLoading(false));
   };
 
@@ -368,7 +370,6 @@ function OfflineApplicationForm({ open, close }) {
         },
       })
       .then((res) => {
-        ;
         setCounties(res.data);
       });
   }, []);
@@ -439,10 +440,6 @@ function OfflineApplicationForm({ open, close }) {
       .then((res) => setCurCities(res.data));
   }, [formData.current_states]);
 
-  useEffect(() => {
-    ;
-  }, [formData]);
-
   const [image, setImage] = useState();
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -452,7 +449,6 @@ function OfflineApplicationForm({ open, close }) {
 
       reader.onload = (event) => {
         setImagePreview(event.target.result);
-        ;
       };
 
       reader.readAsDataURL(image);
@@ -502,6 +498,10 @@ function OfflineApplicationForm({ open, close }) {
   const imageRef = useRef();
 
   const [do_agree, setDoAgree] = useState(false);
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
 
   return (
     <Dialog
@@ -950,8 +950,8 @@ function OfflineApplicationForm({ open, close }) {
                 sx={{ mt: 0.5 }}
                 fullWidth
                 placeholder="Board Name"
-                // value={board}
-                onChange={(e) => debounce(() => setBoard(e.target.value))}
+                name="other_board"
+                onChange={handleChange}
               />
             )}
           </Grid>
@@ -983,13 +983,13 @@ function OfflineApplicationForm({ open, close }) {
                 fullWidth
                 placeholder="Medium Name"
                 // value={medium}
-                onChange={(e) => debounce(() => setMedium(e.target.value))}
+                name="other_medium"
+                onChange={handleChange}
               />
             )}
           </Grid>
           <Grid item xs={12}>
             <Typography
-              fontSize={"1rem"}
               p={1}
               px={1}
               bgcolor={"#ececec"}
@@ -997,6 +997,7 @@ function OfflineApplicationForm({ open, close }) {
               color={"black"}
               fontWeight={500}
               mb={1}
+              mt={2}
             >
               Fee Payment Details
             </Typography>
@@ -1052,6 +1053,22 @@ function OfflineApplicationForm({ open, close }) {
               // value={formData.receipt_no}
             />
           </Grid>
+          <Grid item xs={12}>
+            <Typography
+              p={1}
+              px={1}
+              bgcolor={"#ececec"}
+              borderRadius={1}
+              color={"black"}
+              fontWeight={500}
+              mb={1}
+              mt={2}
+            >
+              Others
+            </Typography>
+          </Grid>
+          <Question1 handleChange={handleChange} />
+          <Question2 handleChange={handleChange} />
         </Grid>
         <Box bgcolor={"grey.300"} width={"1px"}></Box>
         <Grid container px={4} spacing={1} rowSpacing={2} flex={2}>
@@ -1693,11 +1710,12 @@ function OfflineApplicationForm({ open, close }) {
           </Grid>
         </Grid>
       </Box>
+
       <Box padding={"0 3rem"}>
         <FormControlLabel
           name="do_agree"
           control={
-            <Box sx={{ marginTop: -2 }}>
+            <Box>
               <Checkbox />
             </Box>
           }
@@ -1729,5 +1747,173 @@ function OfflineApplicationForm({ open, close }) {
     </Dialog>
   );
 }
+
+const Question1 = ({ handleChange }) => {
+  const [isYes, setIsYes] = useState("no");
+  const [question, setQuestion] = useState({});
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setQuestion((prev) => ({ ...prev, [name]: value }));
+  };
+
+  useEffect(() => {
+    console.log(question);
+    handleChange({
+      target: {
+        name: "question1",
+        value: question,
+      },
+    });
+  }, [question]);
+
+  return (
+    <>
+      <Grid item xs={12} sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <Typography fontWeight={500}>
+          Has any of your relative(s) studied/ currently been studying in Demo
+          School?
+        </Typography>
+        <ToggleButtonGroup
+          color="primary"
+          value={isYes}
+          exclusive
+          onChange={(e, v) => setIsYes(e.target.value)}
+          name="Question1"
+          size="small"
+        >
+          <ToggleButton value="yes">YES</ToggleButton>
+          <ToggleButton value="no">NO</ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+      {isYes == "yes" && (
+        <>
+          <Grid item xs={4}>
+            <TextField label="Name" name="name" fullWidth onChange={onChange} />
+          </Grid>
+          <Grid item xs={4}>
+            <DatePicker
+              sx={{ width: "100%" }}
+              name="date"
+              format="DD MMM YYYY"
+              onChange={(e) => {
+                setQuestion((prev) => ({ ...prev, date: dayjs(new Date(e)).format('YYYY-MM-DD') }));
+              }}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <InputLabel>Relationship Type</InputLabel>
+              <Select label="Relationship Type" name="relationship" onChange={onChange}>
+                {[
+                  "Uncle",
+                  "Aunt",
+                  "Sister",
+                  "Brother",
+                  "Father-in Law",
+                  "Mother-in Law",
+                  "Grandfather",
+                  "Grandmother",
+                ].map((occ, idx) => {
+                  if (occ != "Not Applicable")
+                    return (
+                      <MenuItem key={idx} value={occ}>
+                        {occ}
+                      </MenuItem>
+                    );
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+        </>
+      )}
+    </>
+  );
+};
+
+const Question2 = ({ handleChange }) => {
+  const [isYes, setIsYes] = useState("no");
+  const [question, setQuestion] = useState({});
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setQuestion((prev) => ({ ...prev, [name]: value }));
+  };
+
+  useEffect(() => {
+    console.log(question);
+    handleChange({
+      target: {
+        name: "question2",
+        value: question,
+      },
+    });
+  }, [question]);
+
+  return (
+    <>
+      <Grid item xs={12} sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <Typography fontWeight={500}>
+          Has any of your relative(s) worked / currently been working in Demo
+          School?
+        </Typography>
+        <ToggleButtonGroup
+          color="primary"
+          value={isYes}
+          exclusive
+          onChange={(e, v) => setIsYes(e.target.value)}
+          name="Question1"
+          size="small"
+        >
+          <ToggleButton value="yes">YES</ToggleButton>
+          <ToggleButton value="no">NO</ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+      {isYes == "yes" && (
+        <>
+          <Grid item xs={4}>
+            <TextField label="Name" fullWidth name="name" onChange={onChange} />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              label="Department"
+              fullWidth
+              name="department"
+              onChange={onChange}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <InputLabel>Relationship Type</InputLabel>
+              <Select
+                label="Relationship Type"
+                name="relationship"
+                onChange={onChange}
+              >
+                {[
+                  "Uncle",
+                  "Aunt",
+                  "Sister",
+                  "Brother",
+                  "Father-in Law",
+                  "Mother-in Law",
+                  "Grandfather",
+                  "Grandmother",
+                ].map((occ, idx) => {
+                  if (occ != "Not Applicable")
+                    return (
+                      <MenuItem key={idx} value={occ}>
+                        {occ}
+                      </MenuItem>
+                    );
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+        </>
+      )}
+    </>
+  );
+};
 
 export default OfflineApplicationForm;
