@@ -186,7 +186,7 @@ function OfflineApplicationForm({ open, close }) {
     "admission_year",
     "current_class",
     "percentage_secured",
-    // "caste",
+    // "",
     "school_name",
     "board",
     "medium",
@@ -329,7 +329,7 @@ function OfflineApplicationForm({ open, close }) {
 
   const [classOptions, setClasses] = useState([]);
 
-  const categoryOptions = ["Unreserved", "OBC-A", "OBC-B", "SC", "ST"];
+  const categoryOptions = ["Unreserved", "OBC-A", "OBC-B", "SC", "ST", "EWS", "PwD"];
   const admissionYearOptions = ["2023-24", "2024-25", "2025-26"];
   const specializationOptions = [
     "Science",
@@ -701,7 +701,7 @@ function OfflineApplicationForm({ open, close }) {
                 label="Nationality"
                 onChange={handleChange}
                 name="nationality"
-                // value={formData.nationality}
+                value={formData.nationality}
               >
                 {nationalityCategories.map((category, index) => (
                   <MenuItem key={index} value={category}>

@@ -62,7 +62,7 @@ const Breadcrumb = () => {
           >
             <Icon
               icon="solar:bookmark-bold"
-              color={bookmarked ? "#114d69" : "#3B98C4"}
+              color={bookmarked ? "#114d69" : "#E1EDF3"}
             />
           </IconButton>
         </Tooltip>

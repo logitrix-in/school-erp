@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Box, Button, CircularProgress, LinearProgress } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import * as React from "react";
 import { useState } from "react";
@@ -92,6 +92,7 @@ export default function DataTable() {
   // table setters
   const [rows, setRows] = useState([]);
   const [columns, setColumn] = useState(classColumn);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     api
       .get("/admission/test-center/onboarding/overview/table/")
@@ -100,33 +101,42 @@ export default function DataTable() {
         setClassRow(res.data.map((c, i) => ({ ...c, id: i })));
         setRows(res.data.map((c, i) => ({ ...c, id: i })));
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
-    <div style={{ width: "max(50%, 30rem)" }}>
-      <div style={{ height: 370 }}>
-        <DataGrid
-          rowSelection={false}
-          density="standard"
-          rows={rows}
-          columns={columns}
-        />
-      </div>
-      {curMode != "class" && (
-        <Button
-          variant="contained"
-          sx={{ mt: 1 }}
-          size="small"
-          onClick={() => {
-            setCurMode("class");
-            setColumn(classColumn);
-            setRows(classRows);
-          }}
-        >
-          Back
-        </Button>
+    <>
+      {loading ? (
+        <Box>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <div style={{ width: "max(50%, 30rem)" }}>
+          <div style={{ height: 370 }}>
+            <DataGrid
+              rowSelection={false}
+              density="standard"
+              rows={rows}
+              columns={columns}
+            />
+          </div>
+          {curMode != "class" && (
+            <Button
+              variant="contained"
+              sx={{ mt: 1 }}
+              size="small"
+              onClick={() => {
+                setCurMode("class");
+                setColumn(classColumn);
+                setRows(classRows);
+              }}
+            >
+              Back
+            </Button>
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 }

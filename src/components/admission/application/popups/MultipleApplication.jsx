@@ -154,14 +154,14 @@ const MultipleApplication = ({ close, open }) => {
                 label="Accept All Applications"
               />
               <FormControlLabel
-                value="Accept application for highest class"
+                value="Accept application for the highest class"
                 control={<Radio />}
-                label="Accept application for highest class"
+                label="Accept application for the highest class"
               />
               <FormControlLabel
-                value="Response Apply Offline Multiple Application"
+                value="Accept application for the lowest class"
                 control={<Radio />}
-                label="Response Apply Offline Multiple Application"
+                label="Accept application for the lowest class"
               />
               <FormControlLabel
                 value="Reject all applications"

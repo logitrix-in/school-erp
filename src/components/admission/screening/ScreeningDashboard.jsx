@@ -199,7 +199,7 @@ const ScreeningDashboard = () => {
               </Box>
               <Box flex={1}>
                 <Icon
-                  icon={"material-symbols:person"}
+                  icon={"fluent:notepad-person-20-filled"}
                   fontSize={"10rem"}
                   color="#2C7BA0"
                 />
@@ -230,7 +230,7 @@ const ScreeningDashboard = () => {
               </Box>
               <Box flex={1}>
                 <Icon
-                  icon={"material-symbols:person"}
+                  icon={"mdi:account-alert"}
                   fontSize={"10rem"}
                   color="#C4673B"
                 />

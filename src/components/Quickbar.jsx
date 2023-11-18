@@ -11,6 +11,7 @@ const Quickbar = () => {
 
   useEffect(() => {
     setTabs(ctx.quickTabs);
+    console.log(ctx.quickTabs);
   }, [ctx.quickTabs]);
 
   return (

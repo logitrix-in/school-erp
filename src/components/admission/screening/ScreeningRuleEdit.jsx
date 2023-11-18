@@ -59,7 +59,6 @@ const ScreeningRuleEdit = () => {
 
   useEffect(() => {
     // fetchData();
-    ;
   }, [classes]);
 
   // dynamic criteria
@@ -219,12 +218,11 @@ const ScreeningRuleEdit = () => {
         criteria: crit,
       })
       .then((res) => {
-        ;
         fetchData();
       })
       .catch((err) => {})
       .finally(() => {
-        fetchData()
+        fetchData();
         setLoading(false);
       });
   }
@@ -379,7 +377,20 @@ const ScreeningRuleEdit = () => {
             </Box>
           )}
         </Box>
-        <Box display={"flex"} flexDirection={"column"} gap={2} mt={2}>
+        <Box
+          display={"flex"}
+          sx={
+            classes.find((c) => c.Class == selectedClass)?.active
+              ? {}
+              : {
+                  opacity: 0.6,
+                  pointerEvents: "none",
+                }
+          }
+          flexDirection={"column"}
+          gap={2}
+          mt={2}
+        >
           {crit.map((c, idx) => (
             <Grid container key={idx} spacing={1}>
               <Grid item xs={4}>
@@ -553,6 +564,7 @@ const ScreeningRuleEdit = () => {
               variant="contained"
               sx={{ px: 4 }}
               onClick={SetScreeningRule}
+              disabled={!classes.find((c) => c.Class == selectedClass)?.active}
             >
               Apply
             </LoadingButton>

@@ -5,6 +5,7 @@ import {
   Dialog,
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -17,6 +18,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import api from "../../../../config/api";
 import { LoadingButton } from "@mui/lab";
+import CloseIcon from "@mui/icons-material/Close";
 
 const AutoResponse = ({ open, close }) => {
   const n = 3;
@@ -75,7 +77,6 @@ const AutoResponse = ({ open, close }) => {
     fetchdata();
   }, []);
 
-
   const statusChange = (e) => {
     var temp = [...enabled];
     var cur = temp[value];
@@ -101,16 +102,28 @@ const AutoResponse = ({ open, close }) => {
       disableEnforceFocus={true}
     >
       <Box overflow={"hidden"}>
-        <Typography
+        <Box
           p={1}
-          py={1.5}
+          py={1}
           bgcolor={"primary.main"}
           color={"white"}
-          fontSize={"1rem"}
-          textAlign={"center"}
+          display={"flex"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
         >
-          Set Auto Response
-        </Typography>
+          <Box />
+          <Typography fontSize={"1.1rem"} textAlign={"center"}>
+            Set Auto Response
+          </Typography>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={close}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
 
         <Box display={"flex"} gap={2} p={2} py={2} alignItems={"center"}>
           <FormControl size="small">

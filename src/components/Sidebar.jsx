@@ -49,6 +49,7 @@ const Sidebar = () => {
     setRouteCounters((prevCounters) => ({
       ...prevCounters,
       [route.name]: {
+        ...prevCounters[route.name],
         count: (prevCounters[route.name]?.count || 0) + 1,
         name: route.name,
         link: route.path,

@@ -307,35 +307,32 @@ const ApplicationRecieved = () => {
                 >
                   Notify
                 </Button>
-                <Link to={"view/"}>
-                  <Button variant="outlined" size="" color="secondary">
-                    View All Applications
-                  </Button>
-                </Link>
               </Box>
             </Box>
-            {/* <Box
+            <Box
               display={"flex"}
               flexDirection={"column"}
               gap={1}
               p={3}
               borderRadius={2}
             >
-              
+              <Link to={"view/"}>
+                <Button variant="outlined" size="small" color="primary">
+                  View 
+                </Button>
+              </Link>
               <Button variant="outlined" size="small" color="info">
                 Excel
               </Button>
-              <Button variant="outlined" size="small" color="info">
-                CSV
-              </Button>
-              <Button
+
+              {/* <Button
                 variant="outlined"
                 size="small"
                 color="info"
               >
                 Print
-              </Button>
-            </Box> */}
+              </Button> */}
+            </Box>
           </Box>
         </Bbox>
       </RevealCard>

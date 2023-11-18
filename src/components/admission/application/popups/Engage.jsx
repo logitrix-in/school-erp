@@ -8,6 +8,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import { Editor } from "@tinymce/tinymce-react";
 import { Delete } from "@mui/icons-material";
 import api from "../../../../config/api";
@@ -22,7 +24,7 @@ const Engage = ({ close, open }) => {
     api
       .get("/admission/application/smart-management/application-engagement/")
       .then((res) => setLineups(res.data))
-      .catch((err) =>{} );
+      .catch((err) => {});
   }
 
   useEffect(() => {
@@ -53,10 +55,9 @@ const Engage = ({ close, open }) => {
         state
       )
       .then((res) => {
-        ;
         fetchData();
       })
-      .catch((err) =>{} )
+      .catch((err) => {})
       .finally(() => setLoading(false));
   };
 
@@ -75,10 +76,9 @@ const Engage = ({ close, open }) => {
         }
       )
       .then((res) => {
-        ;
         fetchData();
       })
-      .catch((err) =>{} )
+      .catch((err) => {})
       .finally(() => setReignsOpen(false));
   }
 
@@ -97,16 +97,28 @@ const Engage = ({ close, open }) => {
     >
       <ToastContainer autoClose={1000} />
       <Box overflow={"hidden"}>
-        <Typography
+        <Box
           p={1}
-          py={1.5}
+          py={1}
           bgcolor={"primary.main"}
           color={"white"}
-          fontSize={"1rem"}
-          textAlign={"center"}
+          display={"flex"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
         >
-          Engage
-        </Typography>
+          <Box />
+          <Typography fontSize={"1.1rem"} textAlign={"center"}>
+            Engage
+          </Typography>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={close}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
 
         <Box
           p={2}
@@ -205,7 +217,7 @@ const Engage = ({ close, open }) => {
               name="schedule_after_days"
               size="small"
               value={state.schedule_after_days}
-              inputProps={{min: 0, style: { textAlign: 'center' }}}
+              inputProps={{ min: 0, style: { textAlign: "center" } }}
               sx={{ width: "1.65rem" }}
               variant="standard"
             />

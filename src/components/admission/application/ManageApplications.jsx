@@ -117,10 +117,7 @@ const ManageApplications = () => {
                   format="DD MMM YYYY"
                   defaultValue={new dayjs()}
                   minDate={new dayjs()}
-                  maxDate={dayjs(new Date(openDates.end_date)).subtract(
-                    1,
-                    "day"
-                  )}
+                  maxDate={dayjs(new Date(openDates.end_date))}
                   onChange={(e) =>
                     setOpenDates((prev) => ({
                       ...prev,
@@ -131,7 +128,7 @@ const ManageApplications = () => {
                 <DatePicker
                   label="Closing Date"
                   format="DD MMM YYYY"
-                  minDate={dayjs(new Date(openDates.start_date)).add(1, "day")}
+                  minDate={dayjs(new Date(openDates.start_date))}
                   defaultValue={dayjs().add(7, "day")}
                   onChange={(e) =>
                     setOpenDates((prev) => ({
