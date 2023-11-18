@@ -224,7 +224,11 @@ const ApplicationRecieved = () => {
                   onChange={(e) => setStartDate(e)}
                   format="DD MMM YYYY"
                 />
-                <DatePicker format="DD MMM YYYY" label="End Date" onChange={(e) => setEndDate(e)} />
+                <DatePicker
+                  format="DD MMM YYYY"
+                  label="End Date"
+                  onChange={(e) => setEndDate(e)}
+                />
               </Box>
 
               <FormControl fullWidth>
@@ -303,20 +307,21 @@ const ApplicationRecieved = () => {
                 >
                   Notify
                 </Button>
+                <Link to={"view/"}>
+                  <Button variant="outlined" size="" color="secondary">
+                    View All Applications
+                  </Button>
+                </Link>
               </Box>
             </Box>
-            <Box
+            {/* <Box
               display={"flex"}
               flexDirection={"column"}
               gap={1}
               p={3}
               borderRadius={2}
             >
-              <Link to={"view/"}>
-                <Button variant="outlined" size="small" color="info">
-                  View
-                </Button>
-              </Link>
+              
               <Button variant="outlined" size="small" color="info">
                 Excel
               </Button>
@@ -327,11 +332,10 @@ const ApplicationRecieved = () => {
                 variant="outlined"
                 size="small"
                 color="info"
-                onClick={() => print()}
               >
                 Print
               </Button>
-            </Box>
+            </Box> */}
           </Box>
         </Bbox>
       </RevealCard>

@@ -1372,6 +1372,7 @@ function OfflineApplicationForm({ open, close }) {
           <Grid item xs={4}>
             <Tooltip
               arrow
+              placement="top"
               title="Select the occupation as ‘Not Applicable’ only if the applicant’s Father is deceased."
             >
               <FormControl fullWidth>
@@ -1478,6 +1479,7 @@ function OfflineApplicationForm({ open, close }) {
           <Grid item xs={4}>
             <Tooltip
               arrow
+              placement="top"
               title="Select the occupation as ‘Not Applicable’ only if the applicant’s Mother is deceased."
             >
               <FormControl fullWidth>
@@ -1797,14 +1799,21 @@ const Question1 = ({ handleChange }) => {
               name="date"
               format="DD MMM YYYY"
               onChange={(e) => {
-                setQuestion((prev) => ({ ...prev, date: dayjs(new Date(e)).format('YYYY-MM-DD') }));
+                setQuestion((prev) => ({
+                  ...prev,
+                  date: dayjs(new Date(e)).format("YYYY-MM-DD"),
+                }));
               }}
             />
           </Grid>
           <Grid item xs={4}>
             <FormControl fullWidth>
               <InputLabel>Relationship Type</InputLabel>
-              <Select label="Relationship Type" name="relationship" onChange={onChange}>
+              <Select
+                label="Relationship Type"
+                name="relationship"
+                onChange={onChange}
+              >
                 {[
                   "Uncle",
                   "Aunt",

@@ -1,7 +1,14 @@
 import { Button, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import api from "../../../config/api";
-import { DataGrid } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridExpandMoreIcon,
+  GridToolbar,
+  GridToolbarContainer,
+  GridToolbarExport,
+  GridToolbarExportContainer,
+} from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 
 const ApplicationView = () => {
@@ -84,16 +91,28 @@ const ApplicationView = () => {
     return params.field === "app_id" ? "bold-column" : "";
   };
 
+  const CustomToolbar = () => (
+    <GridToolbarContainer>
+      {/* <GridToolbarExport /> */}
+      <GridToolbar/>
+    </GridToolbarContainer>
+  );
+
   return (
     <div className="application-view">
       {applications ? (
         <div style={{ width: "100%" }}>
           <DataGrid
+            initialState={{
+              pagination: { paginationModel: { pageSize: 50 } },
+            }}
+            pageSizeOptions={[20, 50, 100]}
             density="standard"
             rowHeight={120}
             getCellClassName={boldCell}
             rows={rows}
             columns={columns}
+            slots={{ toolbar: CustomToolbar }}
           />
         </div>
       ) : (
