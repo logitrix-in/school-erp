@@ -2,8 +2,10 @@ import React from "react";
 import Sms from "../../application/popups/widgets/Sms";
 import Email from "../../application/popups/widgets/Email";
 import Whatsapp from "../../application/popups/widgets/Whatsapp";
-import { Box, Dialog, Divider, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Dialog, Divider, IconButton, Tab, Tabs, Typography } from "@mui/material";
 import whatsappBg from "../../../../assets/wp.jpg";
+import CloseIcon from "@mui/icons-material/Close";
+
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -51,16 +53,28 @@ const Notify = ({ open, close }) => {
       disableEnforceFocus={true}
     >
       <Box overflow={"hidden"}>
-        <Typography
+        <Box
           p={1}
-          py={2}
+          py={1}
           bgcolor={"primary.main"}
           color={"white"}
-          fontSize={"1.1rem"}
-          textAlign={"center"}
+          display={"flex"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
         >
-          Manage Notification
-        </Typography>
+          <Box />
+          <Typography fontSize={"1.1rem"} textAlign={"center"}>
+            Manage Notification
+          </Typography>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={close}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
         <Tabs value={value} onChange={handleChange} centered>
           <Tab label="Email" />
           <Tab label="SMS" />

@@ -55,7 +55,7 @@ const IssueAdmitCard = () => {
         date: dayjs(playload.date).format("YYYY-MM-DD"),
         venue: playload.venue,
         time: dayjs(playload.time).format("HH:mm"),
-        duration: dayjs(playload.duration).format("HH:mm"),
+        end_time: dayjs(playload.end_time).format("HH:mm"),
       })
       .then((res) => {
         toast.success(res.data.message);
@@ -127,7 +127,7 @@ const IssueAdmitCard = () => {
     date: dayjs(new Date("30 oct 2023")),
     venue: "",
     time: timeToDate("00:00:00"),
-    duration: timeToDate("00:00:00"),
+    end_time: timeToDate("00:00:00"),
   });
 
   const handleChange = (e) => {
@@ -703,21 +703,19 @@ const IssueAdmitCard = () => {
                     />
                   </Grid>
                   <Grid item xs={2}>
-                    <TimeField
+                    <TimePicker
                       disabled={resend}
-                      onChange={(val) => {
+                      onChange={(val) =>
                         handleChange({
                           target: {
-                            name: "duration",
+                            name: "end_time",
                             value: dayjs(val),
                           },
-                        });
-                      }}
-                      label="Exam Duration"
-                      views={["hours", "minutes"]}
-                      value={dayjs(playload.duration)}
-                      format="HH:mm"
-                      ampm={false}
+                        })
+                      }
+                      value={dayjs(playload.time)}
+                      sx={{ width: "100%" }}
+                      label="Select End Time"
                     />
                   </Grid>
                   <Grid
@@ -744,7 +742,7 @@ const IssueAdmitCard = () => {
                       variant="outlined"
                       onClick={downloadAdmit}
                     >
-                      Export Admit Card
+                      View Admit Card
                     </LoadingButton>
                   </Grid>
                 </Grid>

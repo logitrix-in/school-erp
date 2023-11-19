@@ -544,7 +544,7 @@ const ScreeningRuleEdit = () => {
             </Grid>
           ))}
         </Box>
-        <Box mt={"auto"} display={"flex"} justifyContent={"flex-end"}>
+        <Box mt={5} display={"flex"} justifyContent={"flex-end"}>
           <Box display={"flex"} gap={1}>
             <Button
               variant="contained"

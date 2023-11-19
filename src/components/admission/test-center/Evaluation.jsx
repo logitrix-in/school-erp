@@ -29,13 +29,13 @@ const Evaluation = () => {
     { field: "name", headerName: "Name", width: 180 },
     {
       field: "test_marks",
-      headerName: "Test Marks",
+      headerName: "Test Score",
       width: 100,
       align: "center",
     },
     {
       field: "interview_marks",
-      headerName: "Interview Marks",
+      headerName: "Interview Score",
       width: 130,
       align: "center",
     },
@@ -43,7 +43,7 @@ const Evaluation = () => {
     { field: "caste", headerName: "Caste", width: 90 },
     {
       field: "total",
-      headerName: "Total Marks",
+      headerName: "Total Score",
       width: 90,
       align: "center",
     },
@@ -169,7 +169,9 @@ const Evaluation = () => {
                     }}
                   >
                     {classes?.map((cl, i) => (
-                      <MenuItem key={i} value={cl}>{cl}</MenuItem>
+                      <MenuItem key={i} value={cl}>
+                        {cl}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>

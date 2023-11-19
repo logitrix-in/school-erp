@@ -19,7 +19,7 @@ const ManageTestInterview = () => {
             alignItems={"center"}
           >
             <Typography fontWeight={"700"} borderRadius={1} fontSize={"1.1rem"}>
-              Manage Test Interview
+              Manage Test / Interview
             </Typography>
           </Box>
 

@@ -32,7 +32,8 @@ const ApplicationView = () => {
             avatarUrl: user.candidate_details.profile_photo,
             email: user.candidate_details.email,
             created_at: new Date(user.created_at).toLocaleDateString(),
-            screening_status: user.status,
+            screening_status:
+              user.status == "screened" ? "Screened" : "Unscreened",
           };
         });
         setApplication(values);
@@ -43,12 +44,13 @@ const ApplicationView = () => {
   useEffect(() => {}, [applications]);
 
   const columns = [
-    { field: "id", headerName: "#", width: 70 },
+    { field: "id", headerName: "#", width: 50 },
     {
       field: "avatar",
       headerName: "Avatar",
       headerClassName: "center-header",
-      width: 100,
+
+      flex: 1,
       renderCell: (params) => (
         <img
           src={params.row.avatarUrl} // Replace with the field containing the image URL
@@ -57,29 +59,29 @@ const ApplicationView = () => {
         />
       ),
     },
-    { field: "app_id", headerName: "Application Id", width: 130 },
-    { field: "name", headerName: "Name", width: 140 },
+    { field: "app_id", headerName: "Application Id", flex: 1 },
+    { field: "name", headerName: "Name", flex: 1 },
     {
       field: "primary_contact",
       headerName: "Primary Contact Number",
-      width: 180,
+      flex: 1,
     },
     {
       field: "applied_for",
       headerName: "Applied For",
-      width: 100,
+      flex: 1,
     },
 
-    { field: "created_at", headerName: "Applied On", width: 120 },
-    { field: "screening_status", headerName: "Screening Status", width: 180 },
+    { field: "created_at", headerName: "Applied On", flex: 1 },
+    { field: "screening_status", headerName: "Screening Status", flex: 1 },
     {
       field: "action",
       disableSelectionOnClick: true,
       headerName: "Action",
-      width: 100,
+      flex: 1,
       renderCell: (params) => (
         <Button LinkComponent={Link} to={`${params?.row.app_id}/`}>
-          View
+          Details
         </Button>
       ),
     },
@@ -94,7 +96,7 @@ const ApplicationView = () => {
   const CustomToolbar = () => (
     <GridToolbarContainer>
       {/* <GridToolbarExport /> */}
-      <GridToolbar/>
+      <GridToolbar />
     </GridToolbarContainer>
   );
 

@@ -233,7 +233,7 @@ const TestcenterDashboard = () => {
                   </Typography>
                 </Box>
                 <Icon
-                  icon={"mingcute:user-follow-2-fill"}
+                  icon={"mdi:account-check"}
                   fontSize={"7rem"}
                   color="#3B98C4"
                 />
@@ -268,7 +268,7 @@ const TestcenterDashboard = () => {
                   </Typography>
                 </Box>
                 <Icon
-                  icon={"ri:user-forbid-line"}
+                  icon={"mdi:account-cancel"}
                   fontSize={"6rem"}
                   color="#C4673B"
                 />

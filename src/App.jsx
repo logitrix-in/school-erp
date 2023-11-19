@@ -46,6 +46,7 @@ import AdmissionPostOnboarding from "./pages/admission/AdmissionPostOnboarding";
 import ManageTickets from "./components/admission/post onboarding/ManageTickets";
 import DetailedView from "./components/admission/application/DetailedView";
 import OnboardingApproval from "./components/admission/onboarding/pages/OnboardingApproval";
+import Test from "./pages/Test";
 
 const NavLayout = () => {
   const ux = useAuth();
@@ -159,7 +160,7 @@ function App() {
 
             {/* Test Center */}
 
-            {/* -- Manage Test Interview */}
+            {/* -- Manage Test / Interview */}
             <Route
               path="admission/test-center/"
               element={<AdmissionTestCenter />}
@@ -248,6 +249,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/onboarding-form" element={<OnboardingForm />} />
+          <Route path="/test" element={<Test />} />
         </Routes>
       )}
     </>

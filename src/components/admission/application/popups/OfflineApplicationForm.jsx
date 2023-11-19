@@ -34,6 +34,7 @@ import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import api from "../../../../config/api";
 import dayjs from "dayjs";
+import useClasses from "../../../../hooks/useClasses";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -329,7 +330,17 @@ function OfflineApplicationForm({ open, close }) {
 
   const [classOptions, setClasses] = useState([]);
 
-  const categoryOptions = ["Unreserved", "OBC-A", "OBC-B", "SC", "ST", "EWS", "PwD"];
+  const { classes } = useClasses();
+
+  const categoryOptions = [
+    "Unreserved",
+    "OBC-A",
+    "OBC-B",
+    "SC",
+    "ST",
+    "EWS",
+    "PwD",
+  ];
   const admissionYearOptions = ["2023-24", "2024-25", "2025-26"];
   const specializationOptions = [
     "Science",
@@ -888,7 +899,7 @@ function OfflineApplicationForm({ open, close }) {
                 )}
                 // value={formData.current_class}
               >
-                {classOptions.map((option, index) => (
+                {classes.map((option, index) => (
                   <MenuItem key={index} value={option}>
                     {option}
                   </MenuItem>

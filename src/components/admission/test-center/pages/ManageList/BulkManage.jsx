@@ -493,7 +493,7 @@ const BulkManage = () => {
                                   ? "Pending"
                                   : bat.is_mail_sent
                                   ? "Sent"
-                                  : "Not Send"
+                                  : "Not Sent"
                               }
                               variant="outlined"
                             />

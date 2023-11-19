@@ -15,6 +15,7 @@ import React, { useRef, useState } from "react";
 
 import { Editor } from "@tinymce/tinymce-react";
 import { Icon } from "@iconify/react";
+import axios from "axios";
 
 const Notification = ({ close }) => {
   const [recipentTo, setRecipentTo] = useState("all");
@@ -100,6 +101,22 @@ const Notification = ({ close }) => {
               height: 450,
               menubar: false,
               plugins: ["lists", "advlist", "link", "image", "fullscreen"],
+              images_upload_handler: (blobInfo, progress) => {
+                const formData = new FormData();
+                formData.append("image", blobInfo.blob());
+                return new Promise((resolve, reject) => {
+                  axios
+                    .post("https://cdn.sociolinq.com/upload/", formData)
+                    .then((res) => {
+                      resolve(res.data.link);
+                    })
+                    .catch(() => {
+                      reject(
+                        "Some error occured. Please contact Rownak Mazumder."
+                      );
+                    });
+                });
+              },
               toolbar:
                 "undo redo | formatselect | " +
                 "bold italic backcolor | alignleft aligncenter " +

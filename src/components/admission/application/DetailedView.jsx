@@ -23,6 +23,8 @@ const DetailedView = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const [candImg, setImg] = useState(null);
+
   const renderDetails = (obj) => {
     return Object.entries(obj).map(([key, value]) => {
       if (key == "id") return;
@@ -37,8 +39,8 @@ const DetailedView = () => {
 
       if (typeof value === "object" && value !== null) {
         return (
-          <Grid item xs={12}>
-            <Box key={key}>
+          <Grid item xs={12} key={key}>
+            <Box>
               <Typography
                 p={1}
                 px={2}
@@ -60,22 +62,27 @@ const DetailedView = () => {
         );
       } else {
         return (
-          <Grid item xs={4}>
-            <Box display={"flex"} alignItems={"center"} key={key}>
+          <Grid item xs={4} key={key}>
+            <Box
+              display={"flex"}
+              gap={1}
+              p={1}
+              alignItems={"flex-start"}
+              key={key}
+            >
               <Typography
                 borderRadius={1}
-                p={1}
                 fontSize={"1rem"}
                 textTransform={"capitalize"}
                 fontWeight={500}
               >
-                {key.replaceAll("_", " ")}
+                {key.replaceAll("_", " ").concat(" :")}
               </Typography>
               {typeof value == "string" ? (
                 value.includes("https://") ? (
-                  <Link to={value} target="_BLANK">
-                    View
-                  </Link>
+                  <Box>
+                    <img height={200} src={value} alt="" />
+                  </Box>
                 ) : (
                   <Typography fontSize={"1rem"}>{value}</Typography>
                 )

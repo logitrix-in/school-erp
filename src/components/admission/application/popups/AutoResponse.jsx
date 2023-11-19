@@ -88,6 +88,28 @@ const AutoResponse = ({ open, close }) => {
     console.log(ref1.current.getContent());
   };
 
+  const uploadImageToServer = (file, success, failure) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    formData.append("key", file);
+
+    axios
+      .post("https://api.imgbb.com/1/upload", formData, {
+        params: {
+          key: "d671ba3a169522bfde7d02fadfcc693f",
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        const imageUrl = res.data.display_url;
+        success(imageUrl);
+      })
+      .catch((error) => {
+        console.error("Image upload error:", error);
+        failure("Image upload failed");
+      });
+  };
+
   return (
     <Dialog
       fullWidth
@@ -177,6 +199,23 @@ const AutoResponse = ({ open, close }) => {
                 height: 450,
                 menubar: false,
                 plugins: ["lists", "advlist", "link", "image", "fullscreen"],
+                images_upload_handler: (blobInfo, progress) => {
+                  const formData = new FormData();
+                  formData.append("image", blobInfo.blob());
+                  return new Promise((resolve, reject) => {
+                    axios
+                      .post("https://cdn.sociolinq.com/upload/", formData)
+                      .then((res) => {
+                        resolve(res.data.link);
+                      })
+                      .catch(() => {
+                        reject(
+                          "Some error occured. Please contact Rownak Mazumder."
+                        );
+                      });
+                  });
+                },
+
                 toolbar:
                   "undo redo | formatselect | " +
                   "bold italic backcolor | alignleft aligncenter " +

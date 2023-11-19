@@ -67,7 +67,7 @@ const ManageOnboarding = () => {
     },
   ];
 
-  const { classes } = useClasses();
+  const { classes, acYear, curYear } = useClasses();
 
   const [selectedClass, setClass] = useState("I");
   const [data, setData] = useState(null);
@@ -84,13 +84,15 @@ const ManageOnboarding = () => {
         >
           Onboarding Overview
         </Typography>
-        <Box>
+        <Box mt={2}>
           <FormControl sx={{ width: "10rem" }}>
             <InputLabel>Admission Year</InputLabel>
             <Select label="Admission Year">
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {acYear.map((y, i) => (
+                <MenuItem value={i} key={i}>
+                  {y}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           <FormControl sx={{ width: "10rem", ml: 1 }}>
