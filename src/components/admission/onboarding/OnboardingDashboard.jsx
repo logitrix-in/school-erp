@@ -23,6 +23,7 @@ import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
 import { LoadingButton } from "@mui/lab";
 import { ToastContainer, toast } from "react-toastify";
+import download from "../../../hooks/useDownload";
 
 const OnboardingDashboard = () => {
   useEffect(() => {
@@ -229,7 +230,7 @@ const OnboardingDashboard = () => {
                   />
                 </Box>
                 <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                  <IconButton onClick={() => alert("clicked")}>
+                  <IconButton onClick={() => download('candidates_selected')}>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
                   </IconButton>
                 </Box>
@@ -274,7 +275,7 @@ const OnboardingDashboard = () => {
                   />
                 </Box>
                 <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                  <IconButton onClick={() => alert("clicked")}>
+                  <IconButton onClick={() => download('candidates_in_merit')}>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
                   </IconButton>
                 </Box>
@@ -319,7 +320,7 @@ const OnboardingDashboard = () => {
                   />
                 </Box>
                 <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                  <IconButton onClick={() => alert("clicked")}>
+                  <IconButton onClick={() =>download('candidate_in_review')}>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
                   </IconButton>
                 </Box>
@@ -364,7 +365,7 @@ const OnboardingDashboard = () => {
                   />
                 </Box>
                 <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                  <IconButton onClick={() => alert("clicked")}>
+                  <IconButton onClick={() => download('onboarding_completed')}>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
                   </IconButton>
                 </Box>

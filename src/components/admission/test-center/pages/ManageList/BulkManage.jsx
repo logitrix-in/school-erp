@@ -36,6 +36,7 @@ import { LoadingButton } from "@mui/lab";
 import { Icons, ToastContainer, toast } from "react-toastify";
 import { Mail } from "@mui/icons-material";
 import { Icon } from "@iconify/react";
+import { DataGrid } from "@mui/x-data-grid";
 
 const BulkManage = () => {
   const [classes, setClasses] = useState(null);
@@ -46,6 +47,7 @@ const BulkManage = () => {
     api
       .get("/admission/test-center/issue-admit-card/create-batch/")
       .then((res) => {
+        console.log(res.data);
         setClasses(res.data.classes);
         if (selectedClass)
           setSelectedClass(
@@ -154,6 +156,8 @@ const BulkManage = () => {
 
   const [batchAdmitSentLoding, setBatchAdmitSendLoading] = useState(null);
   const [sendAllAdmitLoading, setAllAdmitLoading] = useState(false);
+
+  const [openPopup, setOpenPopup] = useState(false);
 
   return (
     <>
@@ -713,10 +717,51 @@ const BulkManage = () => {
                     />
                   </FormControl>
                   <Box mt={2} display={"flex"} gap={2} alignItems={"center"}>
-                    <Typography>366 candidates have been selected</Typography>
-                    <Button variant="outlined">View</Button>
+                    <Typography>
+                      {selectedClass?.extras.count} candidates have been
+                      selected
+                    </Typography>
+                    <Button variant="outlined" onClick={()=> setOpenPopup(true)}>View</Button>
                   </Box>
                 </Box>
+                {/* popup */}
+
+                <Dialog maxWidth="md" fullWidth open={openPopup} onClose={()=> setOpenPopup(false)}>
+                  <Box p={2}>
+                    <DataGrid
+                      rows={selectedClass?.extras.applications?.map((a, i) => ({
+                        appid: a.application_id,
+                        gender: `${a.candidate_details.gender}`,
+                        nation: `${a.candidate_details.nationality}`,
+                        name: `${a.candidate_details.first_name} ${a.candidate_details.middle_name} ${a.candidate_details.last_name}`,
+                        id: i,
+                      }))}
+                      columns={[
+                        {
+                          field: "name",
+                          headerName: "name",
+                          flex: 1,
+                        },
+                        {
+                          field: "appid",
+                          headerName: "Application Id",
+                          flex: 1,
+                        },
+                        {
+                          field: "gender",
+                          headerName: "Gender",
+                          flex: 1,
+                        },
+                        {
+                          field: "nation",
+                          headerName: "Nationality",
+                          flex: 1,
+                        },
+                      ]}
+                    />
+                  </Box>
+                </Dialog>
+
                 <Box mt={2} display={"flex"} gap={2} alignItems={"center"}>
                   <Typography>
                     Maximum number of candidates allowed per batch

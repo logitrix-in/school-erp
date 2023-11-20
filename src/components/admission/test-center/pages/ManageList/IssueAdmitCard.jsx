@@ -363,6 +363,8 @@ const IssueAdmitCard = () => {
                 border: "1px solid rgba(0,0,0,0.2)",
                 borderBottom: 0,
                 borderRadius: 0,
+                display:
+                  selected.length == searchResult.length ? "none" : "block",
               }}
             >
               <Box display={"flex"}>
@@ -702,7 +704,7 @@ const IssueAdmitCard = () => {
                       label="Select Start Time"
                     />
                   </Grid>
-                  <Grid item xs={2}>
+                  <Grid item xs={4}>
                     <TimePicker
                       disabled={resend}
                       onChange={(val) =>

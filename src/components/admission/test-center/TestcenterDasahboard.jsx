@@ -4,6 +4,7 @@ import {
   Checkbox,
   Divider,
   FormControl,
+  IconButton,
   InputLabel,
   ListItemText,
   MenuItem,
@@ -16,6 +17,7 @@ import React, { useEffect, useState } from "react";
 import api from "../../../config/api";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
+import download from "../../../hooks/useDownload";
 
 const TestcenterDashboard = () => {
   const curYear = new Date().getFullYear();
@@ -40,16 +42,13 @@ const TestcenterDashboard = () => {
       .put("/admission/screening/", filter)
       .then((response) => {
         const data = response.data;
-        ;
         setCharts({
           total: data.total_application,
           cleared: data.screened,
           failed: data.failed,
         });
       })
-      .catch((error) => {
-        ;
-      });
+      .catch((error) => {});
   }
 
   useEffect(() => {
@@ -58,7 +57,6 @@ const TestcenterDashboard = () => {
   }, []);
 
   useEffect(() => {
-    ;
     getValues();
   }, [filter]);
 
@@ -68,7 +66,6 @@ const TestcenterDashboard = () => {
   useEffect(() => {
     api.get("/admission/application/manage-application/").then((res) => {
       const classes = res.data.map((d) => d.class_name);
-      ;
       setClasses(classes);
     });
   }, []);
@@ -125,7 +122,7 @@ const TestcenterDashboard = () => {
             display={"flex"}
             flexDirection={"column"}
             justifyContent={"center"}
-            alignItems={'stretch'}
+            alignItems={"stretch"}
             gap={"2rem"}
             bgcolor={"white"}
             // width={"30rem"}
@@ -147,13 +144,13 @@ const TestcenterDashboard = () => {
 
             <Box display={"flex"} gap={2}>
               <DatePicker
-                sx={{width:'100%'}}
+                sx={{ width: "100%" }}
                 label="Start Date"
                 onChange={(e) => setStartDate(e)}
                 format="DD MMM YYYY"
-                />
+              />
               <DatePicker
-                sx={{width:'100%'}}
+                sx={{ width: "100%" }}
                 format="DD MMM YYYY"
                 label="End Date"
                 onChange={(e) => setEndDate(e)}
@@ -207,7 +204,13 @@ const TestcenterDashboard = () => {
             </Typography>
           </Bbox>
 
-          <Box display={"flex"} flexDirection={"column"} gap={2} flex={1}>
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            gap={2}
+            flex={1}
+            position={"relative"}
+          >
             <Box
               flex={1}
               borderRadius={1}
@@ -217,6 +220,7 @@ const TestcenterDashboard = () => {
               boxShadow={"0 3px 12px -1px rgba(0,0,0,0.4)"}
               border={"1px solid black"}
               borderColor={"primary.main"}
+              position={'relative'}
             >
               <Box display={"flex"}>
                 <Box flex={2}>
@@ -238,10 +242,15 @@ const TestcenterDashboard = () => {
                   color="#3B98C4"
                 />
               </Box>
-              <Typography fontSize={"0.8rem"} color={"primary.main"}>
-                {((charts.cleared / charts.total) * 100).toFixed(2)}% of the
+              <Typography fontSize={"0.8rem"} color={"primary.main"} width={'90%'}>
+                {charts.total == 0 ? 0 : ((charts.cleared / charts.total) * 100).toFixed(2)}% of the
                 applicants have cleared the screening proccess
               </Typography>
+              <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
+                <IconButton onClick={() => download('cleared_candidates')}>
+                  <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
+                </IconButton>
+              </Box>
             </Box>
             <Box
               flex={1}
@@ -252,6 +261,7 @@ const TestcenterDashboard = () => {
               flexDirection={"column"}
               border={"1px solid black"}
               borderColor={"secondary.main"}
+              position={"relative"}
             >
               <Box display={"flex"}>
                 <Box flex={2}>
@@ -274,9 +284,14 @@ const TestcenterDashboard = () => {
                 />
               </Box>
               <Typography fontSize={"0.8rem"} color={"secondary.main"}>
-                {((charts.failed / charts.total) * 100).toFixed(2)}% of the
+                {charts.total == 0 ? 0 : ((charts.failed / charts.total) * 100).toFixed(2)}% of the
                 applicants have failed to clear the screening proccess
               </Typography>
+              <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
+                <IconButton onClick={() => download('rejected_candidates')}>
+                  <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
+                </IconButton>
+              </Box>
             </Box>
           </Box>
         </Box>

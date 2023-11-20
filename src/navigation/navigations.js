@@ -39,6 +39,19 @@ export const navigations = [
         ]
     },
     {
+        name:'Student',
+        path: 'student/',
+        icon: 'solar:library-bold-duotone',
+        dropdown: true,
+        subMenu: [
+            {
+                name:'menu 1',
+                path: 'student/menu1/',
+                icon: 'material-symbols:folder'
+            },
+        ]
+    },
+    {
         name:'Library',
         path: 'Library/',
         icon: 'solar:library-bold-duotone',
@@ -53,22 +66,27 @@ export const navigations = [
                 name:'menu 2',
                 path: 'library/menu2/',
                 icon: 'material-symbols:folder'
+            },
+            {
+                name:'menu 3',
+                path: 'library/menu2/',
+                icon: 'material-symbols:folder'
             }
         ]
     },
     {
         name:'Utilities',
-        path: 'Utilities/',
+        path: 'utilities/',
         icon: 'solar:document-bold'
     },
     {
         name:'Manage Access',
-        path: 'access_control/',
+        path: 'access-control/',
         icon: 'ic:baseline-manage-accounts'
     },
     {
         name:'Feedback',
-        path: 'Feedback/',
+        path: 'feedback/',
         icon: 'material-symbols:feedback'
     }
 ]

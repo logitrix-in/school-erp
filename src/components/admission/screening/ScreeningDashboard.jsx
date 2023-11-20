@@ -4,6 +4,7 @@ import {
   Checkbox,
   Divider,
   FormControl,
+  IconButton,
   InputLabel,
   ListItemText,
   MenuItem,
@@ -16,6 +17,7 @@ import React, { useEffect, useState } from "react";
 import api from "../../../config/api";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
+import download from "../../../hooks/useDownload";
 
 const ScreeningDashboard = () => {
   const curYear = new Date().getFullYear();
@@ -183,6 +185,7 @@ const ScreeningDashboard = () => {
               sx={{
                 background: "linear-gradient(to right, #2C7BA0, #9BD9F4)",
               }}
+              position={"relative"}
             >
               <Box flex={2} p={3}>
                 <Typography
@@ -204,6 +207,13 @@ const ScreeningDashboard = () => {
                   color="#2C7BA0"
                 />
               </Box>
+              <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
+                <IconButton
+                  onClick={() => download("total_application_recieved")}
+                >
+                  <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
+                </IconButton>
+              </Box>
             </Box>
             <Box
               flex={1}
@@ -214,6 +224,7 @@ const ScreeningDashboard = () => {
               sx={{
                 background: "linear-gradient(to right, #E59D7A, #FAD2C0)",
               }}
+              position={"relative"}
             >
               <Box flex={2} p={3}>
                 <Typography
@@ -234,6 +245,11 @@ const ScreeningDashboard = () => {
                   fontSize={"10rem"}
                   color="#C4673B"
                 />
+              </Box>
+              <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
+                <IconButton onClick={() => download("screening_pending")}>
+                  <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
+                </IconButton>
               </Box>
             </Box>
           </Box>
