@@ -721,12 +721,22 @@ const BulkManage = () => {
                       {selectedClass?.extras.count} candidates have been
                       selected
                     </Typography>
-                    <Button variant="outlined" onClick={()=> setOpenPopup(true)}>View</Button>
+                    <Button
+                      variant="outlined"
+                      onClick={() => setOpenPopup(true)}
+                    >
+                      View
+                    </Button>
                   </Box>
                 </Box>
                 {/* popup */}
 
-                <Dialog maxWidth="md" fullWidth open={openPopup} onClose={()=> setOpenPopup(false)}>
+                <Dialog
+                  maxWidth="md"
+                  fullWidth
+                  open={openPopup}
+                  onClose={() => setOpenPopup(false)}
+                >
                   <Box p={2}>
                     <DataGrid
                       rows={selectedClass?.extras.applications?.map((a, i) => ({
