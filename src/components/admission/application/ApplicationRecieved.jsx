@@ -222,12 +222,13 @@ const ApplicationRecieved = () => {
                 <DatePicker
                   label="Start Date"
                   onChange={(e) => setStartDate(e)}
-                  minDate={dayjs()}
+                  // minDate={dayjs()}
                   format="DD MMM YYYY"
                 />
                 <DatePicker
                   format="DD MMM YYYY"
                   label="End Date"
+                  minDate={startDate}
                   onChange={(e) => setEndDate(e)}
                 />
               </Box>
@@ -319,7 +320,7 @@ const ApplicationRecieved = () => {
             >
               <Link to={"view/"}>
                 <Button variant="outlined" size="small" color="primary">
-                  View 
+                  View
                 </Button>
               </Link>
               <Button variant="outlined" size="small" color="info">
