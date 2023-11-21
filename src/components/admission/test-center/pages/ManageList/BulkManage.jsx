@@ -737,39 +737,46 @@ const BulkManage = () => {
                   open={openPopup}
                   onClose={() => setOpenPopup(false)}
                 >
-                  <Box p={2}>
-                    <DataGrid
-                      rows={selectedClass?.extras.applications?.map((a, i) => ({
-                        appid: a.application_id,
-                        gender: `${a.candidate_details.gender}`,
-                        nation: `${a.candidate_details.nationality}`,
-                        name: `${a.candidate_details.first_name} ${a.candidate_details.middle_name} ${a.candidate_details.last_name}`,
-                        id: i,
-                      }))}
-                      columns={[
-                        {
-                          field: "name",
-                          headerName: "name",
-                          flex: 1,
-                        },
-                        {
-                          field: "appid",
-                          headerName: "Application Id",
-                          flex: 1,
-                        },
-                        {
-                          field: "gender",
-                          headerName: "Gender",
-                          flex: 1,
-                        },
-                        {
-                          field: "nation",
-                          headerName: "Nationality",
-                          flex: 1,
-                        },
-                      ]}
-                    />
-                  </Box>
+                  <>
+                    <Box p={2}>
+                      <DataGrid
+                        rows={selectedClass?.extras.applications?.map(
+                          (a, i) => ({
+                            appid: a.application_id,
+                            gender: `${a.candidate_details.gender}`,
+                            nation: `${a.candidate_details.nationality}`,
+                            name: `${a.candidate_details.first_name} ${a.candidate_details.middle_name} ${a.candidate_details.last_name}`,
+                            id: i,
+                          })
+                        )}
+                        columns={[
+                          {
+                            field: "name",
+                            headerName: "name",
+                            flex: 1,
+                          },
+                          {
+                            field: "appid",
+                            headerName: "Application Id",
+                            flex: 1,
+                          },
+                          {
+                            field: "gender",
+                            headerName: "Gender",
+                            flex: 1,
+                          },
+                          {
+                            field: "nation",
+                            headerName: "Nationality",
+                            flex: 1,
+                          },
+                        ]}
+                      />
+                    </Box>
+                    <Button color="error" onClick={() => setOpenPopup(false)}>
+                      CLOSE
+                    </Button>
+                  </>
                 </Dialog>
 
                 <Box mt={2} display={"flex"} gap={2} alignItems={"center"}>

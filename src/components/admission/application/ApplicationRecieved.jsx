@@ -222,6 +222,7 @@ const ApplicationRecieved = () => {
                 <DatePicker
                   label="Start Date"
                   onChange={(e) => setStartDate(e)}
+                  minDate={dayjs()}
                   format="DD MMM YYYY"
                 />
                 <DatePicker
