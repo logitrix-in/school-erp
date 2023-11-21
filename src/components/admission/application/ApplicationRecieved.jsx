@@ -5,6 +5,7 @@ import {
   Divider,
   FormControl,
   InputLabel,
+  ListItemIcon,
   ListItemText,
   MenuItem,
   OutlinedInput,
@@ -149,13 +150,20 @@ const ApplicationRecieved = () => {
       class: curClass,
     };
     setFilter(_filter);
-  }, [acYear, curClass, startDate, endDate]);
+  }, [acYear, curClass, startDate, endDate]); 
+
+  useEffect(() => {
+    console.log(curClass);
+  }, [curClass]);
 
   const handleClassChange = (e) => {
     const {
       target: { value },
     } = e;
-
+    if (value[value.length - 1] === "all") {
+      setClass(curClass.length === classes.length ? [] : classes);
+      return;
+    }
     setClass(typeof value === "string" ? value.split(",") : value);
   };
 
@@ -241,8 +249,27 @@ const ApplicationRecieved = () => {
                   value={curClass}
                   onChange={handleClassChange}
                   input={<OutlinedInput label="class" />}
-                  renderValue={(selected) => selected.join(", ")}
+                  renderValue={(selected) =>
+                    selected.length == classes.length
+                      ? "All"
+                      : selected.join(", ")
+                  }
                 >
+                  <MenuItem value="all">
+                    <ListItemIcon>
+                      <Checkbox
+                        checked={
+                          classes.length > 0 &&
+                          curClass.length === classes.length
+                        }
+                        indeterminate={
+                          curClass.length > 0 &&
+                          curClass.length < classes.length
+                        }
+                      />
+                    </ListItemIcon>
+                    <ListItemText primary="Select All" />
+                  </MenuItem>
                   {classes.map((name) => (
                     <MenuItem key={name} value={name}>
                       <Checkbox
