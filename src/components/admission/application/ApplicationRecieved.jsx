@@ -26,6 +26,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers";
 import api from "../../../config/api";
+import useClasses from "../../../hooks/useClasses";
 
 const ApplicationRecieved = () => {
   const [series, setSeries] = useState([]);
@@ -119,17 +120,7 @@ const ApplicationRecieved = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const [classes, setClasses] = useState([]);
-
-  useEffect(() => {
-    api
-      .get(
-        "/admission/application/manage-application/?date_format=calendar&is_active=1"
-      )
-      .then((res) => {
-        setClasses(res.data.map((d) => d.class_name));
-      });
-  }, []);
+  const {classes} = useClasses();
 
   const curYear = new Date().getFullYear();
 
@@ -248,6 +239,13 @@ const ApplicationRecieved = () => {
                   multiple
                   value={curClass}
                   onChange={handleClassChange}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: 300,
+                      },
+                    },
+                  }}
                   input={<OutlinedInput label="class" />}
                   renderValue={(selected) =>
                     selected.length == classes.length

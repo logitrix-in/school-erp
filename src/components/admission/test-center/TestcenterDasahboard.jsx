@@ -18,6 +18,8 @@ import api from "../../../config/api";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
 import download from "../../../hooks/useDownload";
+import useClasses from "../../../hooks/useClasses";
+import ReignsSelect from "../../UiComponents/ReignsSelect";
 
 const TestcenterDashboard = () => {
   const curYear = new Date().getFullYear();
@@ -30,7 +32,7 @@ const TestcenterDashboard = () => {
     class: [],
   });
 
-  const [classes, setClasses] = useState([]);
+  const { classes } = useClasses();
   const [charts, setCharts] = useState({
     total: 0,
     cleared: 0,
@@ -63,13 +65,6 @@ const TestcenterDashboard = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  useEffect(() => {
-    api.get("/admission/application/manage-application/").then((res) => {
-      const classes = res.data.map((d) => d.class_name);
-      setClasses(classes);
-    });
-  }, []);
-
   const [acYear, setAcYear] = useState(academicYear);
   const [curClass, setClass] = useState([]);
 
@@ -85,12 +80,12 @@ const TestcenterDashboard = () => {
     setFilter(_filter);
   }, [acYear, curClass, startDate, endDate]);
 
-  const handleClassChange = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setClass(typeof value === "string" ? value.split(",") : value);
-  };
+  // const handleClassChange = (e) => {
+  //   const {
+  //     target: { value },
+  //   } = e;
+  //   setClass(typeof value === "string" ? value.split(",") : value);
+  // };
 
   return (
     <RevealCard>
@@ -157,7 +152,7 @@ const TestcenterDashboard = () => {
               />
             </Box>
 
-            <FormControl fullWidth>
+            {/* <FormControl fullWidth>
               <InputLabel>Class</InputLabel>
               <Select
                 multiple
@@ -176,7 +171,16 @@ const TestcenterDashboard = () => {
                   </MenuItem>
                 ))}
               </Select>
-            </FormControl>
+            </FormControl> */}
+            <ReignsSelect
+              multiple
+              items={classes}
+              onChange={(val) => {
+                console.log(val);
+                setClass(val);
+              }}
+              label="Class"
+            />
           </Box>
 
           <Bbox
@@ -220,7 +224,7 @@ const TestcenterDashboard = () => {
               boxShadow={"0 3px 12px -1px rgba(0,0,0,0.4)"}
               border={"1px solid black"}
               borderColor={"primary.main"}
-              position={'relative'}
+              position={"relative"}
             >
               <Box display={"flex"}>
                 <Box flex={2}>
@@ -242,12 +246,18 @@ const TestcenterDashboard = () => {
                   color="#3B98C4"
                 />
               </Box>
-              <Typography fontSize={"0.8rem"} color={"primary.main"} width={'90%'}>
-                {charts.total == 0 ? 0 : ((charts.cleared / charts.total) * 100).toFixed(2)}% of the
-                applicants have cleared the screening proccess
+              <Typography
+                fontSize={"0.8rem"}
+                color={"primary.main"}
+                width={"90%"}
+              >
+                {charts.total == 0
+                  ? 0
+                  : ((charts.cleared / charts.total) * 100).toFixed(2)}
+                % of the applicants have cleared the screening proccess
               </Typography>
               <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                <IconButton onClick={() => download('cleared_candidates')}>
+                <IconButton onClick={() => download("cleared_candidates")}>
                   <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
                 </IconButton>
               </Box>
@@ -284,11 +294,13 @@ const TestcenterDashboard = () => {
                 />
               </Box>
               <Typography fontSize={"0.8rem"} color={"secondary.main"}>
-                {charts.total == 0 ? 0 : ((charts.failed / charts.total) * 100).toFixed(2)}% of the
-                applicants have failed to clear the screening proccess
+                {charts.total == 0
+                  ? 0
+                  : ((charts.failed / charts.total) * 100).toFixed(2)}
+                % of the applicants have failed to clear the screening proccess
               </Typography>
               <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                <IconButton onClick={() => download('rejected_candidates')}>
+                <IconButton onClick={() => download("rejected_candidates")}>
                   <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
                 </IconButton>
               </Box>

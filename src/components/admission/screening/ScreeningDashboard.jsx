@@ -18,6 +18,9 @@ import api from "../../../config/api";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
 import download from "../../../hooks/useDownload";
+import useClasses from "../../../hooks/useClasses";
+import ReignsPopup from "../../UiComponents/ReignsPopup";
+import ReignsSelect from "../../UiComponents/ReignsSelect";
 
 const ScreeningDashboard = () => {
   const curYear = new Date().getFullYear();
@@ -30,7 +33,7 @@ const ScreeningDashboard = () => {
     class: [],
   });
 
-  const [classes, setClasses] = useState([]);
+  const { classes } = useClasses();
   const [charts, setCharts] = useState({
     total: 0,
     screenedPending: 0,
@@ -61,13 +64,6 @@ const ScreeningDashboard = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  useEffect(() => {
-    api.get("/admission/application/manage-application/").then((res) => {
-      const classes = res.data.map((d) => d.class_name);
-      setClasses(classes);
-    });
-  }, []);
-
   const [acYear, setAcYear] = useState(academicYear);
   const [curClass, setClass] = useState([]);
 
@@ -82,13 +78,6 @@ const ScreeningDashboard = () => {
     };
     setFilter(_filter);
   }, [acYear, curClass, startDate, endDate]);
-
-  const handleClassChange = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setClass(typeof value === "string" ? value.split(",") : value);
-  };
 
   return (
     <RevealCard>
@@ -153,7 +142,7 @@ const ScreeningDashboard = () => {
               />
             </Box>
 
-            <FormControl fullWidth>
+            {/* <FormControl fullWidth>
               <InputLabel>Class</InputLabel>
               <Select
                 multiple
@@ -172,7 +161,17 @@ const ScreeningDashboard = () => {
                   </MenuItem>
                 ))}
               </Select>
-            </FormControl>
+            </FormControl> */}
+
+            <ReignsSelect
+              multiple
+              items={classes}
+              onChange={(val) => {
+                console.log(val);
+                setClass(val);
+              }}
+              label="Class"
+            />
           </Bbox>
 
           <Box display={"flex"} flexDirection={"column"} gap={2} flex={1}>

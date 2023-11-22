@@ -24,6 +24,8 @@ import Bbox from "../../UiComponents/Bbox";
 import { LoadingButton } from "@mui/lab";
 import { ToastContainer, toast } from "react-toastify";
 import download from "../../../hooks/useDownload";
+import ReignsSelect from "../../UiComponents/ReignsSelect";
+import useClasses from "../../../hooks/useClasses";
 
 const OnboardingDashboard = () => {
   useEffect(() => {
@@ -42,7 +44,7 @@ const OnboardingDashboard = () => {
     class: [],
   });
 
-  const [classes, setClasses] = useState([]);
+  const { classes } = useClasses();
   const [charts, setCharts] = useState({});
 
   function getValues() {
@@ -69,13 +71,6 @@ const OnboardingDashboard = () => {
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-
-  useEffect(() => {
-    api.get("/admission/application/manage-application/").then((res) => {
-      const classes = res.data.map((d) => d.class_name);
-      setClasses(classes);
-    });
-  }, []);
 
   const [acYear, setAcYear] = useState(academicYear);
   const [curClass, setClass] = useState([]);
@@ -168,26 +163,15 @@ const OnboardingDashboard = () => {
               />
             </Box>
 
-            <FormControl fullWidth>
-              <InputLabel>Class</InputLabel>
-              <Select
-                multiple
-                value={curClass}
-                onChange={handleClassChange}
-                input={<OutlinedInput label="class" />}
-                renderValue={(selected) => selected.join(", ")}
-              >
-                {classes?.map((name) => (
-                  <MenuItem key={name} value={name}>
-                    <Checkbox
-                      size="small"
-                      checked={curClass.indexOf(name) > -1}
-                    />
-                    <ListItemText primary={name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <ReignsSelect
+              multiple
+              items={classes}
+              onChange={(val) => {
+                console.log(val);
+                setClass(val);
+              }}
+              label="Class"
+            />
           </Bbox>
 
           <Grid container spacing={2} flex={2}>
@@ -230,7 +214,7 @@ const OnboardingDashboard = () => {
                   />
                 </Box>
                 <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                  <IconButton onClick={() => download('candidates_selected')}>
+                  <IconButton onClick={() => download("candidates_selected")}>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
                   </IconButton>
                 </Box>
@@ -275,7 +259,7 @@ const OnboardingDashboard = () => {
                   />
                 </Box>
                 <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                  <IconButton onClick={() => download('candidates_in_merit')}>
+                  <IconButton onClick={() => download("candidates_in_merit")}>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
                   </IconButton>
                 </Box>
@@ -320,7 +304,7 @@ const OnboardingDashboard = () => {
                   />
                 </Box>
                 <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                  <IconButton onClick={() =>download('candidate_in_review')}>
+                  <IconButton onClick={() => download("candidate_in_review")}>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
                   </IconButton>
                 </Box>
@@ -365,7 +349,7 @@ const OnboardingDashboard = () => {
                   />
                 </Box>
                 <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                  <IconButton onClick={() => download('onboarding_completed')}>
+                  <IconButton onClick={() => download("onboarding_completed")}>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
                   </IconButton>
                 </Box>

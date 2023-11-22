@@ -1807,6 +1807,7 @@ const Question1 = ({ handleChange }) => {
           <Grid item xs={4}>
             <DatePicker
               sx={{ width: "100%" }}
+              label="Year of Passing"
               name="date"
               format="DD MMM YYYY"
               onChange={(e) => {
