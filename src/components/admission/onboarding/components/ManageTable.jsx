@@ -45,9 +45,6 @@ export default function DataTable() {
       ),
     },
   ];
-  const candidateRows = [
-    { id: 1, name: "Arnab Chatterjee", appId: "ACS24030001" },
-  ];
 
   // class
   const classColumn = [
@@ -82,7 +79,7 @@ export default function DataTable() {
             setCurMode("candidates");
           }}
         >
-          Review
+          View
         </Button>
       ),
     },
