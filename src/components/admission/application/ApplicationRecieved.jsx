@@ -150,7 +150,7 @@ const ApplicationRecieved = () => {
       class: curClass,
     };
     setFilter(_filter);
-  }, [acYear, curClass, startDate, endDate]); 
+  }, [acYear, curClass, startDate, endDate]);
 
   useEffect(() => {
     console.log(curClass);
