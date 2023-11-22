@@ -80,15 +80,15 @@ const ScreeningRuleEdit = () => {
 
   const option = {
     total_income: {
-      label: "Total Income",
+      label: "Anual family income",
       type: "number",
     },
     critical_ailment: {
-      label: "Critical Ailment",
+      label: "Critical medical ailment",
       type: "text",
     },
     permanent_states: {
-      label: "Permanent States",
+      label: "State ( Permanent address )",
       type: "select",
       options: State.getStatesOfCountry("IN").map((st) => st.name),
     },
@@ -107,7 +107,7 @@ const ScreeningRuleEdit = () => {
       options: boardOptions,
     },
     previous_percent: {
-      label: "Previous Percentage",
+      label: "Marks secured in last class (%)",
       type: "number",
     },
     specialization: {
@@ -412,7 +412,7 @@ const ScreeningRuleEdit = () => {
                         value={ac}
                         disabled={crit.find((b) => b.criteria == ac) != null}
                       >
-                        {ac.replace("_", " ")}
+                        {option[ac].label.replace("_", " ")}
                       </MenuItem>
                     ))}
                   </Select>
