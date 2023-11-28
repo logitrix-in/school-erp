@@ -13,6 +13,7 @@ import {
 import React, { useRef, useState } from "react";
 
 import { Editor } from "@tinymce/tinymce-react";
+import axios from "axios";
 
 const Email = () => {
   const [recipentTo, setRecipentTo] = useState("all");

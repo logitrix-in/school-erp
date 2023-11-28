@@ -249,22 +249,6 @@ const Engage = ({ close, open }) => {
                 height: 450,
                 menubar: false,
                 plugins: ["lists", "advlist", "link", "image", "fullscreen"],
-                images_upload_handler: (blobInfo, progress) => {
-                  const formData = new FormData();
-                  formData.append("image", blobInfo.blob());
-                  return new Promise((resolve, reject) => {
-                    axios
-                      .post("https://cdn.sociolinq.com/upload/", formData)
-                      .then((res) => {
-                        resolve(res.data.link);
-                      })
-                      .catch(() => {
-                        reject(
-                          "Some error occured. Please contact Rownak Mazumder."
-                        );
-                      });
-                  });
-                },
                 toolbar:
                   "undo redo | formatselect | " +
                   "bold italic backcolor | alignleft aligncenter " +
