@@ -208,7 +208,8 @@ const AutoResponse = ({ open, close }) => {
                       .then((res) => {
                         resolve(res.data.link);
                       })
-                      .catch(() => {
+                      .catch((err) => {
+                        console.log(err)
                         reject(
                           "Some error occured. Please contact Rownak Mazumder."
                         );

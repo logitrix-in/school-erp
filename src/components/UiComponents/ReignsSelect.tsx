@@ -25,7 +25,7 @@ const ReignsSelect: React.FC<ReignsSelectProps> = ({
   items = ["item 1", "item 2", "item 3"],
   label,
   sx = {},
-  onChange,
+  onChange = () => {},
   multiple,
   full = true,
 }) => {
@@ -56,7 +56,7 @@ const ReignsSelect: React.FC<ReignsSelectProps> = ({
   }, [selected, value]);
 
   return multiple ? (
-    <FormControl>
+    <FormControl fullWidth={full}>
       <InputLabel>{label}</InputLabel>
       <Select
         sx={sx}
@@ -89,7 +89,7 @@ const ReignsSelect: React.FC<ReignsSelectProps> = ({
       </Select>
     </FormControl>
   ) : (
-    <FormControl>
+    <FormControl fullWidth={full}>
       <InputLabel>{label}</InputLabel>
       <Select
         sx={sx}

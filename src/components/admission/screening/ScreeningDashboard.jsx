@@ -102,7 +102,7 @@ const ScreeningDashboard = () => {
           display={"flex"}
           gap={2}
           flexDirection={{ xs: "column", lg: "row" }}
-          alignItems={{ xs: "center" }}
+          alignItems={{ xs: "stretch" }}
           p={3}
         >
           <Bbox
@@ -111,6 +111,7 @@ const ScreeningDashboard = () => {
             py={5}
             display={"flex"}
             flexDirection={"column"}
+            justifyContent={'center'}
             gap={"2rem"}
             bgcolor={"white"}
             width={{ xs: "100%", lg: "30rem" }}
@@ -138,6 +139,7 @@ const ScreeningDashboard = () => {
               <DatePicker
                 format="DD MMM YYYY"
                 label="End Date"
+                minDate={startDate}
                 onChange={(e) => setEndDate(e)}
               />
             </Box>

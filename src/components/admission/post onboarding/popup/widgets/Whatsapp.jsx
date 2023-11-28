@@ -62,6 +62,23 @@ const Whatsapp = () => {
               "bold italic backcolor | alignleft aligncenter " +
               "alignright alignjustify | bullist numlist outdent indent | " +
               "removeformat | image link | fullscreen |",
+            images_upload_handler: (blobInfo, progress) => {
+              const formData = new FormData();
+              formData.append("image", blobInfo.blob());
+              return new Promise((resolve, reject) => {
+                axios
+                  .post("https://cdn.sociolinq.com/upload/", formData)
+                  .then((res) => {
+                    resolve(res.data.link);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    reject(
+                      "Some error occured. Please contact Rownak Mazumder."
+                    );
+                  });
+              });
+            },
             content_style:
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px, overflow:scroll}",
           }}

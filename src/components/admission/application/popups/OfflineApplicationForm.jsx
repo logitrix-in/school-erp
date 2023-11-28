@@ -35,6 +35,7 @@ import { ToastContainer, toast } from "react-toastify";
 import api from "../../../../config/api";
 import dayjs from "dayjs";
 import useClasses from "../../../../hooks/useClasses";
+import ReignsSelect from "../../../UiComponents/ReignsSelect";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -305,7 +306,9 @@ function OfflineApplicationForm({ open, close }) {
         close();
         toast.success("Application has been submitted successfully");
       })
-      .catch((err) => {})
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      })
       .finally(() => setLoading(false));
   };
 
@@ -1805,17 +1808,30 @@ const Question1 = ({ handleChange }) => {
             <TextField label="Name" name="name" fullWidth onChange={onChange} />
           </Grid>
           <Grid item xs={4}>
-            <DatePicker
+            {/* <DatePicker
               sx={{ width: "100%" }}
               label="Year of Passing"
               name="date"
-              format="DD MMM YYYY"
+              format="YYYY"
+              
+              views={["year"]}
+              maxDate={dayjs()}
               onChange={(e) => {
                 setQuestion((prev) => ({
                   ...prev,
                   date: dayjs(new Date(e)).format("YYYY-MM-DD"),
                 }));
               }}
+            /> */}
+            <ReignsSelect
+              label="Passing Year"
+              items={[
+                'Not Applicable',
+                ...new Array(50)
+                  .fill(0)
+                  .map((e, i) => `${new Date().getFullYear() - i}`),
+              ]}
+              onChange={() => {}}
             />
           </Grid>
           <Grid item xs={4}>
@@ -1827,6 +1843,8 @@ const Question1 = ({ handleChange }) => {
                 onChange={onChange}
               >
                 {[
+                  "Father",
+                  "Mother",
                   "Uncle",
                   "Aunt",
                   "Sister",
@@ -1912,6 +1930,8 @@ const Question2 = ({ handleChange }) => {
                 onChange={onChange}
               >
                 {[
+                  "Father",
+                  "Mother",
                   "Uncle",
                   "Aunt",
                   "Sister",

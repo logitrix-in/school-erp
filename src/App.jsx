@@ -47,6 +47,7 @@ import ManageTickets from "./components/admission/post onboarding/ManageTickets"
 import DetailedView from "./components/admission/application/DetailedView";
 import OnboardingApproval from "./components/admission/onboarding/pages/OnboardingApproval";
 import Test from "./pages/Test";
+import api from "./config/api";
 
 const NavLayout = () => {
   const ux = useAuth();
@@ -115,7 +116,16 @@ function App() {
         navigate("/login/");
       })
       .finally(() => {
-        setLoading(false);
+        api
+          .get("/admission/get-all-classes")
+          .then((res) => {
+            context.setClasses(res.data);
+            console.log(res.data);
+          })
+          .catch((err) => console.log(err))
+          .finally(() => {
+            setLoading(false);
+          });
       });
   }, []);
 

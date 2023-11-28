@@ -158,6 +158,7 @@ const OnboardingDashboard = () => {
               <DatePicker
                 format="DD MMM YYYY"
                 label="End Date"
+                minDate={startDate}
                 sx={{ width: "100%" }}
                 onChange={(e) => setEndDate(e)}
               />

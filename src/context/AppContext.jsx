@@ -24,15 +24,7 @@ const AppContextProvider = ({ children }) => {
   const acYear = generateAcademicYears();
   const curAcademicYear = `${curYear}-${(curYear + 1).toString().slice(2)}`;
 
-  useEffect(() => {
-    api
-      .get("/admission/get-all-classes")
-      .then((res) => {
-        setClasses(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  
 
   const value = {
     user,
@@ -42,6 +34,7 @@ const AppContextProvider = ({ children }) => {
     classes,
     acYear,
     curAcademicYear,
+    setClasses
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
