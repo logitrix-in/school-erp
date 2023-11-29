@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../../config/api";
@@ -8,6 +8,7 @@ const DetailedView = () => {
   const params = useParams();
 
   const [obj, setObj] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     api
@@ -19,6 +20,7 @@ const DetailedView = () => {
       .then((res) => {
         console.log(res.data);
         setObj(res.data.data);
+        setLoading(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -99,7 +101,7 @@ const DetailedView = () => {
   return (
     <Box>
       <Grid container spacing={1}>
-        {obj && renderDetails(obj)}
+        {obj == null ? <CircularProgress /> : renderDetails(obj)}
       </Grid>
     </Box>
   );
