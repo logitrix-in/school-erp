@@ -15,7 +15,7 @@ import React, { useEffect, useState } from "react";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import Bbox from "../../UiComponents/Bbox";
 import { Link } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, GridToolbarContainer } from "@mui/x-data-grid";
 import { Icon } from "@iconify/react";
 import api from "../../../config/api";
 import { ToastContainer, toast } from "react-toastify";
@@ -23,6 +23,12 @@ import useClasses from "../../../hooks/useClasses";
 
 const Evaluation = () => {
   const [resultOpen, setResultOpen] = useState(false);
+  const CustomToolbar = () => (
+    <GridToolbarContainer>
+      {/* <GridToolbarExport /> */}
+      <GridToolbar />
+    </GridToolbarContainer>
+  );
 
   const columns = [
     { field: "id", headerName: "Application Id", width: 150 },
@@ -192,6 +198,7 @@ const Evaluation = () => {
                       pageSize={5}
                       rowsPerPageOptions={[5, 10, 20]}
                       disableSelectionOnClick
+                      slots={{ toolbar: CustomToolbar }}
                     />
                   )}
                 </Box>
