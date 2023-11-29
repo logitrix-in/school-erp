@@ -707,6 +707,7 @@ const IssueAdmitCard = () => {
                   <Grid item xs={4}>
                     <TimePicker
                       disabled={resend}
+                      minTime={playload.time}
                       onChange={(val) =>
                         handleChange({
                           target: {
@@ -715,7 +716,7 @@ const IssueAdmitCard = () => {
                           },
                         })
                       }
-                      value={dayjs(playload.time)}
+                      value={dayjs(playload.end_time)}
                       sx={{ width: "100%" }}
                       label="Select End Time"
                     />

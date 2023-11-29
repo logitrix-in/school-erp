@@ -126,6 +126,10 @@ const BulkManage = () => {
 
   useEffect(() => {}, [batchSettings]);
 
+  useEffect(() => {
+    console.log(playload);
+  }, [playload]);
+
   function handleSettingChange(name, value) {
     setBatchSettings((prev) => ({ ...prev, [name]: value }));
   }
@@ -286,6 +290,7 @@ const BulkManage = () => {
                           ? dayjs(timeToDate(selectBatch?.start_time))
                           : dayjs(timeToDate("00:00:00"))
                       }
+                      minTime={dayjs(timeToDate(playload.start_time))}
                       onChange={(val) =>
                         handleChange({
                           target: {
