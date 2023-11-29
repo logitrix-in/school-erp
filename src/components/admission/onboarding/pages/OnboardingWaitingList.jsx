@@ -65,13 +65,13 @@ const OnboardingMeritList = () => {
   ];
 
   const MeritListColumn = [
-    {
-      field: "checkbox", // Special field for checkbox selection
-      headerName: "Select",
-      width: 80,
-      checkboxSelection: true, // Enable checkbox selection
-      headerCheckboxSelection: true, // Enable header checkbox for selecting all rows
-    },
+    // {
+    //   field: "checkbox", // Special field for checkbox selection
+    //   headerName: "",
+    //   width:10,
+    //   checkboxSelection: true, // Enable checkbox selection
+    //   headerCheckboxSelection: true, // Enable header checkbox for selecting all rows
+    // },
     {
       field: "rank",
       headerName: "Rank",
@@ -263,14 +263,14 @@ const OnboardingMeritList = () => {
                 borderRadius={1}
                 mt={2}
               >
-                Initiate Onboarding Based on Merit/Waiting List
+                Initiate Onboarding Based on Waiting List
               </Typography>
 
               <Box mt={1} height={400}>
                 <DataGrid
-                  checkboxSelection // Enable checkbox selection for the entire DataGrid
+                  checkboxSelection
                   disableSelectionOnClick
-                  // getRowId={(row) => row.ApplicationID}
+                  getRowId={(row) => row.ApplicationID}
                   initialState={{
                     pagination: { paginationModel: { pageSize: 10 } },
                   }}

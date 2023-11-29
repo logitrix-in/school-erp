@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import api from "../../../../../config/api";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, GridToolbarContainer } from "@mui/x-data-grid";
 import { LoadingButton } from "@mui/lab";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -67,6 +67,13 @@ const GenerateMeritList = () => {
   const [generateLoading, setGenerateLoading] = useState(false);
 
   const [publishLoading, setPublishLoading] = useState(false);
+
+
+  const CustomToolbar = () => (
+    <GridToolbarContainer>
+      <GridToolbar />
+    </GridToolbarContainer>
+  );
 
   return (
     <Bbox borderRadius={1}>
@@ -176,6 +183,7 @@ const GenerateMeritList = () => {
           {data != null && data.length > 0 && (
             <Box>
               <DataGrid
+               slots={{ toolbar: CustomToolbar }}
                 rows={data.map((e, i) => ({ ...e, id: i }))}
                 columns={Object.keys(data[0]).map((e, i) => ({
                   field: e,

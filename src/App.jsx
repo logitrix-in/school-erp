@@ -116,16 +116,7 @@ function App() {
         navigate("/login/");
       })
       .finally(() => {
-        api
-          .get("/admission/get-all-classes")
-          .then((res) => {
-            context.setClasses(res.data);
-            console.log(res.data);
-          })
-          .catch((err) => console.log(err))
-          .finally(() => {
-            setLoading(false);
-          });
+        setLoading(false);
       });
   }, []);
 

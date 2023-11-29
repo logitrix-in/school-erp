@@ -8,6 +8,17 @@ const AppContextProvider = ({ children }) => {
   const [quickTabs, setQuickTabs] = useState({});
   const [classes, setClasses] = useState([]);
 
+  useEffect(() => {
+    if (user != null)
+      api
+        .get("/admission/get-all-classes")
+        .then((res) => {
+          setClasses(res.data);
+          console.log(res.data);
+        })
+        .catch((err) => console.log(err));
+  }, [user]);
+
   function generateAcademicYears() {
     const currentYear = new Date().getFullYear();
     const academicYears = [];
@@ -24,8 +35,6 @@ const AppContextProvider = ({ children }) => {
   const acYear = generateAcademicYears();
   const curAcademicYear = `${curYear}-${(curYear + 1).toString().slice(2)}`;
 
-  
-
   const value = {
     user,
     setUser,
@@ -34,7 +43,7 @@ const AppContextProvider = ({ children }) => {
     classes,
     acYear,
     curAcademicYear,
-    setClasses
+    setClasses,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

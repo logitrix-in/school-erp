@@ -378,20 +378,20 @@ const BulkManage = () => {
                       }}
                       fullWidth
                       size="medium"
-                      variant="outlined"
-                      color={selectBatch.is_mail_sent ? "warning" : "primary"}
+                      variant="contained"
+                      // color={selectBatch.is_mail_sent ? "warning" : "primary"}
                     >
                       {selectBatch.is_mail_sent ? "resend" : "Send Admit Card"}
                     </LoadingButton>
 
-                    {/* <LoadingButton
+                    <LoadingButton
                       disabled
                       size="medium"
                       fullWidth
                       variant="outlined"
                     >
-                      Export Admit Card
-                    </LoadingButton> */}
+                      Download Sample Admit Card
+                    </LoadingButton>
                   </Grid>
                 </Grid>
               </Box>

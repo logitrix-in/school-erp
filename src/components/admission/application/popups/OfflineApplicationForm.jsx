@@ -171,7 +171,7 @@ function OfflineApplicationForm({ open, close }) {
     };
   }, []);
 
-  const required = [
+  var required = [
     "first_name",
     "last_name",
     "dob",
@@ -182,7 +182,7 @@ function OfflineApplicationForm({ open, close }) {
     "religion",
     "category",
     "contact_number",
-    "email",
+    // "email",
     "profile_photo",
     "applying_for",
     "admission_year",
@@ -218,10 +218,10 @@ function OfflineApplicationForm({ open, close }) {
     // "guardian_annual_income",
     // "guardian_contact_number",
     // "guardian_email",
+    // "relationType",
     "payment_date",
     "payment_mode",
     "primary_contact",
-    "relationType",
     "receipt_no",
     "type",
   ];
@@ -270,6 +270,22 @@ function OfflineApplicationForm({ open, close }) {
           progress: undefined,
           theme: "dark",
         });
+
+      if (
+        formData.father_occupation == "Not Applicable" &&
+        formData.mother_occupation == "Not Applicable"
+      ) {
+        required = required.concat([
+          "guardian_name",
+          "guardian_occupation",
+          "guardian_annual_income",
+          "guardian_contact_number",
+          "guardian_email",
+          "relationType",
+        ]);
+
+        console.log(required);
+      }
 
       // check required
 
@@ -1826,7 +1842,7 @@ const Question1 = ({ handleChange }) => {
             <ReignsSelect
               label="Passing Year"
               items={[
-                'Not Applicable',
+                "Not Applicable",
                 ...new Array(50)
                   .fill(0)
                   .map((e, i) => `${new Date().getFullYear() - i}`),
