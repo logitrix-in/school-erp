@@ -13,7 +13,7 @@ const ReignsPopup = ({
   reject_txt = "Cancel",
 }) => {
   return (
-    <Dialog open={open} maxWidth="xs" fullWidth>
+    <Dialog open={open} maxWidth="xs" fullWidth onClose={close}>
       <Box>
         <Box bgcolor={"primary.main"} height={15}></Box>
         <Box p={2}>

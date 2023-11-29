@@ -368,10 +368,24 @@ const ScreeningRuleEdit = () => {
           )}
           {selectedClass && crit.length < availCrits.length && (
             <Box display={"flex"} gap={1}>
-              <Button size="small" variant="contained" color="secondary">
+              <Button
+                size="small"
+                variant="contained"
+                color="secondary"
+                disabled={
+                  !classes.find((c) => c.Class == selectedClass)?.active
+                }
+              >
                 Add Special Criterias
               </Button>
-              <Button size="small" variant="contained" onClick={addNew}>
+              <Button
+                size="small"
+                variant="contained"
+                onClick={addNew}
+                disabled={
+                  !classes.find((c) => c.Class == selectedClass)?.active
+                }
+              >
                 Add New criteria
               </Button>
             </Box>
@@ -564,7 +578,6 @@ const ScreeningRuleEdit = () => {
               variant="contained"
               sx={{ px: 4 }}
               onClick={SetScreeningRule}
-              disabled={!classes.find((c) => c.Class == selectedClass)?.active}
             >
               Apply
             </LoadingButton>

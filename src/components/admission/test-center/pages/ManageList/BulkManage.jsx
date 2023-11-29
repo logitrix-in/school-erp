@@ -19,6 +19,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -34,9 +35,10 @@ import api from "../../../../../config/api";
 import dayjs from "dayjs";
 import { LoadingButton } from "@mui/lab";
 import { Icons, ToastContainer, toast } from "react-toastify";
-import { Mail } from "@mui/icons-material";
+import { Download, Mail } from "@mui/icons-material";
 import { Icon } from "@iconify/react";
 import { DataGrid } from "@mui/x-data-grid";
+import ReignsPopup from "../../../../UiComponents/ReignsPopup";
 
 const BulkManage = () => {
   const [classes, setClasses] = useState(null);
@@ -162,6 +164,8 @@ const BulkManage = () => {
   const [sendAllAdmitLoading, setAllAdmitLoading] = useState(false);
 
   const [openPopup, setOpenPopup] = useState(false);
+
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   return (
     <>
@@ -290,7 +294,9 @@ const BulkManage = () => {
                           ? dayjs(timeToDate(selectBatch?.start_time))
                           : dayjs(timeToDate("00:00:00"))
                       }
-                      minTime={dayjs(timeToDate(playload.start_time))}
+                      minTime={dayjs(
+                        timeToDate(playload?.start_time ?? "00:00:00")
+                      )}
                       onChange={(val) =>
                         handleChange({
                           target: {
@@ -313,6 +319,8 @@ const BulkManage = () => {
                     <LoadingButton
                       loading={saveBatchButtonLoading}
                       fullWidth
+                      // color="success"
+                      // sx={{color:'white'}}
                       variant="contained"
                       onClick={() => {
                         setSaveBatchButtonLoading(true);
@@ -366,23 +374,24 @@ const BulkManage = () => {
                           .finally(() => {
                             setSaveBatchButtonLoading(false);
                           });
+                        setOpenConfirm(true);
                       }}
                       fullWidth
                       size="medium"
-                      variant="contained"
+                      variant="outlined"
                       color={selectBatch.is_mail_sent ? "warning" : "primary"}
                     >
                       {selectBatch.is_mail_sent ? "resend" : "Send Admit Card"}
                     </LoadingButton>
 
-                    <LoadingButton
+                    {/* <LoadingButton
                       disabled
                       size="medium"
                       fullWidth
                       variant="outlined"
                     >
                       Export Admit Card
-                    </LoadingButton>
+                    </LoadingButton> */}
                   </Grid>
                 </Grid>
               </Box>
@@ -419,6 +428,8 @@ const BulkManage = () => {
                   height={"47vh"}
                   overflow={"auto"}
                   pb={2}
+                  pt={2}
+                  width={"100%"}
                 >
                   {selectedClass?.batches
                     .sort(function (a, b) {
@@ -436,8 +447,30 @@ const BulkManage = () => {
                           display: "flex",
                           flexDirection: "column",
                           height: "fit-content",
+                          position: "relative",
+                          overflow: "visible",
                         }}
                       >
+                        <Tooltip title="Download">
+                          <Box
+                            sx={{
+                              position: "absolute",
+                              right: 0,
+                              top: 0,
+                              zIndex: 2000,
+                              transform: "translateX(50%) translateY(-50%)",
+                            }}
+                            bgcolor={"#ffffff"}
+                            borderRadius={50}
+                            padding={0.05}
+                            boxShadow={"0 0 10px -1px rgba(0,0,0,0.2)"}
+                            border={"1px solid transparent"}
+                          >
+                            <IconButton size="small" color="primary">
+                              <Icon icon={"material-symbols:download"} />
+                            </IconButton>
+                          </Box>
+                        </Tooltip>
                         <Box
                           bgcolor={
                             bat?.is_disabled
@@ -482,8 +515,13 @@ const BulkManage = () => {
                             display={"flex"}
                             justifyContent={"space-between"}
                             alignItems={"center"}
+                            gap={1}
                           >
-                            <Typography fontSize={"1.1rem"} fontWeight={500}>
+                            <Typography
+                              mr={"auto"}
+                              fontSize={"1.1rem"}
+                              fontWeight={500}
+                            >
                               {bat.batch_no}{" "}
                             </Typography>
                             <Chip
@@ -670,6 +708,21 @@ const BulkManage = () => {
                     variant="contained"
                     disabled={selectedClass.batches.every((b) => b.is_disabled)}
                     onClick={() => {
+                      setOpenConfirm(true);
+                    }}
+                  >
+                    Send Admit Card
+                  </LoadingButton>
+                  <ReignsPopup
+                    desc={`Upon confirmation, admit cards will be promptly sent to all Class ${selectedClass?.applying_for} batches`}
+                    open={openConfirm}
+                    onCancel={() => {
+                      setOpenConfirm(false);
+                    }}
+                    close={() => {
+                      setOpenConfirm(false);
+                    }}
+                    onAccept={() => {
                       setAllAdmitLoading(true);
                       api
                         .post(
@@ -686,9 +739,7 @@ const BulkManage = () => {
                           );
                         });
                     }}
-                  >
-                    Send Admit Card
-                  </LoadingButton>
+                  />
                 </Box>
               </Box>
             ) : (
