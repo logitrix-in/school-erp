@@ -39,10 +39,7 @@ const ManageTickets = () => {
         res.data.map((el) => ({
           ...el,
           date: dayjs(new Date(el.created_on)).format("DD MMM YYYY"),
-          ageing: dayjs(new Date()).diff(
-            dayjs(new Date(el.created_on)),
-            "days"
-          ),
+          ageing: dayjs(new Date()),
         }))
       );
     });

@@ -171,7 +171,7 @@ function App() {
               element={<IssueAdmitCard />}
             />
             <Route
-              path="admission/test-center/issue-admit-card/bulk-manage/"
+              path="admission/test-center/admit-card/bulk-manage/"
               element={<BulkManage />}
             />
 
