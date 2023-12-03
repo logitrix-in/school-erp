@@ -167,7 +167,7 @@ function App() {
               element={<AdmissionTestCenter />}
             />
             <Route
-              path="admission/test-center/issue-admit-card/"
+              path="admission/test-center/admit-card/"
               element={<IssueAdmitCard />}
             />
             <Route
