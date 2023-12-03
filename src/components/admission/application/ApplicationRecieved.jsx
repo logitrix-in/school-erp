@@ -213,7 +213,7 @@ const ApplicationRecieved = () => {
               gap={"2rem"}
               borderRadius={1}
               ml={2}
-              >
+            >
               <FormControl fullWidth>
                 <InputLabel>Academic Year</InputLabel>
                 <Select
