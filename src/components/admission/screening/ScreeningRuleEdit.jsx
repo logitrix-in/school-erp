@@ -368,7 +368,7 @@ const ScreeningRuleEdit = () => {
           )}
           {selectedClass && crit.length < availCrits.length && (
             <Box display={"flex"} gap={1}>
-              <Button
+              {/* <Button
                 size="small"
                 variant="contained"
                 color="secondary"
@@ -377,7 +377,7 @@ const ScreeningRuleEdit = () => {
                 }
               >
                 Add Special Criterias
-              </Button>
+              </Button> */}
               <Button
                 size="small"
                 variant="contained"

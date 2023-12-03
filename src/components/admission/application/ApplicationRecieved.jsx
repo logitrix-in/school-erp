@@ -204,15 +204,16 @@ const ApplicationRecieved = () => {
             flexDirection={{ xs: "column", lg: "row" }}
             alignItems={{ xs: "strech", lg: "center" }}
           >
-            <Box
+            <Bbox
               p={3}
+              py={5}
               display={"flex"}
-              // flex={0.7}
               width={"25rem"}
-              // bgcolor={'red'}
               flexDirection={"column"}
               gap={"2rem"}
-            >
+              borderRadius={1}
+              ml={2}
+              >
               <FormControl fullWidth>
                 <InputLabel>Academic Year</InputLabel>
                 <Select
@@ -289,7 +290,7 @@ const ApplicationRecieved = () => {
                   ))}
                 </Select>
               </FormControl>
-            </Box>
+            </Bbox>
             <Box
               p={3}
               flex={2}
