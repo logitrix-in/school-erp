@@ -1601,6 +1601,7 @@ function OfflineApplicationForm({ open, close }) {
               Local Guardian's Details
             </Typography>
             <Tooltip
+              sx={{ mr: "auto" }}
               arrow
               placement="right"
               title="This section is mandatory only if the applicant is not residing with his/her father/mother"
@@ -1609,6 +1610,23 @@ function OfflineApplicationForm({ open, close }) {
                 <InfoRounded />
               </IconButton>
             </Tooltip>
+            <Button
+              color="error"
+              size="small"
+              onClick={() => {
+                setFormData((prev) => ({
+                  ...prev,
+                  guardian_name: "",
+                  guardian_occupation: "",
+                  guardian_annual_income: "",
+                  guardian_contact_number: "",
+                  guardian_email: "",
+                  relationType: "",
+                }));
+              }}
+            >
+              Clear
+            </Button>
           </Grid>
 
           <Grid item xs={4}>
@@ -1645,9 +1663,10 @@ function OfflineApplicationForm({ open, close }) {
           </Grid>
           <Grid item xs={4}>
             <TextField
-              type="text"
+              type="number"
               fullWidth
               label="Anual Income"
+
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">₹</InputAdornment>
