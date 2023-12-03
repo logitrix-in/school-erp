@@ -120,7 +120,7 @@ const ApplicationRecieved = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const {classes} = useClasses();
+  const { classes } = useClasses();
 
   const curYear = new Date().getFullYear();
 
@@ -128,6 +128,8 @@ const ApplicationRecieved = () => {
 
   const [acYear, setAcYear] = useState(academicYear);
   const [curClass, setClass] = useState([]);
+
+  const [type, setType] = useState("all");
 
   // filter
 
@@ -139,9 +141,11 @@ const ApplicationRecieved = () => {
       start_date: startDate && new Date(startDate).toLocaleDateString("en-CA"),
       end_date: endDate && new Date(endDate).toLocaleDateString("en-CA"),
       class: curClass,
+      type: type,
     };
+    console.log(_filter);
     setFilter(_filter);
-  }, [acYear, curClass, startDate, endDate]);
+  }, [acYear, curClass, startDate, endDate, type]);
 
   useEffect(() => {
     console.log(curClass);
@@ -179,10 +183,16 @@ const ApplicationRecieved = () => {
               Application Recieved
             </Typography>
 
-            <Select defaultValue={30} size="small" onChange={() => {}}>
-              <MenuItem value={10}>Un- screened</MenuItem>
-              <MenuItem value={20}>Screened</MenuItem>
-              <MenuItem value={30}>All</MenuItem>
+            <Select
+              defaultValue={"all"}
+              size="small"
+              onChange={(e) => {
+                setType(e.target.value);
+              }}
+            >
+              <MenuItem value={"unscreened"}>Un- screened</MenuItem>
+              <MenuItem value={"screened"}>Screened</MenuItem>
+              <MenuItem value={"all"}>All</MenuItem>
             </Select>
           </Box>
 

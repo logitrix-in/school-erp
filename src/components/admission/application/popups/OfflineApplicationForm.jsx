@@ -1684,6 +1684,7 @@ function OfflineApplicationForm({ open, close }) {
               fullWidth
               label="Contact Number"
               name="contact_number"
+              value={formData.guardian_contact_number}
               onChange={(value) => {
                 const e = {
                   target: {
