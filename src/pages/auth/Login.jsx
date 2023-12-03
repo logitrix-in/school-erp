@@ -37,7 +37,7 @@ const Login = () => {
     setIsLoading(true);
     axios
       .post(
-        "https://web-production-a472.up.railway.app/api/login/",
+        "https://server.sociolinq.com/api/login/",
         {
           ...formData,
         },
