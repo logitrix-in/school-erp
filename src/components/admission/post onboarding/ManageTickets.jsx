@@ -5,6 +5,7 @@ import {
   Dialog,
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -12,22 +13,49 @@ import {
   Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useClasses from "../../../hooks/useClasses";
+import api from "../../../config/api";
+import dayjs from "dayjs";
+import CloseIcon from "@mui/icons-material/Close";
 
 const ManageTickets = () => {
   const columns = [
-    { field: "ticket_id", headerName: "Ticket ID", flex: 1 },
+    { field: "id", headerName: "Ticket ID", flex: 1 },
     { field: "category", headerName: "Ticket Category", flex: 1 },
     { field: "type", headerName: "Type", wiwdth: 90 },
-    { field: "class", headerName: "Class", flex: 1 },
+    { field: "Class", headerName: "Class", flex: 1 },
     { field: "subject", headerName: "Subject", flex: 1 },
     { field: "date", headerName: "Date", flex: 1 },
     { field: "ageing", headerName: "Ageing (days)", flex: 1 },
   ];
-  const rows = [];
+
+  const [rows, setRows] = useState([]);
+
+  const fetchTickets = () => {
+    api.get("/admission/post-onboarding/ticket/").then((res) => {
+      console.log(res.data);
+      setRows(
+        res.data.map((el) => ({
+          ...el,
+          date: dayjs(new Date(el.created_on)).format("DD MMM YYYY"),
+          ageing: dayjs(new Date()).diff(
+            dayjs(new Date(el.created_on)),
+            "days"
+          ),
+        }))
+      );
+    });
+  };
+
+  useEffect(() => {
+    fetchTickets();
+  }, []);
 
   const [open, setOpen] = useState(false);
+  useEffect(() => {
+    fetchTickets();
+  }, [open]);
 
   const { classes } = useClasses();
 
@@ -69,65 +97,121 @@ const ManageTickets = () => {
       <Box height={"20rem"} mt={2}>
         <DataGrid columns={columns} rows={rows} />
       </Box>
+      <CreateTicket open={open} setOpen={setOpen} classes={classes} />
+    </Box>
+  );
+};
 
-      <Dialog
-        maxWidth="md"
-        fullWidth
-        open={open}
-        onClose={() => setOpen(false)}
-      >
-        <Box>
-          <Typography
-            fontWeight={500}
-            fontSize={"1rem"}
-            color={"white"}
-            p={2}
-            bgcolor={"primary.main"}
-          >
+const CreateTicket = ({ open, setOpen, classes }) => {
+  const [category, setCategory] = useState("");
+  const [Class, setClass] = useState("");
+  const [Subject, setSubject] = useState("");
+  const [Description, setDescription] = useState("");
+
+  const createTicket = () => {
+    api
+      .post("/admission/post-onboarding/ticket/", {
+        category: category,
+        Class: Class,
+        subject: Subject,
+        description: Description,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setOpen(false);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  return (
+    <Dialog maxWidth="md" fullWidth open={open} onClose={() => setOpen(false)}>
+      <Box>
+        <Box
+          p={2}
+          bgcolor={"primary.main"}
+          display={"flex"}
+          alignItems={"center"}
+          justifyContent={"space-between"}
+          color={"white"}
+        >
+          <Typography fontWeight={500} fontSize={"1rem"} color={"white"}>
             Create a New Ticket
           </Typography>
-          <Box p={2}>
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <FormControl fullWidth>
-                  <InputLabel>Ticket Category</InputLabel>
-                  <Select label="Ticket Category" onChange={() => {}}>
-                    {["Uniform", "School Application", "Exit Request"].map(
-                      (val, idx) => (
-                        <MenuItem key={idx} value={val}>
-                          {val}
-                        </MenuItem>
-                      )
-                    )}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={2}>
-                <FormControl fullWidth>
-                  <InputLabel>Class</InputLabel>
-                  <Select label="Class" onChange={() => {}}>
-                    {classes.map((val, idx) => (
+          <IconButton color="inherit" onClick={() => setOpen(false)}>
+            <CloseIcon color="#ffffff" />
+          </IconButton>
+        </Box>
+        <Box p={2}>
+          <Grid container spacing={2}>
+            <Grid item xs={4}>
+              <FormControl fullWidth>
+                <InputLabel>Ticket Category</InputLabel>
+                <Select
+                  label="Ticket Category"
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                  }}
+                >
+                  {["Uniform", "School Application", "Exit Request"].map(
+                    (val, idx) => (
                       <MenuItem key={idx} value={val}>
                         {val}
                       </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <TextField fullWidth label="Subject" />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField multiline fullWidth rows={10} label="Description" />
-              </Grid>
-              <Grid item xs={3}>
-                <Button fullWidth variant="contained">Add Ticket</Button>
-              </Grid>
+                    )
+                  )}
+                </Select>
+              </FormControl>
             </Grid>
-          </Box>
+            <Grid item xs={2}>
+              <FormControl fullWidth>
+                <InputLabel>Class</InputLabel>
+                <Select
+                  label="Class"
+                  onChange={(e) => {
+                    setClass(e.target.value);
+                  }}
+                >
+                  {classes.map((val, idx) => (
+                    <MenuItem key={idx} value={val}>
+                      {val}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="Subject"
+                onChange={(e) => {
+                  setSubject(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                multiline
+                fullWidth
+                rows={10}
+                label="Description"
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={() => createTicket()}
+              >
+                Add Ticket
+              </Button>
+            </Grid>
+          </Grid>
         </Box>
-      </Dialog>
-    </Box>
+      </Box>
+    </Dialog>
   );
 };
 

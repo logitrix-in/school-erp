@@ -104,6 +104,7 @@ const IssueAdmitCard = () => {
         app.id.toLowerCase().includes(search.toLowerCase())
     );
     setSearchResult(value);
+    if (value.length == 0) toast.error("No Candidates Found In Search Result");
   };
 
   function timeToDate(timeString) {

@@ -471,213 +471,215 @@ const BulkManage = () => {
                             </IconButton>
                           </Box>
                         </Tooltip>
-                        <Box
-                          bgcolor={
-                            bat?.is_disabled
-                              ? "#8e8e8e"
-                              : bat.is_mail_sent == null
-                              ? "warning.main"
-                              : bat.is_mail_sent
-                              ? "success.main"
-                              : "error.main"
-                          }
-                          height={8}
-                        />
-                        <Box
-                          px={2}
-                          py={1.4}
-                          width={"18rem"}
-                          position={"relative"}
-                        >
-                          {bat.is_disabled && (
+                        <Box borderRadius={1} overflow={'hidden'}>
+                          <Box
+                            bgcolor={
+                              bat?.is_disabled
+                                ? "#8e8e8e"
+                                : bat.is_mail_sent == null
+                                ? "warning.main"
+                                : bat.is_mail_sent
+                                ? "success.main"
+                                : "error.main"
+                            }
+                            height={8}
+                          />
+                          <Box
+                            px={2}
+                            py={1.4}
+                            width={"18rem"}
+                            position={"relative"}
+                          >
+                            {bat.is_disabled && (
+                              <Box
+                                sx={{
+                                  position: "absolute",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  top: 0,
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 0,
+                                  backgroundColor: "rgba(195, 192, 192, 0.1)",
+                                  backdropFilter: "blur(2px)",
+                                }}
+                              >
+                                <Icon
+                                  fontSize={"4rem"}
+                                  icon="ic:outline-block"
+                                  color="#8e8e8e"
+                                />
+                              </Box>
+                            )}
                             <Box
-                              sx={{
-                                position: "absolute",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                backgroundColor: "rgba(195, 192, 192, 0.1)",
-                                backdropFilter: "blur(2px)",
-                              }}
+                              display={"flex"}
+                              justifyContent={"space-between"}
+                              alignItems={"center"}
+                              gap={1}
                             >
-                              <Icon
-                                fontSize={"4rem"}
-                                icon="ic:outline-block"
-                                color="#8e8e8e"
+                              <Typography
+                                mr={"auto"}
+                                fontSize={"1.1rem"}
+                                fontWeight={500}
+                              >
+                                {bat.batch_no}{" "}
+                              </Typography>
+                              <Chip
+                                size="small"
+                                sx={{ px: 1 }}
+                                color={
+                                  bat.is_mail_sent == null
+                                    ? "warning"
+                                    : bat.is_mail_sent
+                                    ? "success"
+                                    : "error"
+                                }
+                                icon={<Mail />}
+                                label={
+                                  bat.is_mail_sent == null
+                                    ? "Pending"
+                                    : bat.is_mail_sent
+                                    ? "Sent"
+                                    : "Not Sent"
+                                }
+                                variant="outlined"
                               />
                             </Box>
-                          )}
-                          <Box
-                            display={"flex"}
-                            justifyContent={"space-between"}
-                            alignItems={"center"}
-                            gap={1}
-                          >
-                            <Typography
-                              mr={"auto"}
-                              fontSize={"1.1rem"}
-                              fontWeight={500}
+
+                            <Box
+                              display={"flex"}
+                              pt={0.8}
+                              justifyContent={"space-between"}
+                              alignItems={"center"}
                             >
-                              {bat.batch_no}{" "}
-                            </Typography>
-                            <Chip
-                              size="small"
-                              sx={{ px: 1 }}
-                              color={
-                                bat.is_mail_sent == null
-                                  ? "warning"
-                                  : bat.is_mail_sent
-                                  ? "success"
-                                  : "error"
-                              }
-                              icon={<Mail />}
-                              label={
-                                bat.is_mail_sent == null
-                                  ? "Pending"
-                                  : bat.is_mail_sent
-                                  ? "Sent"
-                                  : "Not Sent"
-                              }
-                              variant="outlined"
-                            />
+                              <Typography fontSize={"0.8rem"} fontWeight={400}>
+                                Candidates Allocated:
+                              </Typography>
+                              <Typography fontSize={"0.9rem"} fontWeight={400}>
+                                {bat.application?.length}
+                              </Typography>
+                            </Box>
+                            <Box
+                              display={"flex"}
+                              pt={0.8}
+                              justifyContent={"space-between"}
+                              alignItems={"center"}
+                            >
+                              <Typography fontSize={"0.8rem"} fontWeight={400}>
+                                Exam Date
+                              </Typography>
+                              <Typography fontSize={"0.9rem"} fontWeight={400}>
+                                {bat.exam_date
+                                  ? dayjs(new Date(bat.exam_date)).format(
+                                      "DD MMM YYYY"
+                                    )
+                                  : "Not Issued"}
+                              </Typography>
+                            </Box>
+                            <Box
+                              display={"flex"}
+                              pt={0.8}
+                              justifyContent={"space-between"}
+                              alignItems={"center"}
+                            >
+                              <Typography fontSize={"0.8rem"} fontWeight={400}>
+                                Exam Start
+                              </Typography>
+                              <Typography fontSize={"0.9rem"} fontWeight={400}>
+                                {bat.start_time == null
+                                  ? "Not Issued"
+                                  : dayjs(timeToDate(bat.start_time)).format(
+                                      "hh:mm a"
+                                    )}
+                              </Typography>
+                            </Box>
+                            <Box
+                              display={"flex"}
+                              pt={0.8}
+                              justifyContent={"space-between"}
+                              alignItems={"center"}
+                            >
+                              <Typography fontSize={"0.8rem"} fontWeight={400}>
+                                Exam End
+                              </Typography>
+                              <Typography fontSize={"0.9rem"} fontWeight={400}>
+                                {bat.end_time == null
+                                  ? "Not Issued"
+                                  : dayjs(timeToDate(bat.end_time)).format(
+                                      "hh:mm a"
+                                    )}
+                              </Typography>
+                            </Box>
+                            <Box
+                              display={"flex"}
+                              pt={0.8}
+                              justifyContent={"space-between"}
+                              alignItems={"center"}
+                              mb={1}
+                            >
+                              <Typography fontSize={"0.8rem"} fontWeight={400}>
+                                Exam Venue
+                              </Typography>
+                              <Typography
+                                width={"50%"}
+                                overflow={"hidden"}
+                                whiteSpace={"nowrap"}
+                                textOverflow={"ellipsis"}
+                                textAlign={"right"}
+                                fontSize={"0.9rem"}
+                                fontWeight={400}
+                              >
+                                {bat.venue == null ? "Not Issued" : bat.venue}
+                              </Typography>
+                            </Box>
                           </Box>
 
                           <Box
                             display={"flex"}
-                            pt={0.8}
-                            justifyContent={"space-between"}
-                            alignItems={"center"}
+                            mt={"auto"}
+                            borderTop={"1px solid #e4e4e4"}
                           >
-                            <Typography fontSize={"0.8rem"} fontWeight={400}>
-                              Candidates Allocated:
-                            </Typography>
-                            <Typography fontSize={"0.9rem"} fontWeight={400}>
-                              {bat.application?.length}
-                            </Typography>
-                          </Box>
-                          <Box
-                            display={"flex"}
-                            pt={0.8}
-                            justifyContent={"space-between"}
-                            alignItems={"center"}
-                          >
-                            <Typography fontSize={"0.8rem"} fontWeight={400}>
-                              Exam Date
-                            </Typography>
-                            <Typography fontSize={"0.9rem"} fontWeight={400}>
-                              {bat.exam_date
-                                ? dayjs(new Date(bat.exam_date)).format(
-                                    "DD MMM YYYY"
+                            <Button
+                              variant="contained"
+                              sx={{ borderRadius: 0 }}
+                              disabled={bat?.is_disabled}
+                              fullWidth
+                              onClick={() => {
+                                setOpenbatchPopup(true);
+                                setSelectBatch(bat);
+                              }}
+                            >
+                              Enter Details
+                            </Button>
+                            <LoadingButton
+                              loading={disabledLoading == bat.batch_no}
+                              color="error"
+                              sx={{
+                                borderRadius: 0,
+                                color: bat.is_disabled ? "primary.main" : "red",
+                              }}
+                              fullWidth
+                              onClick={() => {
+                                setDisabledLoading(bat.batch_no);
+                                api
+                                  .patch(
+                                    "/admission/test-center/issue-admit-card/create-batch/",
+                                    {
+                                      id: bat.id,
+                                    }
                                   )
-                                : "Not Issued"}
-                            </Typography>
-                          </Box>
-                          <Box
-                            display={"flex"}
-                            pt={0.8}
-                            justifyContent={"space-between"}
-                            alignItems={"center"}
-                          >
-                            <Typography fontSize={"0.8rem"} fontWeight={400}>
-                              Exam Start
-                            </Typography>
-                            <Typography fontSize={"0.9rem"} fontWeight={400}>
-                              {bat.start_time == null
-                                ? "Not Issued"
-                                : dayjs(timeToDate(bat.start_time)).format(
-                                    "hh:mm a"
-                                  )}
-                            </Typography>
-                          </Box>
-                          <Box
-                            display={"flex"}
-                            pt={0.8}
-                            justifyContent={"space-between"}
-                            alignItems={"center"}
-                          >
-                            <Typography fontSize={"0.8rem"} fontWeight={400}>
-                              Exam End
-                            </Typography>
-                            <Typography fontSize={"0.9rem"} fontWeight={400}>
-                              {bat.end_time == null
-                                ? "Not Issued"
-                                : dayjs(timeToDate(bat.end_time)).format(
-                                    "hh:mm a"
-                                  )}
-                            </Typography>
-                          </Box>
-                          <Box
-                            display={"flex"}
-                            pt={0.8}
-                            justifyContent={"space-between"}
-                            alignItems={"center"}
-                            mb={1}
-                          >
-                            <Typography fontSize={"0.8rem"} fontWeight={400}>
-                              Exam Venue
-                            </Typography>
-                            <Typography
-                              width={"50%"}
-                              overflow={"hidden"}
-                              whiteSpace={"nowrap"}
-                              textOverflow={"ellipsis"}
-                              textAlign={"right"}
-                              fontSize={"0.9rem"}
-                              fontWeight={400}
+                                  .then((res) => {
+                                    toast.info(res.data.message);
+                                    fetchData();
+                                  })
+                                  .catch((err) => {})
+                                  .finally(() => setDisabledLoading(false));
+                              }}
                             >
-                              {bat.venue == null ? "Not Issued" : bat.venue}
-                            </Typography>
+                              {bat.is_disabled ? "Enable" : "Disable"}
+                            </LoadingButton>
                           </Box>
-                        </Box>
-
-                        <Box
-                          display={"flex"}
-                          mt={"auto"}
-                          borderTop={"1px solid #e4e4e4"}
-                        >
-                          <Button
-                            variant="contained"
-                            sx={{ borderRadius: 0 }}
-                            disabled={bat?.is_disabled}
-                            fullWidth
-                            onClick={() => {
-                              setOpenbatchPopup(true);
-                              setSelectBatch(bat);
-                            }}
-                          >
-                            Enter Details
-                          </Button>
-                          <LoadingButton
-                            loading={disabledLoading == bat.batch_no}
-                            color="error"
-                            sx={{
-                              borderRadius: 0,
-                              color: bat.is_disabled ? "primary.main" : "red",
-                            }}
-                            fullWidth
-                            onClick={() => {
-                              setDisabledLoading(bat.batch_no);
-                              api
-                                .patch(
-                                  "/admission/test-center/issue-admit-card/create-batch/",
-                                  {
-                                    id: bat.id,
-                                  }
-                                )
-                                .then((res) => {
-                                  toast.info(res.data.message);
-                                  fetchData();
-                                })
-                                .catch((err) => {})
-                                .finally(() => setDisabledLoading(false));
-                            }}
-                          >
-                            {bat.is_disabled ? "Enable" : "Disable"}
-                          </LoadingButton>
                         </Box>
                       </Card>
                     ))}

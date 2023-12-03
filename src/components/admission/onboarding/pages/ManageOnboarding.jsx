@@ -9,10 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useClasses from "../../../../hooks/useClasses";
 import api from "../../../../config/api";
+import ReignsSelect from "../../../UiComponents/ReignsSelect";
+import { setYear } from "date-fns";
 
 const ManageOnboarding = () => {
   const columns = [
@@ -69,8 +71,30 @@ const ManageOnboarding = () => {
 
   const { classes, acYear, curYear } = useClasses();
 
-  const [selectedClass, setClass] = useState("I");
+  const [selectedClass, setClass] = useState(["I"]);
   const [data, setData] = useState(null);
+  const [year, setYear] = useState(curYear);
+
+  const fetchData = () => {
+    api
+      .get(`/admission/test-center/onboarding/overview/`, {
+        params: {
+          admission_year: year,
+          applyingFor: selectedClass,
+        },
+      })
+      .then((res) => {
+        setData(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedClass, year]);
 
   return (
     <Box>
@@ -84,47 +108,28 @@ const ManageOnboarding = () => {
         >
           Onboarding Overview
         </Typography>
-        <Box mt={2}>
+        <Box mt={2} display={"flex"} gap={1}>
           <FormControl sx={{ width: "10rem" }}>
             <InputLabel>Admission Year</InputLabel>
-            <Select label="Admission Year">
+            <Select
+              label="Admission Year"
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+            >
               {acYear.map((y, i) => (
-                <MenuItem value={i} key={i}>
+                <MenuItem value={y} key={i}>
                   {y}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-          <FormControl sx={{ width: "10rem", ml: 1 }}>
-            <InputLabel>Class</InputLabel>
-            <Select
-              label="Class"
-              onChange={(e) => {
-                setClass(e.target.value);
-                api
-                  .get(`/admission/test-center/onboarding/overview/`, {
-                    params: {
-                      admission_year: "2023-24",
-                      applyingFor: e.target.value,
-                    },
-                  })
-                  .then((res) => {
-                    setData(res.data);
-                    console.log(res.data);
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-              }}
-              value={selectedClass}
-            >
-              {classes.map((cl, idx) => (
-                <MenuItem key={idx} value={cl}>
-                  {cl}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <ReignsSelect
+            sx={{ width: "12rem" }}
+            items={classes}
+            label="Classes"
+            multiple
+            onChange={(e) => setClass(e)}
+          />
         </Box>
         <Box>
           <DataGrid

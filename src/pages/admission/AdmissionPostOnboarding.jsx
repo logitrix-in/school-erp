@@ -223,13 +223,21 @@ const AdmissionPostOnboarding = () => {
             </Select>
           </FormControl>
 
+          <Button variant="contained" color="secondary">
+            Set Rule
+          </Button>
+        </Box>
+        <Box mx={3} mb={2} display={"flex"} gap={2}>
           <Button
+            fullWidth
             variant="contained"
-            color="secondary"
             LinkComponent={Link}
             to={"manage-ticket/"}
           >
-            Set Rule
+            Open Tickets (122)
+          </Button>
+          <Button fullWidth variant="contained">
+            Close Tickets (432)
           </Button>
         </Box>
       </Bbox>

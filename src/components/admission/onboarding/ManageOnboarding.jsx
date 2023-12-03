@@ -33,7 +33,7 @@ const ManageOnboarding = () => {
             LinkComponent={Link}
             to={"manage/"}
           >
-            Onboarding
+            Initiate Onboarding
           </Button>
           <Button
             fullWidth
