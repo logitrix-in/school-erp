@@ -91,7 +91,7 @@ const ReignsSelect: React.FC<ReignsSelectProps> = ({
   ) : (
     <FormControl size={size} sx={sx} fullWidth={full}>
       <InputLabel>{label}</InputLabel>
-      <Select label={label} onChange={onChange} >
+      <Select label={label} onChange={onChange}>
         {items.map((name, idx) => (
           <MenuItem key={idx} value={name}>
             {name}

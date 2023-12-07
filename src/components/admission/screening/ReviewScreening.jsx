@@ -60,14 +60,14 @@ export default function ReviewScreening() {
   const [selected, setSelected] = useState(null);
 
   function applyScreening() {
-    // setLoading(true);
-    // api
-    //   .post("/admission/screening/final/", {
-    //     qualified: getFilteredRightCount(),
-    //   })
-    //   .then((res) => console.log(res.data))
-    //   .catch((err) => console.log(err))
-    //   .finally(() => setLoading(false));
+    setLoading(true);
+    api
+      .post("/admission/screening/final/", {
+        qualified: getFilteredRightCount(),
+      })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
 
     console.log({
       qualified: getFilteredRightCount(),
@@ -142,64 +142,73 @@ export default function ReviewScreening() {
     });
   };
 
-  const customList = (items, dir) => (
-    <Paper sx={{ overflow: "auto", height: "60vh" }}>
-      <List dense component="div" role="list">
-        {items
-          .filter((it) => {
-            const data = it.candidate_details;
+  const customList = (items, dir) => {
+    var l = items
+      .filter((it) => {
+        const data = it.candidate_details;
 
-            const age = (
-              new Date().getFullYear() - new Date(data.dob).getFullYear()
-            ).toString();
+        const age = (
+          new Date().getFullYear() - new Date(data.dob).getFullYear()
+        ).toString();
 
-            const searchString =
-              `${data.first_name} ${data.last_name} ${data.email} ${age}`.toLowerCase();
-            return searchString.includes(filter.toLowerCase());
-          })
-          .filter((items) => {
-            console.log(items.application_details.applying_for);
+        const searchString =
+          `${data.first_name} ${data.last_name} ${data.email} ${age}`.toLowerCase();
+        return searchString.includes(filter.toLowerCase());
+      })
+      .filter((items) => {
+        console.log(items.application_details.applying_for);
 
-            const arr = selectedClass.includes(
-              items.application_details.applying_for
-            );
+        const arr = selectedClass.includes(
+          items.application_details.applying_for
+        );
 
-            return arr;
-          })
-          .map((value) => {
-            const labelId = `transfer-list-item-${value.id}-label`;
+        return arr;
+      });
 
-            return (
-              <ListItem key={value.id} role="listitem">
-                <Checkbox
-                  checked={checked.indexOf(value) !== -1}
-                  onClick={() => {
-                    handleToggle(value);
-                  }}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{
-                    "aria-labelledby": labelId,
-                  }}
-                />
-                <Typography
-                  onClick={() => {
-                    setSelected(value);
-                  }}
-                  sx={{
-                    cursor: "pointer",
-                    "&:hover": {
-                      color: "primary.dark",
-                      fontWeight: 500,
-                    },
-                  }}
-                >{`${value.candidate_details.first_name} ${value.candidate_details.last_name} `}</Typography>
-              </ListItem>
-            );
-          })}
-      </List>
-    </Paper>
-  );
+    return (
+      <Paper sx={{ overflow: "auto", height: "60vh" }}>
+        {l.length <= 0 && filter.length == 0 ? (
+          <Box
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            height={"100%"}
+          >
+            <Typography>No Data Found For Selected Classes</Typography>
+          </Box>
+        ) : (
+          <List dense component="div" role="list">
+            {l.map((value) => {
+              return (
+                <ListItem key={value.id} role="listitem">
+                  <Checkbox
+                    checked={checked.indexOf(value) !== -1}
+                    onClick={() => {
+                      handleToggle(value);
+                    }}
+                    tabIndex={-1}
+                    disableRipple
+                  />
+                  <Typography
+                    onClick={() => {
+                      setSelected(value);
+                    }}
+                    sx={{
+                      cursor: "pointer",
+                      "&:hover": {
+                        color: "primary.dark",
+                        fontWeight: 500,
+                      },
+                    }}
+                  >{`${value.candidate_details.first_name} ${value.candidate_details.last_name} `}</Typography>
+                </ListItem>
+              );
+            })}
+          </List>
+        )}
+      </Paper>
+    );
+  };
 
   return (
     <Box>
@@ -211,6 +220,7 @@ export default function ReviewScreening() {
             </Typography>
 
             <ReignsSelect
+              val={selectedClass}
               label="Classes"
               sx={{ ml: "auto", width: "12rem" }}
               items={classes}
@@ -228,11 +238,12 @@ export default function ReviewScreening() {
               value={filter}
             />
             <LoadingButton
+              size="large"
               loading={loading}
               variant="contained"
               onClick={applyScreening}
             >
-              Apply Screening
+              Confirm Screening
             </LoadingButton>
           </Box>
 

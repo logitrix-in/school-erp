@@ -35,14 +35,8 @@ const ScreeningManager = () => {
           gap={2}
           flexDirection={{ xs: "column", md: "row" }}
         >
-          <Button fullWidth variant="contained" color="primary">
-            Screen Pending Application
-          </Button>
-          <Button fullWidth variant="contained" color="primary">
-            Reset Screening
-          </Button>
           <Button fullWidth variant="contained" color="primary" LinkComponent={Link} to={'review/'}>
-            Review
+            Screen Pending Applications
           </Button>
         </Box>
       </Bbox>
