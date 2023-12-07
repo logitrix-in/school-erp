@@ -102,7 +102,13 @@ const UploadOfflineScore = () => {
               name="file"
               types={fileTypes}
             />
-            <Button variant="contained" sx={{ mt: 2 }} onClick={() => {}}>
+            <Button
+              variant="contained"
+              sx={{ mt: 2 }}
+              onClick={() => {
+                window.open("/Offline_Test_Scores.csv", '_BLANK');
+              }}
+            >
               Download Template
             </Button>
           </Box>

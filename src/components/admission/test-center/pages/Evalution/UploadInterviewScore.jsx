@@ -7,6 +7,7 @@ import api from "../../../../../config/api";
 import { ToastContainer, toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
 
+
 const UploadInterviewScore = () => {
   const [json, setJson] = useState(null);
   const [dragging, setDragging] = useState(null);
@@ -102,9 +103,18 @@ const UploadInterviewScore = () => {
               name="file"
               types={fileTypes}
             />
-            <Button variant="contained" sx={{ mt: 2 }} onClick={() => {}}>
+            <Button
+              variant="contained"
+              sx={{ mt: 2 }}
+              LinkComponent={a}
+              href={template}
+              download="MyExampleDoc"
+              target="_blank"
+            >
               Download Template
             </Button>
+
+            
           </Box>
         )
       ) : (
