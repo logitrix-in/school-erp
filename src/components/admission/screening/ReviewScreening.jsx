@@ -1,4 +1,13 @@
-import { Box, Divider, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import List from "@mui/material/List";
@@ -10,6 +19,8 @@ import api from "../../../config/api";
 import Bbox from "../../UiComponents/Bbox";
 import ReviewRightCard from "./component/ReviewRightCard";
 import { LoadingButton } from "@mui/lab";
+import ReignsSelect from "../../UiComponents/ReignsSelect";
+import useClasses from "../../../hooks/useClasses";
 
 function not(a, b) {
   return a.filter((objA) => !b.some((objB) => objB.id === objA.id));
@@ -24,6 +35,13 @@ export default function ReviewScreening() {
   const [left, setLeft] = React.useState([]);
   const [right, setRight] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const { classes } = useClasses();
+
+  const [selectedClass, setSelectedClass] = useState(classes);
+
+  useEffect(() => {
+    console.log(selectedClass);
+  }, [selectedClass]);
 
   useEffect(() => {
     api
@@ -31,45 +49,6 @@ export default function ReviewScreening() {
         type: "screen",
       })
       .then((res) => {
-        // console.log(res.data);
-
-        const fn = [
-          "Arnab",
-          "Rownak",
-          "Arindom",
-          "Abhisekh",
-          "Rahul",
-          "Arka",
-          "Priyanshu",
-        ];
-        const ln = ["chatterjee", "mazumder", "Ghose", "Biswas", "Roy"];
-        const lg = ["random", "kiu", "dom", "mizi", "zab"];
-        const yy = [2002, 2003, 2005, 2010, 2001, 2006];
-
-        function randomChoice(arr) {
-          return arr[Math.floor(arr.length * Math.random())];
-        }
-
-        const l = Array(20)
-          .fill()
-          .map((_, idx) => {
-            let f_name = randomChoice(fn);
-            return {
-              id: idx,
-              candidate_details: {
-                profile_photo:
-                  "https://xsgames.co/randomusers/avatar.php?g=male",
-                first_name: f_name,
-                last_name: randomChoice(ln),
-                email: `${f_name}.${randomChoice(lg)}@gmail.com`,
-                dob: `01-01-${randomChoice(yy)}`,
-              },
-            };
-          });
-
-        // setLeft(l.filter((l) => l.id >= 5));
-        // setRight(l.filter((l) => l.id < 5));
-
         setLeft(res.data.not_qualified);
         setRight(res.data.qualified);
       });
@@ -80,21 +59,18 @@ export default function ReviewScreening() {
 
   const [selected, setSelected] = useState(null);
 
-  // useEffect(() => console.log(checked, left, right), [checked]);
-  // useEffect(() => console.log(leftChecked), [leftChecked]);
-
   function applyScreening() {
-    setLoading(true);
-    api
-      .post("/admission/screening/final/", {
-        qualified: right,
-      })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
+    // setLoading(true);
+    // api
+    //   .post("/admission/screening/final/", {
+    //     qualified: getFilteredRightCount(),
+    //   })
+    //   .then((res) => console.log(res.data))
+    //   .catch((err) => console.log(err))
+    //   .finally(() => setLoading(false));
 
     console.log({
-      qualified: right,
+      qualified: getFilteredRightCount(),
     });
   }
 
@@ -136,7 +112,37 @@ export default function ReviewScreening() {
 
   const [filter, setFilter] = useState("");
 
-  const customList = (items) => (
+  const getFilteredLeftCount = () => {
+    return left.filter((item) => {
+      const data = item.candidate_details;
+      const searchString = `${data.first_name} ${data.last_name} ${
+        data.email
+      } ${(
+        new Date().getFullYear() - new Date(data.dob).getFullYear()
+      ).toString()}`.toLowerCase();
+      return (
+        searchString.includes(filter.toLowerCase()) &&
+        selectedClass.includes(item.application_details.applying_for)
+      );
+    });
+  };
+
+  const getFilteredRightCount = () => {
+    return right.filter((item) => {
+      const data = item.candidate_details;
+      const searchString = `${data.first_name} ${data.last_name} ${
+        data.email
+      } ${(
+        new Date().getFullYear() - new Date(data.dob).getFullYear()
+      ).toString()}`.toLowerCase();
+      return (
+        searchString.includes(filter.toLowerCase()) &&
+        selectedClass.includes(item.application_details.applying_for)
+      );
+    });
+  };
+
+  const customList = (items, dir) => (
     <Paper sx={{ overflow: "auto", height: "60vh" }}>
       <List dense component="div" role="list">
         {items
@@ -150,6 +156,15 @@ export default function ReviewScreening() {
             const searchString =
               `${data.first_name} ${data.last_name} ${data.email} ${age}`.toLowerCase();
             return searchString.includes(filter.toLowerCase());
+          })
+          .filter((items) => {
+            console.log(items.application_details.applying_for);
+
+            const arr = selectedClass.includes(
+              items.application_details.applying_for
+            );
+
+            return arr;
           })
           .map((value) => {
             const labelId = `transfer-list-item-${value.id}-label`;
@@ -190,14 +205,24 @@ export default function ReviewScreening() {
     <Box>
       <Box display={"flex"} gap={1} alignItems={"stretch"} overflow={"hidden"}>
         <Box flex={1}>
-          <Box display={"flex"} alignItems={"center"} gap={1} mb={1}>
+          <Box display={"flex"} alignItems={"center"} gap={1} mb={1} py={1}>
             <Typography fontSize={17} fontWeight={500}>
               Review Screening
             </Typography>
+
+            <ReignsSelect
+              label="Classes"
+              sx={{ ml: "auto", width: "12rem" }}
+              items={classes}
+              multiple
+              onChange={(v) => {
+                setSelectedClass(v);
+              }}
+              size="medium"
+            />
             <TextField
               title="search name, title, email, age"
-              size="small"
-              sx={{ ml: "auto" }}
+              size="medium"
               placeholder="Search"
               onChange={(e) => setFilter(e.target.value)}
               value={filter}
@@ -222,11 +247,11 @@ export default function ReviewScreening() {
             <Bbox flex={1} borderRadius={1}>
               <Box display={"flex"}>
                 <Typography fontWeight={500} p={2}>
-                  Not Qualified candidates ({left.length})
+                  Not Qualified candidates ({getFilteredLeftCount().length})
                 </Typography>
               </Box>
               <Divider />
-              {customList(left)}
+              {customList(left, "left")}
             </Bbox>
             <Bbox
               display={"flex"}
@@ -282,10 +307,10 @@ export default function ReviewScreening() {
             </Bbox>
             <Bbox flex={1} borderRadius={1}>
               <Typography fontWeight={500} p={2}>
-                Qualified candidates ({right.length})
+                Qualified candidates ({getFilteredRightCount().length})
               </Typography>
               <Divider />
-              {customList(right)}
+              {customList(right, "right")}
             </Bbox>
           </Box>
         </Box>

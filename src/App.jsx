@@ -48,6 +48,9 @@ import DetailedView from "./components/admission/application/DetailedView";
 import OnboardingApproval from "./components/admission/onboarding/pages/OnboardingApproval";
 import Test from "./pages/Test";
 import api from "./config/api";
+import dayjs from "dayjs";
+
+dayjs.locale('en-in'); 
 
 const NavLayout = () => {
   const ux = useAuth();
