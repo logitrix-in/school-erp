@@ -306,6 +306,7 @@ const OnboardingMeritList = () => {
                   </Button>
                   <Button
                     variant="contained"
+                    disabled={selectionModel.length > 1}
                     onClick={() => {
                       setInitiatingFor("offline");
                       setIsInitiating(true);

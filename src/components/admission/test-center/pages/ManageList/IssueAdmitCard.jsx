@@ -186,7 +186,8 @@ const IssueAdmitCard = () => {
           >
             <FormControlLabel
               sx={{ mr: "auto" }}
-              label="Resend admit card to already issued candidates"
+              label="Show candidates
+              whose admit card has been issued"
               control={<Checkbox />}
               onChange={(_, v) => {
                 setCheckState(v);

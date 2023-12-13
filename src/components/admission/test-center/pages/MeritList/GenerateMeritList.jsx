@@ -16,10 +16,11 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import api from "../../../../../config/api";
+import api, { exportAPI } from "../../../../../config/api";
 import { DataGrid, GridToolbar, GridToolbarContainer } from "@mui/x-data-grid";
 import { LoadingButton } from "@mui/lab";
 import { ToastContainer, toast } from "react-toastify";
+import ReignsPopup from "../../../../UiComponents/ReignsPopup";
 
 const GenerateMeritList = () => {
   const initPayload = {
@@ -68,12 +69,14 @@ const GenerateMeritList = () => {
 
   const [publishLoading, setPublishLoading] = useState(false);
 
-
   const CustomToolbar = () => (
     <GridToolbarContainer>
       <GridToolbar />
     </GridToolbarContainer>
   );
+
+  const [popup, setPopup] = useState(false);
+  const [downloadLoading, setDownloadLoading] = useState(false);
 
   return (
     <Bbox borderRadius={1}>
@@ -183,7 +186,7 @@ const GenerateMeritList = () => {
           {data != null && data.length > 0 && (
             <Box>
               <DataGrid
-               slots={{ toolbar: CustomToolbar }}
+                slots={{ toolbar: CustomToolbar }}
                 rows={data.map((e, i) => ({ ...e, id: i }))}
                 columns={Object.keys(data[0]).map((e, i) => ({
                   field: e,
@@ -191,11 +194,54 @@ const GenerateMeritList = () => {
                   flex: 1,
                 }))}
               />
-              <LoadingButton
-                loading={publishLoading}
-                variant="contained"
-                sx={{ width: "15rem", mt: 2 }}
-                onClick={() => {
+              <Box display={"flex"} gap={1}>
+                <LoadingButton
+                  loading={publishLoading}
+                  variant="contained"
+                  sx={{ width: "15rem", mt: 2 }}
+                  onClick={() => {
+                    setPopup(true);
+                  }}
+                >
+                  Publish
+                </LoadingButton>
+
+                <LoadingButton
+                  loading={downloadLoading}
+                  variant="outlined"
+                  sx={{ width: "15rem", mt: 2 }}
+                  onClick={() => {
+                    setDownloadLoading(true);
+                    exportAPI
+                      .get("", {
+                        params: {
+                          name: "generate-merit-list",
+                          Class: payload.applyingFor,
+                        },
+                      })
+                      .then((res) => {
+                        console.log(res.data);
+                        window.open(res.data.url, "_BLANK");
+                      })
+                      .catch((err) => {
+                        toast.error(err.response.data.message);
+                      })
+                      .finally(() => {
+                        setDownloadLoading(false);
+                      });
+                  }}
+                >
+                  Download
+                </LoadingButton>
+              </Box>
+
+              <ReignsPopup
+                open={popup}
+                desc="Once published, you will not be able to revert back."
+                title="Are You Sure You Want To Publish?"
+                onCancel={() => setPopup(false)}
+                close={() => setPopup(false)}
+                onAccept={() => {
                   setPublishLoading(true);
                   api
                     .post(
@@ -209,9 +255,7 @@ const GenerateMeritList = () => {
                     .catch((err) => console.log(err))
                     .finally(() => setPublishLoading(false));
                 }}
-              >
-                Publish
-              </LoadingButton>
+              />
             </Box>
           )}
         </Box>
