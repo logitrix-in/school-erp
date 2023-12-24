@@ -21,6 +21,7 @@ import ReviewRightCard from "./component/ReviewRightCard";
 import { LoadingButton } from "@mui/lab";
 import ReignsSelect from "../../UiComponents/ReignsSelect";
 import useClasses from "../../../hooks/useClasses";
+import ReignsPopup from "../../UiComponents/ReignsPopup";
 
 function not(a, b) {
   return a.filter((objA) => !b.some((objB) => objB.id === objA.id));
@@ -209,6 +210,7 @@ export default function ReviewScreening() {
       </Paper>
     );
   };
+  const [popupopen, setPopupopen] = useState(false);
 
   return (
     <Box>
@@ -241,11 +243,19 @@ export default function ReviewScreening() {
               size="large"
               loading={loading}
               variant="contained"
-              onClick={applyScreening}
+              onClick={() => setPopupopen(true)}
             >
               Confirm Screening
             </LoadingButton>
           </Box>
+
+          <ReignsPopup
+            open={popupopen}
+            desc="once confirmed changes can not be reverted back."
+            onAccept={() => applyScreening()}
+            onCancel={() => setPopupopen(false)}
+            close={() => setPopupopen(false)}
+          />
 
           <Box
             borderRadius={1}

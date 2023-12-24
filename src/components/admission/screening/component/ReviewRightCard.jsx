@@ -6,8 +6,6 @@ const ReviewRightCard = ({ selected }) => {
   const app = selected.application_details;
   const add = selected.address_details.permanent_address;
 
-  ;
-
   return (
     <Box>
       <Typography fontSize={18} fontWeight={500} color={"primary.light"}>
@@ -20,7 +18,7 @@ const ReviewRightCard = ({ selected }) => {
           src={selected.candidate_details.profile_photo}
           alt=""
         />
-        <Box display={'flex'} flexDirection={'column'} gap={0.2}>
+        <Box display={"flex"} flexDirection={"column"} gap={0.2}>
           <Typography fontSize={"1.2rem"} fontWeight={500}>
             {selected.candidate_details.first_name}{" "}
             {selected.candidate_details.last_name}
@@ -58,8 +56,12 @@ const ReviewRightCard = ({ selected }) => {
           label: "Previous Marks",
           value: app.percentage_secured + "%",
         },
+        {
+          label: "Reason",
+          value: app.reason ?? "NA",
+        },
       ].map((elem, idx) => (
-        <>
+        <Box key={idx}>
           <Box
             my={1.8}
             display={"flex"}
@@ -70,7 +72,7 @@ const ReviewRightCard = ({ selected }) => {
             <Typography fontSize={16}>{elem.value}</Typography>
           </Box>
           <Divider />
-        </>
+        </Box>
       ))}
     </Box>
   );

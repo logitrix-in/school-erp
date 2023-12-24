@@ -31,6 +31,7 @@ const UploadOfflineScore = () => {
           console.log(res.data);
           setJson(res.data.data.map((data, id) => ({ ...data, id: id })));
           setLoadingJSON(false);
+          toast.success("File Uploaded Successfuly");
         })
         .catch((error) => {
           console.error(error);
@@ -57,6 +58,7 @@ const UploadOfflineScore = () => {
 
   return (
     <Bbox p={2} borderRadius={1}>
+      <ToastContainer />
       {json == null ? (
         loadingJSON ? (
           <Box
@@ -127,7 +129,7 @@ const UploadOfflineScore = () => {
           <ToastContainer />
           <Box sx={{ mt: 1 }} display={"flex"} alignItems={"center"}>
             <Button variant="contained" onClick={() => setJson(null)}>
-              Reupload
+              Re-upload
             </Button>
             <LoadingButton
               loading={loadingSave}

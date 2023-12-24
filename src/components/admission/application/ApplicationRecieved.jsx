@@ -180,7 +180,7 @@ const ApplicationRecieved = () => {
             alignItems={"center"}
           >
             <Typography fontWeight={"700"} borderRadius={1} fontSize={"1.1rem"}>
-              Application Recieved
+              Dashboard
             </Typography>
 
             <Select
@@ -192,6 +192,7 @@ const ApplicationRecieved = () => {
             >
               <MenuItem value={"unscreened"}>Un- screened</MenuItem>
               <MenuItem value={"screened"}>Screened</MenuItem>
+              <MenuItem value={"rejected"}>Rejected</MenuItem>
               <MenuItem value={"all"}>All</MenuItem>
             </Select>
           </Box>

@@ -268,7 +268,7 @@ const OnboardingMeritList = () => {
                 borderRadius={1}
                 mt={2}
               >
-                Initiate Onboarding Based on Merit
+                Initiate Onboarding Based on Merit List
               </Typography>
 
               <Box mt={1} height={400}>

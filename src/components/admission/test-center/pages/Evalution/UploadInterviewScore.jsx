@@ -7,7 +7,6 @@ import api from "../../../../../config/api";
 import { ToastContainer, toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
 
-
 const UploadInterviewScore = () => {
   const [json, setJson] = useState(null);
   const [dragging, setDragging] = useState(null);
@@ -32,6 +31,7 @@ const UploadInterviewScore = () => {
           console.log(res.data);
           setJson(res.data.data.map((data, id) => ({ ...data, id: id })));
           setLoadingJSON(false);
+          toast.success("File Uploaded Successfuly");
         })
         .catch((error) => {
           console.error(error);
@@ -58,6 +58,7 @@ const UploadInterviewScore = () => {
 
   return (
     <Bbox p={2} borderRadius={1}>
+      <ToastContainer />
       {json == null ? (
         loadingJSON ? (
           <Box
@@ -106,15 +107,12 @@ const UploadInterviewScore = () => {
             <Button
               variant="contained"
               sx={{ mt: 2 }}
-              LinkComponent={a}
-              href={template}
-              download="MyExampleDoc"
-              target="_blank"
+              onClick={() => {
+                window.open("/Offline_Interview_Scores.csv", "_BLANK");
+              }}
             >
               Download Template
             </Button>
-
-            
           </Box>
         )
       ) : (
@@ -131,7 +129,7 @@ const UploadInterviewScore = () => {
           <ToastContainer />
           <Box sx={{ mt: 1 }} display={"flex"} alignItems={"center"}>
             <Button variant="contained" onClick={() => setJson(null)}>
-              Reupload
+              Re-upload
             </Button>
             <LoadingButton
               loading={loadingSave}
