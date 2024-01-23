@@ -7,7 +7,7 @@ const api = axios.create({
 });
 
 const exportAPI = axios.create({
-  baseURL: "https://downloads.sociolinq.com/",
+  baseURL: "https://downloads.sociolinq.com",
   headers: { "x-api-key": "a8518942-17ea-44a6-b4e1-a974189a9a90" },
   withCredentials: true,
 });

@@ -3,7 +3,7 @@ import Bbox from "../../../../UiComponents/Bbox";
 import { FileUploader } from "react-drag-drop-files";
 import { Box, Button, LinearProgress, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import api from "../../../../../config/api";
+import api, { exportAPI } from "../../../../../config/api";
 import { ToastContainer, toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
 
@@ -108,8 +108,18 @@ const UploadInterviewScore = () => {
               variant="contained"
               sx={{ mt: 2 }}
               onClick={() => {
-                window.open("/Offline_Interview_Scores.csv", "_BLANK");
+                exportAPI
+                  .get("https://cdn.sociolinq.com/template/", {
+                    params: {
+                      name: "interview_score",
+                    },
+                  })
+                  .then((res) => {
+                    window.open(res.data.url, "_BLANK");
+                  })
+                  .catch((err) => console.log(err));
               }}
+            
             >
               Download Template
             </Button>

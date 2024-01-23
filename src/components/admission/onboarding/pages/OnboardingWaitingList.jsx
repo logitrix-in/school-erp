@@ -17,6 +17,7 @@ import React, { useEffect, useState } from "react";
 import useClasses from "../../../../hooks/useClasses";
 import api from "../../../../config/api";
 import { ToastContainer, toast } from "react-toastify";
+import ReignsSelect from "../../../UiComponents/ReignsSelect";
 
 const OnboardingMeritList = () => {
   const [isInitiating, setIsInitiating] = useState(false);
@@ -111,7 +112,7 @@ const OnboardingMeritList = () => {
 
   const { classes, acYear, curYear } = useClasses();
 
-  const [selectedClass, setClass] = useState("I");
+  const [selectedClass, setClass] = useState([]);
   const [selectedAcademicYear, setSelectedAcademicYear] = useState(curYear);
   const [data, setData] = useState(null);
   const [tableRow, setTableRow] = useState(null);
@@ -125,7 +126,7 @@ const OnboardingMeritList = () => {
         },
       })
       .then((res) => {
-        setTableRow([{ ...res.data, id: 1 }]);
+        setTableRow(res.data.map((e, i) => ({ ...e, id: i })));
         console.log(res.data);
       })
       .catch((err) => {
@@ -181,66 +182,62 @@ const OnboardingMeritList = () => {
               ))}
             </Select>
           </FormControl>
-          <FormControl sx={{ width: "10rem", ml: 1 }}>
-            <InputLabel>Class</InputLabel>
-            <Select
-              label="Class"
-              value={selectedClass}
-              onChange={(e) => {
-                setClass(e.target.value);
-                setData(null);
-                setTableRow(null);
+          <ReignsSelect
+            items={classes}
+            onChange={(e) => {
+              setClass(e);
+              setData(null);
+              setTableRow(null);
 
-                api
-                  .get(
-                    `/admission/test-center/onboarding/overview/?type=merit_list`,
-                    {
-                      params: {
-                        admission_year: "2023-24",
-                        applyingFor: e.target.value,
-                      },
-                    }
-                  )
-                  .then((res) => {
-                    setTableRow([{ ...res.data, id: 1 }]);
-                    console.log(res.data);
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
+              api
+                .get(
+                  `/admission/test-center/onboarding/overview/?type=merit_list`,
+                  {
+                    params: {
+                      admission_year: selectedAcademicYear,
+                      applyingFor: e,
+                    },
+                  }
+                )
+                .then((res) => {
+                  setTableRow(res.data.map((e, i) => ({ ...e, id: i })));
+                  console.log(res.data);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
 
-                api
-                  .get(
-                    "/admission/test-center/onboarding/initiate/online/data/",
-                    {
-                      params: {
-                        applyingFor: e.target.value,
-                        admission_year: "2023-24",
-                      },
-                    }
-                  )
-                  .then((res) => {
-                    console.log(res.data);
-                    setData(
-                      res.data.map((app, idx) => ({
-                        id: idx,
-                        key: idx,
-                        rank: idx + 1,
-                        ApplicationID: app?.application_no,
-                        CandidateName: app?.name,
-                        OnboardingStatus: app?.status,
-                      }))
-                    );
-                  });
-              }}
-            >
-              {classes.map((cl, idx) => (
-                <MenuItem key={idx} value={cl}>
-                  {cl}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              api
+                .get(
+                  "/admission/test-center/onboarding/initiate/online/data/",
+                  {
+                    params: {
+                      admission_year: selectedAcademicYear,
+                      applyingFor: e,
+                    },
+                  }
+                )
+                .then((res) => {
+                  console.log(res.data);
+                  setData(
+                    res.data.map((app, idx) => ({
+                      id: idx,
+                      key: idx,
+                      rank: idx + 1,
+                      ApplicationID: app?.application_no,
+                      CandidateName: app?.name,
+                      OnboardingStatus: app?.status,
+                    }))
+                  );
+                });
+            }}
+            label="Class"
+            multiple
+            sx={{
+              width: "10rem",
+              ml: 1,
+            }}
+          />
         </Box>
 
         {tableRow && data ? (
@@ -301,6 +298,7 @@ const OnboardingMeritList = () => {
                   </Button>
                   <Button
                     variant="contained"
+                    disabled={selectionModel.length > 1}
                     onClick={() => {
                       setInitiatingFor("offline");
                       setIsInitiating(true);

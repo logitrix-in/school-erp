@@ -65,6 +65,7 @@ export default function ReviewScreening() {
     api
       .post("/admission/screening/final/", {
         qualified: getFilteredRightCount(),
+        not_qualified: getFilteredLeftCount(),
       })
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err))

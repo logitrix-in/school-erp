@@ -85,7 +85,8 @@ const ScreeningRuleEdit = () => {
     },
     critical_ailment: {
       label: "Critical medical ailment",
-      type: "text",
+      type: "singleSelect",
+      options: ["Yes", "No"],
     },
     permanent_states: {
       label: "State ( Permanent address )",
@@ -475,7 +476,7 @@ const ScreeningRuleEdit = () => {
                         </Select>
                       )}
                       {/* text */}
-                      {option[c.criteria]?.type == "text" && (
+                      {option[c.criteria]?.type == "singleSelect" && (
                         <Select
                           value={c.operator}
                           labelId="demo-simple-select-label"
@@ -484,8 +485,8 @@ const ScreeningRuleEdit = () => {
                           id="demo-simple-select"
                           label="Operator"
                         >
-                          <MenuItem value={"eq"}>Can be</MenuItem>
-                          <MenuItem value={"nt"}>Can not be</MenuItem>
+                          <MenuItem value={"eq"}>Equal To</MenuItem>
+                          <MenuItem value={"nt"}>Not Equal To</MenuItem>
                         </Select>
                       )}
                     </FormControl>
@@ -520,7 +521,7 @@ const ScreeningRuleEdit = () => {
                       </FormControl>
                     )}
                     {/* number */}
-                    {option[c.criteria]?.type != "select" && (
+                    {option[c.criteria]?.type == "number" && (
                       <TextField
                         fullWidth
                         type="text"
@@ -535,6 +536,24 @@ const ScreeningRuleEdit = () => {
                         value={c.value}
                         onChange={(e) => handleChange(e, idx)}
                       />
+                    )}
+                    {/* singleSelect */}
+                    {option[c.criteria]?.type == "singleSelect" && (
+                      <FormControl fullWidth>
+                        <InputLabel>Value</InputLabel>
+                        <Select
+                          label="value"
+                          name="value"
+                          value={c.value}
+                          onChange={(e) => handleChange(e, idx)}
+                        >
+                          {option[c.criteria]?.options.map((item) => (
+                            <MenuItem key={item} value={item}>
+                              {item}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
                     )}
                   </>
                 )}
@@ -558,7 +577,8 @@ const ScreeningRuleEdit = () => {
             </Grid>
           ))}
         </Box>
-        <Box mt={5} display={"flex"} justifyContent={"flex-end"}>
+        
+        <Box mt={5} display={ selectedClass ? "flex" : "none"} justifyContent={"flex-end"}>
           <Box display={"flex"} gap={1}>
             <Button
               variant="contained"

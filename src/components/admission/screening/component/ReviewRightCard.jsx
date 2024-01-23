@@ -6,6 +6,8 @@ const ReviewRightCard = ({ selected }) => {
   const app = selected.application_details;
   const add = selected.address_details.permanent_address;
 
+  console.log(selected)
+
   return (
     <Box>
       <Typography fontSize={18} fontWeight={500} color={"primary.light"}>
@@ -58,7 +60,7 @@ const ReviewRightCard = ({ selected }) => {
         },
         {
           label: "Reason",
-          value: app.reason ?? "NA",
+          value: selected.reason ?? "NA",
         },
       ].map((elem, idx) => (
         <Box key={idx}>
@@ -69,7 +71,7 @@ const ReviewRightCard = ({ selected }) => {
             alignItems={"center"}
           >
             <Typography fontSize={15}>{elem.label}:</Typography>
-            <Typography fontSize={16}>{elem.value}</Typography>
+            <Typography textTransform={'capitalize'} fontSize={16}>{elem.value}</Typography>
           </Box>
           <Divider />
         </Box>

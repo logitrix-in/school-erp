@@ -33,7 +33,7 @@ const ApplicationView = () => {
             email: user.candidate_details.email,
             created_at: new Date(user.created_at).toLocaleDateString(),
             screening_status:
-              user.status == "screened" ? "Screened" : "Unscreened",
+              user.status.charAt(0).toUpperCase() + user.status.slice(1),
           };
         });
         setApplication(values);

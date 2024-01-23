@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import api from "../config/api";
+import { ToastContainer, toast } from "react-toastify";
 
 const OnboardingForm = () => {
   const [rollNum, setRollNum] = useState();
@@ -58,17 +59,24 @@ const OnboardingForm = () => {
               variant="contained"
               onClick={() => {
                 api
-                  .get("/admission/application/search-by-roll/")
+                  .get("/admission/application/search-by-roll/", {
+                    params: {
+                      roll: rollNum,
+                    },
+                  })
                   .then((e) => {
                     console.log(e.data);
                     setCandidate(e.data);
                   })
-                  .catch((e) => console.log(e));
+                  .catch((e) => {
+                    toast.error(e.response.data.message);
+                  });
               }}
             >
               Fetch Profile
             </Button>
           </Grid>
+          <ToastContainer />
         </Grid>
         <Box mt={4} display={"flex"} flexDirection={"column"} gap={2}>
           <Box>
