@@ -67,7 +67,7 @@ const ScreeningRuleEdit = () => {
     "age",
     "board",
     "previous_percent",
-    "specialization",
+    // "specialization",
     "medium",
     "permanent_states",
     "total_income",
@@ -111,11 +111,11 @@ const ScreeningRuleEdit = () => {
       label: "Marks secured in last class (%)",
       type: "number",
     },
-    specialization: {
-      label: "Specialization",
-      type: "select",
-      options: specializationOptions,
-    },
+    // specialization: {
+    //   label: "Specialization",
+    //   type: "select",
+    //   options: specializationOptions,
+    // },
   };
 
   const [availCrits, setAvailCrits] = useState(available_crits);

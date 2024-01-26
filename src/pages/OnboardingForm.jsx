@@ -21,6 +21,11 @@ const OnboardingForm = () => {
   const [bloodGroup, setBloodGroup] = useState("");
   const [otherField, setOtherField] = useState("");
   const [physician, setPhysician] = useState("");
+  const [activities, setActivities] = useState([]);
+  const [activityLevel, setActivityLevel] = useState("");
+  const [activityCertificate, setActivityCertificate] = useState(null);
+  const [nccEnrolled, setNccEnrolled] = useState(false);
+  const [hobbies, setHobbies] = useState("");
 
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
@@ -32,6 +37,63 @@ const OnboardingForm = () => {
     setOtherField(event.target.value);
   };
 
+  const handleActivitiesChange = (event) => {
+    setActivities(event.target.value);
+  };
+
+  const handleActivityLevelChange = (event) => {
+    setActivityLevel(event.target.value);
+  };
+
+  const handleActivityCertificateChange = (event) => {
+    setActivityCertificate(event.target.files[0]);
+  };
+
+  const handleNccEnrolledChange = (event) => {
+    setNccEnrolled(event.target.value === "yes");
+  };
+
+  const handleHobbiesChange = (event) => {
+    setHobbies(event.target.value);
+  };
+
+  const activitiesList = [
+    { id: 1, name: "Football" },
+    { id: 2, name: "Cricket" },
+    { id: 3, name: "Badminton" },
+    { id: 4, name: "Tennis" },
+    { id: 5, name: "Table Tennis" },
+    { id: 6, name: "Hockey" },
+    { id: 7, name: "Dance" },
+    { id: 8, name: "Music" },
+    { id: 9, name: "Painting" },
+    { id: 10, name: "Sculpture" },
+  ];
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Add the new state variable to the form data
+    const formData = new FormData();
+    formData.append("rollNum", rollNum);
+    formData.append("candidate", JSON.stringify(candidate));
+    formData.append("bloodGroup", bloodGroup);
+    formData.append("otherField", otherField);
+    formData.append("physician", physician);
+    formData.append("activities", activities.join(","));
+    formData.append("activityLevel", activityLevel);
+    formData.append("activityCertificate", activityCertificate);
+    formData.append("nccEnrolled", nccEnrolled);
+    formData.append("hobbies", hobbies);
+
+    try {
+      // const response = await api.post("/onboarding", formData);
+      toast.success("Form submitted successfully!");
+    } catch (error) {
+      toast.error("Error submitting form.");
+    }
+  };
+
   return (
     <Box>
       <Typography
@@ -40,45 +102,17 @@ const OnboardingForm = () => {
         fontWeight={500}
         bgcolor={"primary.main"}
         color={"whitesmoke"}
+        position={"fixed"}
+        top={0}
+        width={"100%"}
+        zIndex={5}
       >
         Onboarding Form
       </Typography>
 
-      <Box p={2}>
-        <Grid container spacing={2}>
-          <Grid item xs={3}>
-            <TextField
-              fullWidth
-              label="Roll Number"
-              size="small"
-              onChange={(e) => setRollNum(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                api
-                  .get("/admission/application/search-by-roll/", {
-                    params: {
-                      roll: rollNum,
-                    },
-                  })
-                  .then((e) => {
-                    console.log(e.data);
-                    setCandidate(e.data);
-                  })
-                  .catch((e) => {
-                    toast.error(e.response.data.message);
-                  });
-              }}
-            >
-              Fetch Profile
-            </Button>
-          </Grid>
-          <ToastContainer />
-        </Grid>
-        <Box mt={4} display={"flex"} flexDirection={"column"} gap={2}>
+      <Box p={2} mt={8}>
+        <ToastContainer />
+        <Box display={"flex"} flexDirection={"column"} gap={2}>
           <Box>
             <Typography fontSize={"1.3rem"} fontWeight={500}>
               {candidate?.name}
@@ -90,14 +124,14 @@ const OnboardingForm = () => {
           {/* category */}
           <Box display={"flex"} alignItems={"center"} gap={2}>
             <Typography>
-              Upload Catergory Certificate for {setCandidate?.caste}
+              Upload Category Certificate for {setCandidate?.caste}
             </Typography>
             <Button size="small" variant="contained" component="label">
               <input type="file" hidden />
-              Category Cirtificate
+              Category Certificate
             </Button>
           </Box>
-          {/* category */}
+          {/* dob */}
           <Box display={"flex"} alignItems={"center"} gap={2}>
             <Typography>Upload Date of Birth</Typography>
             <Button size="small" variant="contained" component="label">
@@ -105,7 +139,7 @@ const OnboardingForm = () => {
               Adhar (preferable) / Birth Cirtificate
             </Button>
           </Box>
-          {/* category */}
+          {/* blood group */}
           <Box display={"flex"} alignItems={"center"} gap={2}>
             <Typography>Blood Group</Typography>
             <FormControl sx={{ width: "15rem" }} variant="outlined">
@@ -164,12 +198,105 @@ const OnboardingForm = () => {
             </Button>
           </Box>
 
-          {/* category */}
+          {/* migration */}
           <Box display={"flex"} alignItems={"center"} gap={2}>
             <Typography>Upload Migration & Transfer Cirtificate</Typography>
             <Button size="small" variant="contained" component="label">
               <input type="file" hidden />
               Upload
+            </Button>
+          </Box>
+
+          <Typography
+            mt={2}
+            fontSize={"1.3rem"}
+            fontWeight={500}
+            textTransform={"capitalize"}
+          >
+            Extra Curricular Activities
+          </Typography>
+
+          <Box display={"flex"} alignItems={"center"} gap={2}>
+            <Typography>Activities & Sports</Typography>
+            <FormControl sx={{ width: "15rem" }} variant="outlined">
+              <InputLabel id="activities-label">Activities & Sports</InputLabel>
+              <Select
+                multiple
+                value={activities}
+                onChange={handleActivitiesChange}
+                label="Activities & Sports"
+              >
+                {activitiesList.map((activity) => (
+                  <MenuItem key={activity.id} value={activity.id}>
+                    {activity.name}
+                  </MenuItem>
+                ))}
+
+                <MenuItem value="others">Others</MenuItem>
+              </Select>
+            </FormControl>
+
+            {activities.includes("others") && (
+              <TextField label="Mention other activities" />
+            )}
+          </Box>
+
+          <Box display={"flex"} alignItems={"center"} gap={2}>
+            <Typography>Level</Typography>
+            <FormControl sx={{ width: "10rem" }} variant="outlined">
+              <InputLabel id="activity-level-label">Level</InputLabel>
+              <Select
+                value={activityLevel}
+                onChange={handleActivityLevelChange}
+                label="Level"
+              >
+                <MenuItem value="international">International</MenuItem>
+                <MenuItem value="national">National</MenuItem>
+                <MenuItem value="others">Others</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
+          <Box display={"flex"} alignItems={"center"} gap={2}>
+            <Typography>Upload relevant certificate</Typography>
+            <Button size="small" variant="contained" component="label">
+              <input
+                type="file"
+                hidden
+                onChange={handleActivityCertificateChange}
+              />
+              Upload Certificate
+            </Button>
+          </Box>
+
+          <Box display={"flex"} alignItems={"center"} gap={2}>
+            <Typography>
+              Are you enrolled in National Cadet Corps(NCC)
+            </Typography>
+            <FormControl sx={{ width: "10rem" }} variant="outlined">
+              <Select
+                value={nccEnrolled ? "yes" : "no"}
+                onChange={handleNccEnrolledChange}
+              >
+                <MenuItem value="yes">Yes</MenuItem>
+                <MenuItem value="no">No</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
+          <Box display={"flex"} alignItems={"center"} gap={2}>
+            <Typography>Hobbies/Interested in</Typography>
+            <TextField value={hobbies} onChange={handleHobbiesChange} />
+          </Box>
+
+          <Box display={"flex"} justifyContent={"center"} mt={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={handleSubmit}
+            >
+              Submit
             </Button>
           </Box>
         </Box>

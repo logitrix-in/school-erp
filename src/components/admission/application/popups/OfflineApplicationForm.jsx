@@ -186,12 +186,12 @@ function OfflineApplicationForm({ open, close }) {
     "profile_photo",
     "applying_for",
     "admission_year",
-    "current_class",
-    "percentage_secured",
+    // "current_class",
+    // "percentage_secured",
     // "",
-    "school_name",
-    "board",
-    "medium",
+    // "school_name",
+    // "board",
+    // "medium",
     "permanent_address",
     "permanent_country",
     "permanent_states",
@@ -238,80 +238,85 @@ function OfflineApplicationForm({ open, close }) {
   const onSubmit = () => {
     toast.dismiss();
 
-    if (!devMode) {
-      // check conditional required
-      if (formData.is_critical_ailment && formData.critical_ailment == "")
-        return toast.error("Critical Ailment is Required.", {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: false,
-          progress: undefined,
-          theme: "dark",
-        });
+    if (formData.is_critical_ailment && formData.critical_ailment == "")
+      return toast.error("Critical Ailment is Required.", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "dark",
+      });
 
-      if (
-        [
-          formData.father_email,
-          formData.mother_email,
-          formData.guardian_email,
-          formData.email,
-        ].every((val) => val == "")
-      )
-        return toast.error("At least one email is required", {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: false,
-          progress: undefined,
-          theme: "dark",
-        });
+    if (
+      [
+        formData.father_email,
+        formData.mother_email,
+        formData.guardian_email,
+        formData.email,
+      ].every((val) => val == "")
+    )
+      return toast.error("At least one email is required", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "dark",
+      });
 
-      if (
-        formData.father_occupation == "Not Applicable" &&
-        formData.mother_occupation == "Not Applicable"
-      ) {
-        required = required.concat([
-          "guardian_name",
-          "guardian_occupation",
-          "guardian_annual_income",
-          "guardian_contact_number",
-          "guardian_email",
-          "relationType",
-        ]);
-
-        console.log(required);
-      }
-
-      // check required
-
-      var flag = true;
-
-      for (let i = 0; i < required.length; i++) {
-        if (formData[required[i]] == "" || formData[required[i]] == null) {
-          flag = false;
-          toast.error(
-            `${sentenceCase(required[i].replaceAll("_", " "))} are required `,
-            {
-              position: "top-right",
-              autoClose: 500,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: false,
-              draggable: false,
-              progress: undefined,
-              theme: "dark",
-            }
-          );
-          break;
-        }
-      }
-      if (!flag) return;
+    if (
+      formData.father_occupation == "Not Applicable" &&
+      formData.mother_occupation == "Not Applicable"
+    ) {
+      required = required.concat([
+        "guardian_name",
+        "guardian_occupation",
+        "guardian_annual_income",
+        "guardian_contact_number",
+        "guardian_email",
+        "relationType",
+      ]);
     }
+
+    if (!["Nursery", "PP1", "PP2", "I"].includes(formData.applying_for))
+      required = required.concat([
+        "current_class",
+        "percentage_secured",
+        "school_name",
+        "board",
+        "medium",
+      ]);
+
+    console.log(required);
+    // check required
+
+    var flag = true;
+
+    for (let i = 0; i < required.length; i++) {
+      if (formData[required[i]] == "" || formData[required[i]] == null) {
+        flag = false;
+        toast.error(
+          `${sentenceCase(required[i].replaceAll("_", " "))} are required `,
+          {
+            position: "top-right",
+            autoClose: 500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: false,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
+        break;
+      }
+    }
+    if (!flag) return;
 
     setLoading(true);
     api
@@ -1666,7 +1671,6 @@ function OfflineApplicationForm({ open, close }) {
               type="number"
               fullWidth
               label="Anual Income"
-
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">₹</InputAdornment>

@@ -23,6 +23,7 @@ import useClasses from "../../../../hooks/useClasses";
 import api from "../../../../config/api";
 import { ToastContainer, toast } from "react-toastify";
 import ReignsSelect from "../../../UiComponents/ReignsSelect";
+import { Navigate, redirect, useNavigate } from "react-router-dom";
 
 const OnboardingMeritList = () => {
   const [isInitiating, setIsInitiating] = useState(false);
@@ -108,7 +109,10 @@ const OnboardingMeritList = () => {
     },
   ];
 
+  const navigate = useNavigate();
   const [selectionModel, setSelectionModel] = useState([]);
+
+  useEffect(() => console.log(selectionModel), [selectionModel]);
 
   const handleSelectionModelChange = (newSelectionModel) => {
     setSelectionModel(newSelectionModel);
@@ -305,11 +309,11 @@ const OnboardingMeritList = () => {
                   <Button
                     variant="contained"
                     disabled={selectionModel.length > 1}
-                    onClick={() => {
-                      setInitiatingFor("offline");
-                      setIsInitiating(true);
-                      console.log(isInitiating);
-                    }}
+                    onClick={() =>
+                      navigate(
+                        `/onboarding-form?appid=${selectionModel[0]}`
+                      )
+                    }
                   >
                     Initiate Offline Onboarding Request
                   </Button>
