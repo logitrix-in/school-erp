@@ -191,7 +191,7 @@ const ApplicationRecieved = () => {
               }}
             >
               <MenuItem value={"unscreened"}>Un- screened</MenuItem>
-              <MenuItem value={"screened"}>Screened</MenuItem>
+              <MenuItem value={"screened"}>Cleared</MenuItem>
               <MenuItem value={"rejected"}>Rejected</MenuItem>
               <MenuItem value={"all"}>All</MenuItem>
             </Select>
