@@ -9,16 +9,21 @@ import {
   Select,
   MenuItem,
   InputAdornment,
+  FormControlLabel,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../config/api";
 import { ToastContainer, toast } from "react-toastify";
 
 const OnboardingForm = () => {
-  const [rollNum, setRollNum] = useState();
   const [candidate, setCandidate] = useState(null);
 
+  const [catCir, setCatCir] = useState(null);
+  const [dob, setDob] = useState(null);
   const [bloodGroup, setBloodGroup] = useState("");
+  const [thumb, setThumb] = useState(null);
+  const [migration, setMigration] = useState(null);
+
   const [otherField, setOtherField] = useState("");
   const [physician, setPhysician] = useState("");
   const [activities, setActivities] = useState([]);
@@ -27,7 +32,17 @@ const OnboardingForm = () => {
   const [nccEnrolled, setNccEnrolled] = useState(false);
   const [hobbies, setHobbies] = useState("");
 
-  const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+  const [fatherDocType, setFatherDocType] = useState("");
+  const [motherDocType, setMotherDocType] = useState("");
+
+  const [fdoc, setFdoc] = useState(null);
+  const [mdoc, setMdoc] = useState(null);
+
+  const [question1, setQuestion1] = useState("");
+
+  useEffect(() => {
+    console.log(fatherDocType);
+  }, [fatherDocType]);
 
   const handleBloodGroupChange = (event) => {
     setBloodGroup(event.target.value);
@@ -57,6 +72,7 @@ const OnboardingForm = () => {
     setHobbies(event.target.value);
   };
 
+  const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const activitiesList = [
     { id: 1, name: "Football" },
     { id: 2, name: "Cricket" },
@@ -69,22 +85,35 @@ const OnboardingForm = () => {
     { id: 9, name: "Painting" },
     { id: 10, name: "Sculpture" },
   ];
+  const Details = ["Aadhar Card", "Voter Card", "PAN Card", "Passport"];
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Add the new state variable to the form data
     const formData = new FormData();
-    formData.append("rollNum", rollNum);
-    formData.append("candidate", JSON.stringify(candidate));
-    formData.append("bloodGroup", bloodGroup);
-    formData.append("otherField", otherField);
+    formData.append("category_certificate", catCir);
+    formData.append("dob", dob);
+    formData.append("blood_group", bloodGroup);
+    formData.append("signature", thumb);
+    formData.append("migration", migration);
+    formData.append("activities", activities+','+otherField);
     formData.append("physician", physician);
     formData.append("activities", activities.join(","));
-    formData.append("activityLevel", activityLevel);
-    formData.append("activityCertificate", activityCertificate);
-    formData.append("nccEnrolled", nccEnrolled);
+    formData.append("level", activityLevel);
+    formData.append("activity_cert", activityCertificate);
+    formData.append("ncc", nccEnrolled);
     formData.append("hobbies", hobbies);
+    formData.append("father_doc_type", fatherDocType);
+    formData.append("father_doc", fdoc);
+    formData.append("mother_doc", mdoc);
+    formData.append("question1", question1);
+
+
+
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
 
     try {
       // const response = await api.post("/onboarding", formData);
@@ -124,10 +153,14 @@ const OnboardingForm = () => {
           {/* category */}
           <Box display={"flex"} alignItems={"center"} gap={2}>
             <Typography>
-              Upload Category Certificate for {setCandidate?.caste}
+              Upload Category Certificate for {candidate?.caste}
             </Typography>
             <Button size="small" variant="contained" component="label">
-              <input type="file" hidden />
+              <input
+                type="file"
+                hidden
+                onChange={(e) => setCatCir(e.target.files[0])}
+              />
               Category Certificate
             </Button>
           </Box>
@@ -135,7 +168,11 @@ const OnboardingForm = () => {
           <Box display={"flex"} alignItems={"center"} gap={2}>
             <Typography>Upload Date of Birth</Typography>
             <Button size="small" variant="contained" component="label">
-              <input type="file" hidden />
+              <input
+                type="file"
+                hidden
+                onChange={(e) => setDob(e.target.files[0])}
+              />
               Adhar (preferable) / Birth Cirtificate
             </Button>
           </Box>
@@ -193,7 +230,11 @@ const OnboardingForm = () => {
           <Box display={"flex"} alignItems={"center"} gap={2}>
             <Typography>Upload Signeture & Thumb Impression</Typography>
             <Button size="small" variant="contained" component="label">
-              <input type="file" hidden />
+              <input
+                type="file"
+                hidden
+                onChange={(e) => setThumb(e.target.files[0])}
+              />
               Upload
             </Button>
           </Box>
@@ -202,7 +243,11 @@ const OnboardingForm = () => {
           <Box display={"flex"} alignItems={"center"} gap={2}>
             <Typography>Upload Migration & Transfer Cirtificate</Typography>
             <Button size="small" variant="contained" component="label">
-              <input type="file" hidden />
+              <input
+                type="file"
+                hidden
+                onChange={(e) => setMigration(e.target.files[0])}
+              />
               Upload
             </Button>
           </Box>
@@ -227,7 +272,7 @@ const OnboardingForm = () => {
                 label="Activities & Sports"
               >
                 {activitiesList.map((activity) => (
-                  <MenuItem key={activity.id} value={activity.id}>
+                  <MenuItem key={activity.id} value={activity.name}>
                     {activity.name}
                   </MenuItem>
                 ))}
@@ -289,10 +334,107 @@ const OnboardingForm = () => {
             <TextField value={hobbies} onChange={handleHobbiesChange} />
           </Box>
 
-          <Box display={"flex"} justifyContent={"center"} mt={2}>
+          <Typography
+            mt={2}
+            fontSize={"1.3rem"}
+            fontWeight={500}
+            textTransform={"capitalize"}
+          >
+            Guardian Details
+          </Typography>
+
+          <Box display={"flex"} alignItems={"center"} gap={1}>
+            <Typography>Upload Government ID for father</Typography>
+            <FormControl sx={{ width: "15rem" }} variant="outlined">
+              <InputLabel>Select Document Type</InputLabel>
+              <Select
+                label="Select Document Type"
+                onChange={(e) => setFatherDocType(e.target.value)}
+              >
+                {Details.map((e, i) => (
+                  <MenuItem key={i} value={e}>
+                    {e}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button variant="contained" component="label" size="large">
+              <input
+                type="file"
+                hidden
+                onChange={(e) => setFdoc(e.target.files[0])}
+              />
+              Upload Certificate
+            </Button>
+          </Box>
+
+          <Box display={"flex"} alignItems={"center"} gap={1}>
+            <Typography>Upload Government ID for mother</Typography>
+            <FormControl sx={{ width: "15rem" }} variant="outlined">
+              <InputLabel>Select Document Type</InputLabel>
+              <Select
+                label="Select Document Type"
+                onChange={(e) => setMotherDocType(e.target.value)}
+              >
+                {Details.map((e, i) => (
+                  <MenuItem key={i} value={e}>
+                    {e}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <Button variant="contained" component="label" size="large">
+              <input
+                type="file"
+                hidden
+                onChange={(e) => setMdoc(e.target.files[0])}
+              />
+              Upload Certificate
+            </Button>
+          </Box>
+
+          <Typography
+            mt={2}
+            fontSize={"1.3rem"}
+            fontWeight={500}
+            textTransform={"capitalize"}
+          >
+            Additional Question
+          </Typography>
+
+          <Box display={"flex"} gap={1} alignItems={"center"}>
+            <Typography>How did you come to know about ABC school? </Typography>
+            <FormControl sx={{ width: "15rem" }} variant="outlined">
+              <InputLabel>Select</InputLabel>
+              <Select
+                label="Select"
+                value={question1}
+                onChange={(e) => setQuestion1(e.target.value)}
+              >
+                {[
+                  "ABC website",
+                  "Newspaper",
+                  "Social media",
+                  "Advertisement",
+                  "Friend/relative",
+                  "brochure/pamphlet",
+                  "Others-specify",
+                ].map((e, i) => (
+                  <MenuItem key={i} value={e}>
+                    {e}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+
+          {/* submit */}
+          <Box display={"flex"} mt={3}>
             <Button
               variant="contained"
               color="primary"
+              fullWidth
               size="large"
               onClick={handleSubmit}
             >
