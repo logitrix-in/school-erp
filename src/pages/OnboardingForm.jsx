@@ -14,6 +14,9 @@ import {
 import React, { useEffect, useState } from "react";
 import api from "../config/api";
 import { ToastContainer, toast } from "react-toastify";
+import { FormatIndentDecreaseSharp } from "@mui/icons-material";
+import { useSearchParams } from "react-router-dom";
+import { LoadingButton } from "@mui/lab";
 
 const OnboardingForm = () => {
   const [candidate, setCandidate] = useState(null);
@@ -39,6 +42,8 @@ const OnboardingForm = () => {
   const [mdoc, setMdoc] = useState(null);
 
   const [question1, setQuestion1] = useState("");
+
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     console.log(fatherDocType);
@@ -87,19 +92,22 @@ const OnboardingForm = () => {
   ];
   const Details = ["Aadhar Card", "Voter Card", "PAN Card", "Passport"];
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Add the new state variable to the form data
     const formData = new FormData();
+    formData.append("type", "offline");
+    formData.append("appid", searchParams.get("appid"));
     formData.append("category_certificate", catCir);
     formData.append("dob", dob);
     formData.append("blood_group", bloodGroup);
     formData.append("signature", thumb);
     formData.append("migration", migration);
-    formData.append("activities", activities+','+otherField);
+    formData.append("activities", activities + "," + otherField);
     formData.append("physician", physician);
-    formData.append("activities", activities.join(","));
     formData.append("level", activityLevel);
     formData.append("activity_cert", activityCertificate);
     formData.append("ncc", nccEnrolled);
@@ -109,17 +117,22 @@ const OnboardingForm = () => {
     formData.append("mother_doc", mdoc);
     formData.append("question1", question1);
 
-
-
     for (var pair of formData.entries()) {
       console.log(pair[0] + ": " + pair[1]);
     }
 
     try {
-      // const response = await api.post("/onboarding", formData);
+      setSending(true);
+      const res = await api.post(
+        "admission/test-center/onboarding/initiate/",
+        formData
+      );
+      console.log(res.data);
       toast.success("Form submitted successfully!");
     } catch (error) {
       toast.error("Error submitting form.");
+    } finally {
+      setSending(false);
     }
   };
 
@@ -282,7 +295,10 @@ const OnboardingForm = () => {
             </FormControl>
 
             {activities.includes("others") && (
-              <TextField label="Mention other activities" />
+              <TextField
+                onChange={handleOtherFieldChange}
+                label="Mention other activities"
+              />
             )}
           </Box>
 
@@ -431,7 +447,8 @@ const OnboardingForm = () => {
 
           {/* submit */}
           <Box display={"flex"} mt={3}>
-            <Button
+            <LoadingButton
+              loading={sending}
               variant="contained"
               color="primary"
               fullWidth
@@ -439,7 +456,7 @@ const OnboardingForm = () => {
               onClick={handleSubmit}
             >
               Submit
-            </Button>
+            </LoadingButton>
           </Box>
         </Box>
       </Box>
