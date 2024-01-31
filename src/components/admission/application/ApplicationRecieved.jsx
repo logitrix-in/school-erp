@@ -23,7 +23,7 @@ import Notify from "./popups/Notify";
 import Bbox from "../../UiComponents/Bbox";
 import RevealCard from "../../AnimationComponents/RevealCard";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers";
 import api from "../../../config/api";
 import useClasses from "../../../hooks/useClasses";
@@ -53,6 +53,7 @@ const ApplicationRecieved = () => {
 
   useEffect(() => {
     getChart();
+    console.log(filter);
   }, [filter]);
 
   const options = {
@@ -165,6 +166,8 @@ const ApplicationRecieved = () => {
   const onApplicationClose = () => {
     setApplocationPopupOpen(false);
   };
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -355,11 +358,20 @@ const ApplicationRecieved = () => {
               p={3}
               borderRadius={2}
             >
-              <Link to={"view/"}>
-                <Button variant="outlined" size="small" color="primary">
-                  View
-                </Button>
-              </Link>
+              <Button
+                onClick={() =>
+                  navigate("view", {
+                    state: {
+                      filter,
+                    },
+                  })
+                }
+                variant="outlined"
+                size="small"
+                color="primary"
+              >
+                View
+              </Button>
               <Button variant="outlined" size="small" color="info">
                 Excel
               </Button>

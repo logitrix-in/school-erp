@@ -9,14 +9,21 @@ import {
   GridToolbarExport,
   GridToolbarExportContainer,
 } from "@mui/x-data-grid";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const ApplicationView = () => {
   const [applications, setApplication] = useState(null);
 
+  const state = useLocation();
+
   useEffect(() => {
+    console.log(state.state.filter)
     api
-      .get("/admission/application/")
+      .get("/admission/application/", {
+        params: {
+          ...state.state.filter
+        },
+      })
       .then((res) => {
         const data = res.data;
         const values = data.map((user, idx) => {
@@ -40,8 +47,6 @@ const ApplicationView = () => {
       })
       .catch((err) => console.error(err));
   }, []);
-
-  useEffect(() => {}, [applications]);
 
   const columns = [
     { field: "id", headerName: "#", width: 50 },

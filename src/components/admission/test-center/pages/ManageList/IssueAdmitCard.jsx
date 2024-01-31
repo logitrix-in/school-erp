@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Bbox from "../../../../UiComponents/Bbox";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   DateField,
   DatePicker,
@@ -79,8 +79,9 @@ const IssueAdmitCard = () => {
 
   const downloadAdmit = () => {
     setDownloadLoading(true);
+    console.log(playload);
     api
-      .post("/admission/test-center/download-admit-card/", { id: playload.id })
+      .post("/admission/test-center/download-admit-card/", { id: selected })
       .then((res) => {
         window.open(res.data.link, "_blank", "noopener,noreferrer");
       })
@@ -97,6 +98,12 @@ const IssueAdmitCard = () => {
   const [searchResult, setSearchResult] = useState([]);
 
   const doSearch = () => {
+    console.log(search);
+    console.log(
+      applicants.filter((app) =>
+        app.name.toLowerCase().includes(search.toLowerCase())
+      )
+    );
     if (search == "") return setSearchResult([]);
     var value = applicants.filter(
       (app) =>
@@ -106,6 +113,10 @@ const IssueAdmitCard = () => {
     setSearchResult(value);
     if (value.length == 0) toast.error("No Candidates Found In Search Result");
   };
+
+  useEffect(() => {
+    console.log(searchResult);
+  }, [searchResult]);
 
   function timeToDate(timeString) {
     var timeParts = timeString.split(":");
@@ -366,7 +377,11 @@ const IssueAdmitCard = () => {
                 borderBottom: 0,
                 borderRadius: 0,
                 display:
-                  selected.length == searchResult.length ? "none" : "block",
+                  searchResult.filter(
+                    (res) => !selected.some((s) => s.id == res.id)
+                  ).length == 0
+                    ? "none"
+                    : "block",
               }}
             >
               <Box display={"flex"}>

@@ -14,7 +14,7 @@ const UploadInterviewScore = () => {
   const [savedFile, setFile] = useState(null);
   const [loadingSave, setLoadingSave] = useState(false);
 
-  const fileTypes = ["csv"];
+  const fileTypes = ["csv","xls","xlsx"];
 
   const csvToJson = (file) => {
     const formData = new FormData();

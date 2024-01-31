@@ -38,7 +38,6 @@ const DetailedView = () => {
       if (key == "moodle_id") return;
       if (typeof value == "boolean") value = value ? "Yes" : "No";
       if (value == "") value = "NA";
-
       if (typeof value === "object" && value !== null) {
         return (
           <Grid item xs={12} key={key}>
@@ -63,37 +62,36 @@ const DetailedView = () => {
           </Grid>
         );
       } else {
-        return (
-          <Grid item xs={4} key={key}>
-            <Box
-              display={"flex"}
-              gap={1}
-              p={1}
-              alignItems={"flex-start"}
-              key={key}
-            >
-              <Typography
-                borderRadius={1}
-                fontSize={"1rem"}
-                textTransform={"capitalize"}
-                fontWeight={500}
+        if (key == "br") return <Grid item xs={12} />
+        else {
+          return (
+            <Grid item xs={4} key={key}>
+              <Box
+                display={"flex"}
+                gap={1}
+                p={1}
+                alignItems={"flex-start"}
+                key={key}
               >
-                {key.replaceAll("_", " ").concat(" :")}
-              </Typography>
-              {typeof value == "string" ? (
-                value.includes("https://") ? (
+                <Typography
+                  borderRadius={1}
+                  fontSize={"1rem"}
+                  textTransform={"capitalize"}
+                  fontWeight={500}
+                >
+                  {key.replaceAll("_", " ").concat(" :")}
+                </Typography>
+                {typeof value == "string" && value.includes("https://") ? (
                   <Box>
                     <img height={200} src={value} alt="" />
                   </Box>
                 ) : (
                   <Typography fontSize={"1rem"}>{value}</Typography>
-                )
-              ) : (
-                <Typography fontSize={"1rem"}>{value}</Typography>
-              )}
-            </Box>
-          </Grid>
-        );
+                )}
+              </Box>
+            </Grid>
+          );
+        }
       }
     });
   };
