@@ -369,192 +369,191 @@ const IssueAdmitCard = () => {
             </Drawer>
           )}
 
-          {searchResult.length > 0 && (
-            <Box
-              overflow={"auto"}
-              sx={{
-                border: "1px solid rgba(0,0,0,0.2)",
-                borderBottom: 0,
-                borderRadius: 0,
-                display:
-                  searchResult.filter(
-                    (res) => !selected.some((s) => s.id == res.id)
-                  ).length == 0
-                    ? "none"
-                    : "block",
-              }}
-            >
-              <Box display={"flex"}>
-                <Typography
-                  flex={1}
-                  minWidth={"100px"}
-                  p={1}
-                  sx={{
-                    borderRight: "1px solid rgba(0,0,0,0.2)",
-                    borderBottom: "1px solid rgba(0,0,0,0.2)",
-                    bgcolor: "rgba(0,0,0,0.05)",
-                    textAlign: "center",
-                  }}
-                >
-                  Applicant ID
-                </Typography>
-                <Typography
-                  flex={2}
-                  minWidth={"200px"}
-                  p={1}
-                  sx={{
-                    borderRight: "1px solid rgba(0,0,0,0.2)",
-                    borderBottom: "1px solid rgba(0,0,0,0.2)",
-                    bgcolor: "rgba(0,0,0,0.05)",
-                    textAlign: "center",
-                  }}
-                >
-                  Candidate Name
-                </Typography>
-                <Typography
-                  flex={1}
-                  minWidth={"100px"}
-                  p={1}
-                  sx={{
-                    borderRight: "1px solid rgba(0,0,0,0.2)",
-                    borderBottom: "1px solid rgba(0,0,0,0.2)",
-                    bgcolor: "rgba(0,0,0,0.05)",
-                    textAlign: "center",
-                  }}
-                >
-                  Issue Date
-                </Typography>
-                <Typography
-                  flex={1}
-                  minWidth={"100px"}
-                  p={1}
-                  sx={{
-                    borderRight: "1px solid rgba(0,0,0,0.2)",
-                    borderBottom: "1px solid rgba(0,0,0,0.2)",
-                    bgcolor: "rgba(0,0,0,0.05)",
-                    textAlign: "center",
-                  }}
-                >
-                  Applying For
-                </Typography>
-                <Typography
-                  flex={1}
-                  minWidth={"100px"}
-                  p={1}
-                  sx={{
-                    bgcolor: "rgba(0,0,0,0.05)",
-                    borderBottom: "1px solid rgba(0,0,0,0.2)",
-                    textAlign: "center",
-                  }}
-                >
-                  Actions
-                </Typography>
-              </Box>
+          {searchResult.length > 0 &&
+            searchResult.filter((res) => !selected.some((s) => s.id == res.id))
+              .length > 0 && (
+              <Box
+                overflow={"auto"}
+                sx={{
+                  border: "1px solid rgba(0,0,0,0.2)",
+                  borderBottom: 0,
+                  borderRadius: 0,
+                  display: "block",
+                }}
+              >
+                <Box display={"flex"}>
+                  <Typography
+                    flex={1}
+                    minWidth={"100px"}
+                    p={1}
+                    sx={{
+                      borderRight: "1px solid rgba(0,0,0,0.2)",
+                      borderBottom: "1px solid rgba(0,0,0,0.2)",
+                      bgcolor: "rgba(0,0,0,0.05)",
+                      textAlign: "center",
+                    }}
+                  >
+                    Applicant ID
+                  </Typography>
+                  <Typography
+                    flex={2}
+                    minWidth={"200px"}
+                    p={1}
+                    sx={{
+                      borderRight: "1px solid rgba(0,0,0,0.2)",
+                      borderBottom: "1px solid rgba(0,0,0,0.2)",
+                      bgcolor: "rgba(0,0,0,0.05)",
+                      textAlign: "center",
+                    }}
+                  >
+                    Candidate Name
+                  </Typography>
+                  <Typography
+                    flex={1}
+                    minWidth={"100px"}
+                    p={1}
+                    sx={{
+                      borderRight: "1px solid rgba(0,0,0,0.2)",
+                      borderBottom: "1px solid rgba(0,0,0,0.2)",
+                      bgcolor: "rgba(0,0,0,0.05)",
+                      textAlign: "center",
+                    }}
+                  >
+                    Issue Date
+                  </Typography>
+                  <Typography
+                    flex={1}
+                    minWidth={"100px"}
+                    p={1}
+                    sx={{
+                      borderRight: "1px solid rgba(0,0,0,0.2)",
+                      borderBottom: "1px solid rgba(0,0,0,0.2)",
+                      bgcolor: "rgba(0,0,0,0.05)",
+                      textAlign: "center",
+                    }}
+                  >
+                    Applying For
+                  </Typography>
+                  <Typography
+                    flex={1}
+                    minWidth={"100px"}
+                    p={1}
+                    sx={{
+                      bgcolor: "rgba(0,0,0,0.05)",
+                      borderBottom: "1px solid rgba(0,0,0,0.2)",
+                      textAlign: "center",
+                    }}
+                  >
+                    Actions
+                  </Typography>
+                </Box>
 
-              {searchResult
-                .filter((res) => (resend ? res.issueDate != "Not Issued" : res))
-                .filter((res) => !selected.some((s) => s.id == res.id))
-                .sort((a, b) => {
-                  if (a.id < b.id) {
-                    return -1;
-                  }
-                  if (a.id > b.id) {
-                    return 1;
-                  }
-                  return 0;
-                })
-                .map((app, idx) => (
-                  <Box display={"flex"} key={idx}>
-                    <Typography
-                      flex={1}
-                      minWidth={"100px"}
-                      p={1}
-                      sx={{
-                        borderRight: "1px solid rgba(0,0,0,0.2)",
-                        borderBottom: "1px solid rgba(0,0,0,0.2)",
-                        textAlign: "center",
-                      }}
-                    >
-                      {app.id}
-                    </Typography>
-                    <Typography
-                      flex={2}
-                      minWidth={"200px"}
-                      p={1}
-                      sx={{
-                        borderRight: "1px solid rgba(0,0,0,0.2)",
-                        borderBottom: "1px solid rgba(0,0,0,0.2)",
-                        textAlign: "center",
-                      }}
-                    >
-                      {app.name}
-                    </Typography>
-                    <Typography
-                      flex={1}
-                      minWidth={"100px"}
-                      p={1}
-                      sx={{
-                        borderRight: "1px solid rgba(0,0,0,0.2)",
-                        borderBottom: "1px solid rgba(0,0,0,0.2)",
-                        textAlign: "center",
-                      }}
-                    >
-                      {app.issueDate}
-                    </Typography>
-                    <Typography
-                      flex={1}
-                      minWidth={"100px"}
-                      p={1}
-                      sx={{
-                        borderRight: "1px solid rgba(0,0,0,0.2)",
-                        borderBottom: "1px solid rgba(0,0,0,0.2)",
-                        textAlign: "center",
-                      }}
-                    >
-                      {app.applyingFor}
-                    </Typography>
-
-                    <Box
-                      flex={1}
-                      display={"flex"}
-                      minWidth={"100px"}
-                      gap={1}
-                      justifyContent={"center"}
-                      p={1}
-                      sx={{
-                        borderBottom: "1px solid rgba(0,0,0,0.2)",
-                        textAlign: "center",
-                      }}
-                    >
-                      <Button
-                        fullWidth
-                        variant="contained"
-                        size="small"
-                        onClick={() =>
-                          setSelected((prev) => [
-                            ...prev,
-                            { id: app.id, name: app.name },
-                          ])
-                        }
-                      >
-                        Select
-                      </Button>
-                      <Button
-                        fullWidth
-                        variant="outlined"
-                        size="small"
-                        onClick={() => {
-                          setSideOpen(true);
-                          setViewCandidate(app);
+                {searchResult
+                  .filter((res) =>
+                    !resend ? res.issueDate == "Not Issued" : res
+                  )
+                  .filter((res) => !selected.some((s) => s.id == res.id))
+                  .sort((a, b) => {
+                    if (a.id < b.id) {
+                      return -1;
+                    }
+                    if (a.id > b.id) {
+                      return 1;
+                    }
+                    return 0;
+                  })
+                  .map((app, idx) => (
+                    <Box display={"flex"} key={idx}>
+                      <Typography
+                        flex={1}
+                        minWidth={"100px"}
+                        p={1}
+                        sx={{
+                          borderRight: "1px solid rgba(0,0,0,0.2)",
+                          borderBottom: "1px solid rgba(0,0,0,0.2)",
+                          textAlign: "center",
                         }}
                       >
-                        View
-                      </Button>
+                        {app.id}
+                      </Typography>
+                      <Typography
+                        flex={2}
+                        minWidth={"200px"}
+                        p={1}
+                        sx={{
+                          borderRight: "1px solid rgba(0,0,0,0.2)",
+                          borderBottom: "1px solid rgba(0,0,0,0.2)",
+                          textAlign: "center",
+                        }}
+                      >
+                        {app.name}
+                      </Typography>
+                      <Typography
+                        flex={1}
+                        minWidth={"100px"}
+                        p={1}
+                        sx={{
+                          borderRight: "1px solid rgba(0,0,0,0.2)",
+                          borderBottom: "1px solid rgba(0,0,0,0.2)",
+                          textAlign: "center",
+                        }}
+                      >
+                        {app.issueDate}
+                      </Typography>
+                      <Typography
+                        flex={1}
+                        minWidth={"100px"}
+                        p={1}
+                        sx={{
+                          borderRight: "1px solid rgba(0,0,0,0.2)",
+                          borderBottom: "1px solid rgba(0,0,0,0.2)",
+                          textAlign: "center",
+                        }}
+                      >
+                        {app.applyingFor}
+                      </Typography>
+
+                      <Box
+                        flex={1}
+                        display={"flex"}
+                        minWidth={"100px"}
+                        gap={1}
+                        justifyContent={"center"}
+                        p={1}
+                        sx={{
+                          borderBottom: "1px solid rgba(0,0,0,0.2)",
+                          textAlign: "center",
+                        }}
+                      >
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          size="small"
+                          onClick={() =>
+                            setSelected((prev) => [
+                              ...prev,
+                              { id: app.id, name: app.name },
+                            ])
+                          }
+                        >
+                          Select
+                        </Button>
+                        <Button
+                          fullWidth
+                          variant="outlined"
+                          size="small"
+                          onClick={() => {
+                            setSideOpen(true);
+                            setViewCandidate(app);
+                          }}
+                        >
+                          View
+                        </Button>
+                      </Box>
                     </Box>
-                  </Box>
-                ))}
-            </Box>
-          )}
+                  ))}
+              </Box>
+            )}
 
           <Box sx={{ display: selected.length > 0 ? "block" : "none" }}>
             <Typography my={1} mb fontSize={"1rem"} fontWeight={500}>

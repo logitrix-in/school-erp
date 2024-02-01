@@ -311,7 +311,7 @@ const OnboardingMeritList = () => {
                     disabled={selectionModel.length > 1}
                     onClick={() =>
                       navigate(
-                        `/onboarding-form?appid=${selectionModel[0]}`
+                        `/admission/onboarding/manage/merit-list/offline-onboarding?appid=${selectionModel[0]}`
                       )
                     }
                   >

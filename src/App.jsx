@@ -221,6 +221,13 @@ function App() {
               element={<OnboardingMeritList />}
             />
 
+            <Route
+              path="admission/onboarding/manage/merit-list/offline-onboarding/"
+              element={<OnboardingForm />}
+            />
+
+
+
             {/* -- Waiting List */}
             <Route
               path="admission/onboarding/manage/waiting-list/"
@@ -252,7 +259,6 @@ function App() {
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/onboarding-form" element={<OnboardingForm />} />
           <Route path="/test" element={<Test />} />
         </Routes>
       )}
