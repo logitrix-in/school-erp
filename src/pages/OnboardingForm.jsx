@@ -46,6 +46,7 @@ const OnboardingForm = () => {
     handleSubmit,
     formState: { errors },
     control,
+    watch,
   } = useForm({
     defaultValues: {
       blood_group: "",
@@ -114,6 +115,7 @@ const OnboardingForm = () => {
                 register={register}
                 err={err}
                 control={control}
+                watch={watch}
               />
               <ExtraCurricularActivities
                 candidate={candidate}
@@ -176,9 +178,11 @@ const show = (label, value, size = "0") => {
 
 // Left side forms
 
-const PersonalDetails = ({ candidate, register, err, control }) => {
+const PersonalDetails = ({ candidate, register, err, control, watch }) => {
   const c = candidate;
   const p = c?.candidate_details;
+
+  const elem = watch("blood_group");
 
   return (
     <Box>
@@ -224,14 +228,15 @@ const PersonalDetails = ({ candidate, register, err, control }) => {
           {show("Date of Birth", dayjs(p?.dob).format("DD MMM YYYY"))}
         </Grid>
 
-        <Grid item xs={6}>
+        <Grid item xs={6} display={"flex"} gap={2} alignItems={'center'} borderRadius={2}>
           {show("Category", p?.category)}
+          <Box p={1} boxShadow={'0 0 10px 0px #00000025'}>Upload Category Certificate</Box>
         </Grid>
 
         <Grid item xs={6}>
           {show("Gender", p?.gender)}
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} component={Stack} gap={1.5}>
           <Controller
             control={control}
             name="blood_group"
@@ -246,16 +251,30 @@ const PersonalDetails = ({ candidate, register, err, control }) => {
                 {...err("blood_group")}
                 {...field}
               >
-                {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
-                  (name, idx) => (
-                    <MenuItem key={idx} value={name}>
-                      {name}
-                    </MenuItem>
-                  )
-                )}
+                {[
+                  "A+",
+                  "A-",
+                  "B+",
+                  "B-",
+                  "AB+",
+                  "AB-",
+                  "O+",
+                  "O-",
+                  "Other",
+                ].map((name, idx) => (
+                  <MenuItem key={idx} value={name}>
+                    {name}
+                  </MenuItem>
+                ))}
               </TextField>
             )}
           />
+          {elem == "Other" && (
+            <TextField
+              label="Mention Blood Group"
+              fullWidth
+            />
+          )}
         </Grid>
       </Grid>
     </Box>
