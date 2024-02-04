@@ -31,7 +31,6 @@ import AdmissionScreening from "./pages/admission/AdmissionScreening";
 import AdmissionTestCenter from "./pages/admission/AdmissionTestCenter";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-import { Logger } from "./config/Logger";
 import IssueAdmitCard from "./components/admission/test-center/pages/ManageList/IssueAdmitCard";
 import BulkManage from "./components/admission/test-center/pages/ManageList/BulkManage";
 import UploadOfflineScore from "./components/admission/test-center/pages/Evalution/UploadOfflineScore";
@@ -47,60 +46,16 @@ import ManageTickets from "./components/admission/post onboarding/ManageTickets"
 import DetailedView from "./components/admission/application/DetailedView";
 import OnboardingApproval from "./components/admission/onboarding/pages/OnboardingApproval";
 import Test from "./pages/Test";
-import api from "./config/api";
 import dayjs from "dayjs";
 
-dayjs.locale('en-in'); 
+dayjs.locale("en-in");
 
 const NavLayout = () => {
-  const ux = useAuth();
-  const naviagte = useNavigate();
-
-  useEffect(() => {
-    if (ux.user == null) {
-      naviagte("/login");
-    }
-  });
-  return (
-    <>
-      <Box
-        display={"flex"}
-        width={"100vw"}
-        position={"fixed"}
-        top={0}
-        zIndex={100}
-        sx={{ pointerEvents: "none" }}
-        overflow={"hidden"}
-        height={"100vh"}
-      >
-        <Sidebar />
-        <Navbar />
-      </Box>
-
-      <Box
-        flex={1}
-        bgcolor={"#ffffff"}
-        pt={2}
-        px={3}
-        sx={{ borderRadius: 2 }}
-        paddingTop={"7rem"}
-        ml={config.NAVBAR_WIDTH}
-      >
-        <Breadcrumb />
-        <Outlet />
-        <Footer />
-      </Box>
-    </>
-  );
-};
-
-function App() {
   const [loading, setLoading] = useState(true);
-  const location = useLocation();
+  const ux = useAuth();
   const navigate = useNavigate();
-
+  const location = useLocation();
   const currentRoute = location.pathname;
-  const context = useContext(AppContext);
 
   useEffect(() => {
     axios
@@ -111,16 +66,14 @@ function App() {
         withCredentials: true,
       })
       .then((res) => {
-        context.setUser(res.data);
+        ux.setUser(res.data);
         if (currentRoute == "/") navigate("/dashboard/");
       })
       .catch((er) => {
-        context.setUser(null);
-        navigate("/login/");
+        ux.setUser(null);
+        navigate("/login");
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -128,140 +81,170 @@ function App() {
       {loading ? (
         <Loader />
       ) : (
-        <Routes>
-          <Route path="/" element={<NavLayout />}>
-            <Route path="dashboard/" element={<Dashboard />} />
+        <>
+          <Box
+            display={"flex"}
+            width={"100vw"}
+            position={"fixed"}
+            top={0}
+            zIndex={100}
+            sx={{ pointerEvents: "none" }}
+            overflow={"hidden"}
+            height={"100vh"}
+          >
+            <Sidebar />
+            <Navbar />
+          </Box>
 
-            {/* application Routes */}
-            <Route
-              path="admission/application/"
-              element={<AdmissionApplication />}
-            />
-            <Route
-              path="admission/application/view"
-              element={<ApplicationView />}
-            />
-
-            <Route
-              path="admission/application/view/:id/"
-              element={<DetailedView />}
-            />
-
-            {/* screening */}
-            <Route
-              path="admission/screening/"
-              element={<AdmissionScreening />}
-            />
-            <Route
-              path="admission/screening/edit/"
-              element={<ScreeningRuleEdit />}
-            />
-
-            <Route
-              path="admission/screening/review/"
-              element={<ReviewScreening />}
-            />
-
-            {/* Test Center */}
-
-            {/* -- Manage Test / Interview */}
-            <Route
-              path="admission/test-center/"
-              element={<AdmissionTestCenter />}
-            />
-            <Route
-              path="admission/test-center/admit-card/"
-              element={<IssueAdmitCard />}
-            />
-            <Route
-              path="admission/test-center/admit-card/bulk-manage/"
-              element={<BulkManage />}
-            />
-
-            {/* -- Evalution */}
-
-            <Route
-              path="admission/test-center/upload-offline-test-score/"
-              element={<UploadOfflineScore />}
-            />
-            <Route
-              path="admission/test-center/upload-interview-score/"
-              element={<UploadInterviewScore />}
-            />
-
-            {/* -- Merit List */}
-
-            <Route
-              path="admission/test-center/set-rule/"
-              element={<SetMeritListRule />}
-            />
-
-            <Route
-              path="admission/test-center/generate-merit-list/"
-              element={<GenerateMeritList />}
-            />
-
-            {/* Onboarding */}
-
-            <Route
-              path="admission/onboarding/"
-              element={<AdmissionOnboarding />}
-            />
-
-            {/* -- Manage */}
-
-            <Route
-              path="admission/onboarding/manage/"
-              element={<ManageOnboarding />}
-            />
-
-            {/* -- Merit List */}
-            <Route
-              path="admission/onboarding/manage/merit-list/"
-              element={<OnboardingMeritList />}
-            />
-
-            <Route
-              path="admission/onboarding/manage/merit-list/offline-onboarding/"
-              element={<OnboardingForm />}
-            />
-
-
-
-            {/* -- Waiting List */}
-            <Route
-              path="admission/onboarding/manage/waiting-list/"
-              element={<OnboardingWaitingList />}
-            />
-
-            {/* -- Approval */}
-
-            <Route
-              path="admission/onboarding/:id"
-              element={<OnboardingApproval />}
-            />
-
-            {/* Post Onboarding */}
-
-            <Route
-              path={"admission/post-onboarding/"}
-              element={<AdmissionPostOnboarding />}
-            />
-
-            {/* -- Ticket */}
-
-            <Route
-              path={"admission/post-onboarding/manage-ticket/"}
-              element={<ManageTickets />}
-            />
-
-            <Route path="*" element={<_404 />} />
-          </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/test" element={<Test />} />
-        </Routes>
+          <Box
+            flex={1}
+            bgcolor={"#ffffff"}
+            pt={2}
+            px={3}
+            sx={{ borderRadius: 2 }}
+            paddingTop={"7rem"}
+            ml={config.NAVBAR_WIDTH}
+          >
+            <Breadcrumb />
+            <Outlet />
+            <Footer />
+          </Box>
+        </>
       )}
+    </>
+  );
+};
+
+function App() {
+  const context = useContext(AppContext);
+
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<NavLayout />}>
+          <Route path="dashboard/" element={<Dashboard />} />
+
+          {/* application Routes */}
+          <Route
+            path="admission/application/"
+            element={<AdmissionApplication />}
+          />
+          <Route
+            path="admission/application/view"
+            element={<ApplicationView />}
+          />
+
+          <Route
+            path="admission/application/view/:id/"
+            element={<DetailedView />}
+          />
+
+          {/* screening */}
+          <Route path="admission/screening/" element={<AdmissionScreening />} />
+          <Route
+            path="admission/screening/edit/"
+            element={<ScreeningRuleEdit />}
+          />
+
+          <Route
+            path="admission/screening/review/"
+            element={<ReviewScreening />}
+          />
+
+          {/* Test Center */}
+
+          {/* -- Manage Test / Interview */}
+          <Route
+            path="admission/test-center/"
+            element={<AdmissionTestCenter />}
+          />
+          <Route
+            path="admission/test-center/admit-card/"
+            element={<IssueAdmitCard />}
+          />
+          <Route
+            path="admission/test-center/admit-card/bulk-manage/"
+            element={<BulkManage />}
+          />
+
+          {/* -- Evalution */}
+
+          <Route
+            path="admission/test-center/upload-offline-test-score/"
+            element={<UploadOfflineScore />}
+          />
+          <Route
+            path="admission/test-center/upload-interview-score/"
+            element={<UploadInterviewScore />}
+          />
+
+          {/* -- Merit List */}
+
+          <Route
+            path="admission/test-center/set-rule/"
+            element={<SetMeritListRule />}
+          />
+
+          <Route
+            path="admission/test-center/generate-merit-list/"
+            element={<GenerateMeritList />}
+          />
+
+          {/* Onboarding */}
+
+          <Route
+            path="admission/onboarding/"
+            element={<AdmissionOnboarding />}
+          />
+
+          {/* -- Manage */}
+
+          <Route
+            path="admission/onboarding/manage/"
+            element={<ManageOnboarding />}
+          />
+
+          {/* -- Merit List */}
+          <Route
+            path="admission/onboarding/manage/merit-list/"
+            element={<OnboardingMeritList />}
+          />
+
+          {/* -- Waiting List */}
+          <Route
+            path="admission/onboarding/manage/waiting-list/"
+            element={<OnboardingWaitingList />}
+          />
+
+          {/* -- Approval */}
+
+          <Route
+            path="admission/onboarding/:id"
+            element={<OnboardingApproval />}
+          />
+
+          {/* Post Onboarding */}
+
+          <Route
+            path={"admission/post-onboarding/"}
+            element={<AdmissionPostOnboarding />}
+          />
+
+          {/* -- Ticket */}
+
+          <Route
+            path={"admission/post-onboarding/manage-ticket/"}
+            element={<ManageTickets />}
+          />
+
+          <Route path="*" element={<_404 />} />
+        </Route>
+
+        <Route path="admission/onboarding-form/" element={<OnboardingForm />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/test" element={<Test />} />
+      </Routes>
     </>
   );
 }

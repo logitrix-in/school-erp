@@ -16,10 +16,10 @@ interface ReignsSelectProps {
   items: string[];
   label: string;
   sx?: SxProps;
-  onChange: (selected: any) => void;
+  onChange?: (selected: any) => void;
   multiple?: boolean;
   full?: boolean;
-  size: "small" | "medium";
+  size?: "small" | "medium";
 }
 
 const ReignsSelect: React.FC<ReignsSelectProps> = ({
@@ -30,6 +30,7 @@ const ReignsSelect: React.FC<ReignsSelectProps> = ({
   multiple,
   full = true,
   size = "medium",
+  ...rest
 }) => {
   // handle multiselect
   const [selected, setSelected] = useState<string[]>([]);
@@ -61,6 +62,7 @@ const ReignsSelect: React.FC<ReignsSelectProps> = ({
     <FormControl fullWidth={full} size={size} sx={sx}>
       <InputLabel>{label}</InputLabel>
       <Select
+        {...rest}
         multiple
         value={selected}
         onChange={handleMultiChange}
@@ -91,7 +93,7 @@ const ReignsSelect: React.FC<ReignsSelectProps> = ({
   ) : (
     <FormControl size={size} sx={sx} fullWidth={full}>
       <InputLabel>{label}</InputLabel>
-      <Select label={label} onChange={onChange}>
+      <Select {...rest} label={label} onChange={onChange}>
         {items.map((name, idx) => (
           <MenuItem key={idx} value={name}>
             {name}

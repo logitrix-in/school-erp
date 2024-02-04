@@ -23,7 +23,7 @@ const Footer = () => {
               fontWeight={600}
               mr={"auto"}
             >
-              Last Logged In on {dayjs(new Date(user?.user.last_login)).format('DD MMM YYYY, hh:mm a')}
+              Last Logged In on {dayjs(new Date(user?.user?.last_login)).format('DD MMM YYYY, hh:mm a')}
             </Typography>
             <Box display={"flex"} alignItems={"center"} gap={0.4}>
               <Icon icon="fa:group" fontSize={"1.2rem"} />

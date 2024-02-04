@@ -18,7 +18,7 @@ const Dashboard = () => {
         Hello {user?.user.first_name} {user?.user.last_name}
       </Typography>
 
-      <Button variant="contained" LinkComponent={Link} to="/admission/screening/">Current Workplace</Button>
+      <Button variant="contained" LinkComponent={Link} to="/admission/onboarding/manage/merit-list/offline-onboarding/?appid=ACS24020002">Current Workplace</Button>
     </Bbox>
   );
 };
