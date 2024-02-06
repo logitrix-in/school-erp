@@ -4,8 +4,10 @@ import {
   FormControl,
   Grid,
   IconButton,
+  InputBase,
   InputLabel,
   MenuItem,
+  OutlinedInput,
   Select,
   Stack,
   TextField,
@@ -19,6 +21,7 @@ import { Controller, useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import ReignsSelect from "../components/UiComponents/ReignsSelect";
 import { Icon } from "@iconify/react";
+import { candidateType } from "../utils/candidateType";
 
 const OnboardingForm = () => {
   // Retrive Candidate
@@ -47,11 +50,17 @@ const OnboardingForm = () => {
     formState: { errors },
     control,
     watch,
+    setValue,
   } = useForm({
     defaultValues: {
       blood_group: "",
+      physician_number: "",
     },
   });
+
+  // register("",{
+  //   maxLength
+  // })
 
   const err = (name) => {
     return {
@@ -159,9 +168,7 @@ const OnboardingForm = () => {
 const show = (label, value, size = "0") => {
   return (
     <Stack direction={"row"} spacing={1}>
-      <Typography textTransform={"capitalize"} minWidth={size + "px"}>
-        {label} :
-      </Typography>
+      <Typography minWidth={size + "px"}>{label} :</Typography>
       <Typography
         textTransform={"capitalize"}
         flex={1}
@@ -179,7 +186,7 @@ const show = (label, value, size = "0") => {
 // Left side forms
 
 const PersonalDetails = ({ candidate, register, err, control, watch }) => {
-  const c = candidate;
+  const c: candidateType = candidate;
   const p = c?.candidate_details;
 
   const elem = watch("blood_group");
@@ -216,27 +223,49 @@ const PersonalDetails = ({ candidate, register, err, control, watch }) => {
         <Grid item sm={12} lg={6}>
           {show("Email", p?.email)}
         </Grid>
-        <Grid item xs={6}>
+        <Grid item sm={12} lg={6}>
           {show("Nationility", p?.nationality)}
         </Grid>
 
-        <Grid item xs={6}>
+        <Grid item sm={12} lg={6}>
           {show("Religion", p?.religion)}
         </Grid>
 
-        <Grid item xs={6}>
+        <Grid item sm={12} lg={6}>
           {show("Date of Birth", dayjs(p?.dob).format("DD MMM YYYY"))}
         </Grid>
 
-        <Grid item xs={6} display={"flex"} gap={2} alignItems={'center'} borderRadius={2}>
+        <Grid
+          item
+          sm={12}
+          lg={6}
+          display={"flex"}
+          gap={2}
+          alignItems={"center"}
+        >
           {show("Category", p?.category)}
-          <Box p={1} boxShadow={'0 0 10px 0px #00000025'}>Upload Category Certificate</Box>
+          <Stack>
+            <Button variant="contained" size="small" component="label">
+              Upload Category Certificate
+              <input
+                type="file"
+                multiple={false}
+                hidden
+                {...register("category_certificate", {
+                  required: "Category Certificate is required",
+                })}
+              />
+            </Button>
+            <Typography color={"error"} variant="caption" mt={0.3}>
+              {err("category_certificate")?.helperText}
+            </Typography>
+          </Stack>
         </Grid>
 
-        <Grid item xs={6}>
+        <Grid item sm={12} lg={6}>
           {show("Gender", p?.gender)}
         </Grid>
-        <Grid item xs={6} component={Stack} gap={1.5}>
+        <Grid item sm={12} lg={6} component={Stack} gap={1.5}>
           <Controller
             control={control}
             name="blood_group"
@@ -270,11 +299,58 @@ const PersonalDetails = ({ candidate, register, err, control, watch }) => {
             )}
           />
           {elem == "Other" && (
-            <TextField
-              label="Mention Blood Group"
-              fullWidth
-            />
+            <TextField label="Mention Blood Group" fullWidth />
           )}
+        </Grid>
+
+        <Grid item sm={12} lg={6}>
+          {show(
+            "Critical Medical Ailment(s)",
+            p?.is_critical_ailment ? p?.critical_ailment : "No"
+          )}
+        </Grid>
+
+        <Grid item sm={12} lg={6}>
+          <TextField
+            label="Physician's Contact Number"
+            fullWidth
+            type="number"
+            {...err("physician_number")}
+            {...register("physician_number", {
+              maxLength: {
+                value: 10,
+                message: "Phone number must be 10 digits",
+              },
+              minLength: {
+                value: 10,
+                message: "Phone number must be 10 digits",
+              },
+            })}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Stack direction={"row"} spacing={2} alignItems={"center"}>
+            <Typography>Transfer / Migration Documents: </Typography>
+            <Button variant="contained" size="small" component="label">
+              Upload Transfer Certificate
+              <input
+                type="file"
+                multiple={false}
+                hidden
+                {...register("transfer_certificate", {})}
+              />
+            </Button>
+            <Button variant="contained" size="small" component="label">
+              Upload Migration Certificate
+              <input
+                type="file"
+                multiple={false}
+                hidden
+                {...register("migration_certificate", {})}
+              />
+            </Button>
+          </Stack>
         </Grid>
       </Grid>
     </Box>

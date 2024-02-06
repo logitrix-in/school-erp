@@ -1818,7 +1818,7 @@ const Question1 = ({ handleChange }) => {
     handleChange({
       target: {
         name: "question1",
-        value: question,
+        value: JSON.stringify(question),
       },
     });
   }, [question]);
@@ -1848,31 +1848,24 @@ const Question1 = ({ handleChange }) => {
             <TextField label="Name" name="name" fullWidth onChange={onChange} />
           </Grid>
           <Grid item xs={4}>
-            {/* <DatePicker
-              sx={{ width: "100%" }}
-              label="Year of Passing"
-              name="date"
-              format="YYYY"
-              
-              views={["year"]}
-              maxDate={dayjs()}
-              onChange={(e) => {
-                setQuestion((prev) => ({
-                  ...prev,
-                  date: dayjs(new Date(e)).format("YYYY-MM-DD"),
-                }));
-              }}
-            /> */}
-            <ReignsSelect
+            <TextField
+              fullWidth
+              name="passing_year"
+              select
               label="Passing Year"
-              items={[
+              onChange={onChange}
+            >
+              {[
                 "Not Applicable",
                 ...new Array(50)
                   .fill(0)
                   .map((e, i) => `${new Date().getFullYear() - i}`),
-              ]}
-              onChange={() => {}}
-            />
+              ].map((e, i) => (
+                <MenuItem key={i} value={e}>
+                  {e}
+                </MenuItem>
+              ))}
+            </TextField>
           </Grid>
           <Grid item xs={4}>
             <FormControl fullWidth>
@@ -1924,7 +1917,7 @@ const Question2 = ({ handleChange }) => {
     handleChange({
       target: {
         name: "question2",
-        value: question,
+        value: JSON.stringify(question),
       },
     });
   }, [question]);
