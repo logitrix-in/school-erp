@@ -47,6 +47,7 @@ import DetailedView from "./components/admission/application/DetailedView";
 import OnboardingApproval from "./components/admission/onboarding/pages/OnboardingApproval";
 import Test from "./pages/Test";
 import dayjs from "dayjs";
+import Information from "./pages/student/Information";
 
 dayjs.locale("en-in");
 
@@ -237,6 +238,12 @@ function App() {
             element={<ManageTickets />}
           />
 
+          {/* student-information */}
+          <Route
+            path={'student/information/'}
+            element={<Information />}
+          />
+
           <Route path="*" element={<_404 />} />
         </Route>
 
@@ -250,4 +257,3 @@ function App() {
 }
 
 export default App;
-

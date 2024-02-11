@@ -45,8 +45,8 @@ export const navigations = [
         dropdown: true,
         subMenu: [
             {
-                name:'menu 1',
-                path: 'student/menu1/',
+                name:'Information',
+                path: 'student/information/',
                 icon: 'material-symbols:folder'
             },
         ]
