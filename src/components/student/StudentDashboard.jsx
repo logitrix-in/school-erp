@@ -43,15 +43,15 @@ const StudentDashboard = () => {
         {/* divider */}
         <Divider />
 
-        {/* left input */}
         <Box
           display={"flex"}
-          gap={3}
+          gap={2}
           flexDirection={{ xs: "column", lg: "row" }}
           alignItems={{ xs: "center" }}
-          p={3}
+          p={2}
           pb={2}
         >
+          {/* left section */}
           <Bbox
             borderRadius={1}
             p={3}
@@ -63,8 +63,8 @@ const StudentDashboard = () => {
             bgcolor={"white"}
             width={{ xs: "100%", lg: "30rem" }}
           >
-            {/* academic year */}
-            <FormControl fullWidth>
+            {/* academic year drop-down */}
+            <FormControl fullWidth style={{ width: 329, height: 55 }}>
               <InputLabel>Academic Year</InputLabel>
               <Select
                 label="Academic Year"
@@ -81,8 +81,8 @@ const StudentDashboard = () => {
               </Select>
             </FormControl>
 
-            {/* class */}
-            <FormControl fullWidth>
+            {/* class drop-down */}
+            <FormControl fullWidth style={{ width: 329, height: 55 }}>
               <InputLabel>Class</InputLabel>
               <Select
                 label="Class"
@@ -112,8 +112,8 @@ const StudentDashboard = () => {
               </Select>
             </FormControl>
 
-            {/* section */}
-            <FormControl fullWidth>
+            {/* section drop-down */}
+            <FormControl fullWidth style={{ width: 329, height: 55 }}>
               <InputLabel>Section</InputLabel>
               <Select
                 label="Section"
@@ -128,8 +128,8 @@ const StudentDashboard = () => {
               </Select>
             </FormControl>
 
-            {/* status */}
-            <FormControl fullWidth>
+            {/* status drop-down */}
+            <FormControl fullWidth style={{ width: 329, height: 55 }}>
               <InputLabel>Status</InputLabel>
               <Select
                 label="Status"
@@ -145,8 +145,9 @@ const StudentDashboard = () => {
             </FormControl>
           </Bbox>
 
-          {/* grid */}
-          <Grid container spacing={2} flex={2}>
+          {/* mid section */}
+          <Grid container spacing={1} flex={2}>
+            {/* Total students sections */}
             <Grid item xs={6}>
               <Bbox
                 height={"9rem"}
@@ -175,7 +176,7 @@ const StudentDashboard = () => {
                       {/* {charts.interview} */}
                     </Typography>
                     <Typography color={"primary.main"}>
-                      Candidates selected for Test/Interview
+                      Total students sections
                     </Typography>
                   </Box>
 
@@ -192,6 +193,8 @@ const StudentDashboard = () => {
                 </Box>
               </Bbox>
             </Grid>
+
+            {/* student teacher ration section */}
             <Grid item xs={6}>
               <Bbox
                 height={"9rem"}
@@ -220,7 +223,7 @@ const StudentDashboard = () => {
                       {/* {charts.in_merit} */}
                     </Typography>
                     <Typography color={"secondary.main"}>
-                      Candidates in Merit
+                      student teacher ration section
                     </Typography>
                   </Box>
 
@@ -237,6 +240,8 @@ const StudentDashboard = () => {
                 </Box>
               </Bbox>
             </Grid>
+
+            {/* vaccancy section */}
             <Grid item xs={6}>
               <Bbox
                 height={"9rem"}
@@ -265,7 +270,7 @@ const StudentDashboard = () => {
                       {/* {charts.in_review} */}
                     </Typography>
                     <Typography color={"secondary.main"}>
-                      Onboarding In-Review
+                      vaccancy section
                     </Typography>
                   </Box>
 
@@ -279,10 +284,11 @@ const StudentDashboard = () => {
                   {/* <IconButton onClick={() => download("candidate_in_review")}>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
                   </IconButton> */}
-                  
                 </Box>
               </Bbox>
             </Grid>
+
+            {/* defaulter section */}
             <Grid item xs={6}>
               <Bbox
                 height={"9rem"}
@@ -311,7 +317,102 @@ const StudentDashboard = () => {
                       {/* {charts.completed} */}
                     </Typography>
                     <Typography color={"primary.main"}>
-                      Onboarding Completed
+                      defaulter section
+                    </Typography>
+                  </Box>
+
+                  {/* <Icon
+                    icon={"teenyicons:tick-circle-solid"}
+                    color="#3B98C4"
+                    fontSize={"4rem"}
+                  /> */}
+                </Box>
+                <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
+                  {/* <IconButton onClick={() => download("onboarding_completed")}>
+                    <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
+                  </IconButton> */}
+                </Box>
+              </Bbox>
+            </Grid>
+          </Grid>
+
+          {/* right section */}
+          <Grid container spacing={1} flex={2}>
+            {/* gender distribution section */}
+            <Grid item xs={8}>
+              <Bbox
+                height={"9rem"}
+                borderRadius={1}
+                p={3}
+                px={10}
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="stretch"
+                position={"relative"}
+              >
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                  flex={1}
+                  gap={3}
+                >
+                  <Box>
+                    <Typography
+                      fontSize={"1.6rem"}
+                      color={"primary.dark"}
+                      fontWeight={600}
+                    >
+                      {/* {charts.completed} */}
+                    </Typography>
+                    <Typography color={"primary.main"}>
+                      gender distribution section
+                    </Typography>
+                  </Box>
+
+                  {/* <Icon
+                    icon={"teenyicons:tick-circle-solid"}
+                    color="#3B98C4"
+                    fontSize={"4rem"}
+                  /> */}
+                </Box>
+                <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
+                  {/* <IconButton onClick={() => download("onboarding_completed")}>
+                    <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
+                  </IconButton> */}
+                </Box>
+              </Bbox>
+            </Grid>
+
+            {/* cultural diversity section */}
+            <Grid item xs={8}>
+              <Bbox
+                height={"9rem"}
+                borderRadius={1}
+                p={3}
+                px={10}
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="stretch"
+                position={"relative"}
+              >
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                  flex={1}
+                  gap={3}
+                >
+                  <Box>
+                    <Typography
+                      fontSize={"1.6rem"}
+                      color={"primary.dark"}
+                      fontWeight={600}
+                    >
+                      {/* {charts.completed} */}
+                    </Typography>
+                    <Typography color={"primary.main"}>
+                      cultural diversity section
                     </Typography>
                   </Box>
 
@@ -332,7 +433,7 @@ const StudentDashboard = () => {
         </Box>
       </Bbox>
 
-      {/* <ToastContainer /> */}
+      <ToastContainer />
     </RevealCard>
   );
 };
