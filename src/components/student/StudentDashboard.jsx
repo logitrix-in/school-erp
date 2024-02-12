@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { ToastContainer, toast } from "react-toastify";
+import { Icon } from "@iconify/react";
 
 const StudentDashboard = () => {
   return (
@@ -147,108 +148,222 @@ const StudentDashboard = () => {
 
           {/* mid section */}
           <Grid container spacing={1} flex={2}>
-            {/* Total students sections */}
-            <Grid item xs={6}>
+            {/* total students sections */}
+            <Grid item xs={6} style={{ width: 530, height: 235 }}>
               <Bbox
-                height={"9rem"}
+                height={"11rem"}
                 bgcolor={"primary.light"}
                 borderRadius={1}
-                p={3}
-                px={10}
+                p={2}
                 display="flex"
-                justifyContent="flex-start"
+                flexDirection="column"
+                justifyContent="space-between"
                 alignItems="stretch"
                 position={"relative"}
               >
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  flex={1}
-                  justifyContent={"space-between"}
-                  gap={3}
+                {/* Top Number */}
+                <Typography
+                  fontSize={30}
+                  fontWeight="600"
+                  color={"primary.dark"}
+                  align="left"
                 >
-                  <Box>
+                  1266
+                </Typography>
+
+                {/* Total students text */}
+                <Typography
+                  fontSize={15}
+                  fontWeight="300"
+                  color={"#3B98C4"}
+                  align="left"
+                  style={{ marginTop: "-2rem" }}
+                >
+                  Total students
+                </Typography>
+
+                {/* Three parts in a row */}
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  style={{ paddingBottom: "0.5rem", paddingRight: "2rem" }}
+                >
+                  {/* Part 1 */}
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="left"
+                    borderRight="1px solid black"
+                    paddingRight="1rem"
+                    paddingBottom="0.5rem"
+                  >
                     <Typography
-                      fontSize={"1.6rem"}
+                      fontSize={15}
+                      fontWeight="500"
                       color={"primary.dark"}
-                      fontWeight={600}
                     >
-                      {/* {charts.interview} */}
+                      1230
                     </Typography>
-                    <Typography color={"primary.main"}>
-                      Total students sections
+                    <Typography
+                      fontSize={10}
+                      fontWeight="300"
+                      color={"primary.dark"}
+                    >
+                      Active
                     </Typography>
                   </Box>
-
-                  {/* <Icon
-                    icon={"fluent:note-edit-24-filled"}
-                    color="#3B98C4"
-                    fontSize={"4rem"}
-                  /> */}
+                  {/* Part 2 */}
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="left"
+                    borderRight="1px solid black"
+                    paddingRight="1rem"
+                  >
+                    <Typography
+                      fontSize={15}
+                      fontWeight="500"
+                      color={"primary.dark"}
+                    >
+                      36
+                    </Typography>
+                    <Typography
+                      fontSize={10}
+                      fontWeight="300"
+                      color={"primary.dark"}
+                    >
+                      Suspended
+                    </Typography>
+                  </Box>
+                  {/* Part 3 */}
+                  <Box display="flex" flexDirection="column" alignItems="left">
+                    <Typography
+                      fontSize={15}
+                      fontWeight="500"
+                      color={"primary.dark"}
+                    >
+                      36
+                    </Typography>
+                    <Typography
+                      fontSize={10}
+                      fontWeight="300"
+                      color={"primary.dark"}
+                    >
+                      Separated
+                    </Typography>
+                  </Box>
                 </Box>
-                <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                  {/* <IconButton onClick={() => download("candidates_selected")}>
+
+                <Box position={"absolute"} bottom={"0.1rem"} right={"0.1rem"}>
+                  <IconButton>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
-                  </IconButton> */}
+                  </IconButton>
                 </Box>
               </Bbox>
             </Grid>
 
             {/* student teacher ration section */}
-            <Grid item xs={6}>
+            <Grid item xs={6} style={{ width: 530, height: 235 }}>
               <Bbox
-                height={"9rem"}
+                height={"11rem"}
                 bgcolor={"secondary.light"}
                 borderRadius={1}
-                p={3}
-                px={10}
+                p={2}
                 display="flex"
-                justifyContent="flex-start"
+                flexDirection="column"
+                justifyContent="space-between"
                 alignItems="stretch"
                 position={"relative"}
               >
-                <Box
-                  display={"flex"}
-                  flex={1}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                  gap={3}
+                {/* Top Number */}
+                <Typography
+                  fontSize={30}
+                  fontWeight="600"
+                  color={"primary.dark"}
+                  align="left"
                 >
-                  <Box>
+                  24:1
+                </Typography>
+
+                {/* Total students text */}
+                <Typography
+                  fontSize={15}
+                  fontWeight="300"
+                  color={"#B34A19"}
+                  align="left"
+                  style={{ marginTop: "-2rem" }}
+                >
+                  Student-Teacher Ratio
+                </Typography>
+
+                {/* Three parts in a row */}
+                <Box
+                  display="flex"
+                  style={{ paddingBottom: "0.5rem", paddingRight: "2rem" }}
+                >
+                  {/* Part 1 */}
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="left"
+                    borderRight="1px solid black"
+                    paddingRight="1rem"
+                    paddingBottom="0.5rem"
+                  >
                     <Typography
-                      fontSize={"1.6rem"}
-                      color={"secondary.dark"}
-                      fontWeight={600}
+                      fontSize={15}
+                      fontWeight="500"
+                      color={"primary.dark"}
                     >
-                      {/* {charts.in_merit} */}
+                      1266
                     </Typography>
-                    <Typography color={"secondary.main"}>
-                      student teacher ration section
+                    <Typography
+                      fontSize={10}
+                      fontWeight="300"
+                      color={"primary.dark"}
+                    >
+                      Students
                     </Typography>
                   </Box>
-
-                  {/* <Icon
-                    icon={"clarity:list-solid"}
-                    color="#91431F"
-                    fontSize={"4rem"}
-                  /> */}
+                  {/* Part 2 */}
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="left"
+                    paddingLeft="1rem"
+                  >
+                    <Typography
+                      fontSize={15}
+                      fontWeight="500"
+                      color={"primary.dark"}
+                    >
+                      53
+                    </Typography>
+                    <Typography
+                      fontSize={10}
+                      fontWeight="300"
+                      color={"primary.dark"}
+                    >
+                      Teachers
+                    </Typography>
+                  </Box>
                 </Box>
-                <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                  {/* <IconButton onClick={() => download("candidates_in_merit")}>
+
+                <Box position={"absolute"} bottom={"0.1rem"} right={"0.1rem"}>
+                  <IconButton>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
-                  </IconButton> */}
+                  </IconButton>
                 </Box>
               </Bbox>
             </Grid>
 
             {/* vaccancy section */}
-            <Grid item xs={6}>
+            <Grid item xs={6} style={{ width: 530, height: 235 }}>
               <Bbox
-                height={"9rem"}
+                height={"11rem"}
                 bgcolor={"secondary.light"}
                 borderRadius={1}
-                p={3}
-                px={10}
+                p={1}
                 display="flex"
                 justifyContent="flex-start"
                 alignItems="stretch"
@@ -289,13 +404,12 @@ const StudentDashboard = () => {
             </Grid>
 
             {/* defaulter section */}
-            <Grid item xs={6}>
+            <Grid item xs={6} style={{ width: 530, height: 235 }}>
               <Bbox
-                height={"9rem"}
+                height={"11rem"}
                 bgcolor={"primary.light"}
                 borderRadius={1}
-                p={3}
-                px={10}
+                p={1}
                 display="flex"
                 justifyContent="flex-start"
                 alignItems="stretch"
@@ -339,7 +453,7 @@ const StudentDashboard = () => {
           {/* right section */}
           <Grid container spacing={1} flex={2}>
             {/* gender distribution section */}
-            <Grid item xs={8}>
+            <Grid item xs={8} style={{ width: 400, height: 235 }}>
               <Bbox
                 height={"9rem"}
                 borderRadius={1}
@@ -385,7 +499,7 @@ const StudentDashboard = () => {
             </Grid>
 
             {/* cultural diversity section */}
-            <Grid item xs={8}>
+            <Grid item xs={8} style={{ width: 400, height: 235 }}>
               <Bbox
                 height={"9rem"}
                 borderRadius={1}
