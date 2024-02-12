@@ -27,7 +27,7 @@ const StudentDashboard = () => {
   return (
     <RevealCard>
       <Bbox borderRadius={2} overflow={"hidden"}>
-        {/* dashboard text box */}
+        {/* dashboard top text box */}
         <Box
           bgcolor={"white"}
           py={1.3}
@@ -53,7 +53,7 @@ const StudentDashboard = () => {
           p={2}
           pb={2}
         >
-          {/* left section */}
+          {/* left drop-down section */}
           <Bbox
             borderRadius={1}
             p={3}
@@ -147,7 +147,7 @@ const StudentDashboard = () => {
             </FormControl>
           </Bbox>
 
-          {/* mid section */}
+          {/* mid grid section */}
           <Grid container spacing={1} flex={2}>
             {/* total students sections */}
             <Grid item xs={6} style={{ width: 530, height: 235 }}>
@@ -162,7 +162,7 @@ const StudentDashboard = () => {
                 alignItems="stretch"
                 position={"relative"}
               >
-                {/* Top Number */}
+                {/* total students in number */}
                 <Typography
                   fontSize={30}
                   fontWeight="600"
@@ -172,7 +172,7 @@ const StudentDashboard = () => {
                   1266
                 </Typography>
 
-                {/* Total students text */}
+                {/* total students in text */}
                 <Typography
                   fontSize={15}
                   fontWeight="300"
@@ -183,13 +183,13 @@ const StudentDashboard = () => {
                   Total students
                 </Typography>
 
-                {/* Three parts in a row */}
+                {/* flex-row */}
                 <Box
                   display="flex"
                   justifyContent="space-between"
                   style={{ paddingBottom: "0.5rem", paddingRight: "2rem" }}
                 >
-                  {/* Part 1 */}
+                  {/* active section */}
                   <Box
                     display="flex"
                     flexDirection="column"
@@ -213,7 +213,7 @@ const StudentDashboard = () => {
                       Active
                     </Typography>
                   </Box>
-                  {/* Part 2 */}
+                  {/* suspended section */}
                   <Box
                     display="flex"
                     flexDirection="column"
@@ -236,7 +236,7 @@ const StudentDashboard = () => {
                       Suspended
                     </Typography>
                   </Box>
-                  {/* Part 3 */}
+                  {/* saperated section */}
                   <Box display="flex" flexDirection="column" alignItems="left">
                     <Typography
                       fontSize={15}
@@ -255,6 +255,7 @@ const StudentDashboard = () => {
                   </Box>
                 </Box>
 
+                {/* download icon */}
                 <Box position={"absolute"} bottom={"0.1rem"} right={"0.1rem"}>
                   <IconButton>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
@@ -263,7 +264,7 @@ const StudentDashboard = () => {
               </Bbox>
             </Grid>
 
-            {/* student teacher ration section */}
+            {/* student-teacher ratio section */}
             <Grid item xs={6} style={{ width: 530, height: 235 }}>
               <Bbox
                 height={"11rem"}
@@ -276,7 +277,7 @@ const StudentDashboard = () => {
                 alignItems="stretch"
                 position={"relative"}
               >
-                {/* Top Number */}
+                {/* ration in number */}
                 <Typography
                   fontSize={30}
                   fontWeight="600"
@@ -286,7 +287,7 @@ const StudentDashboard = () => {
                   24:1
                 </Typography>
 
-                {/* Total students text */}
+                {/* student-teacher ratio text */}
                 <Typography
                   fontSize={15}
                   fontWeight="300"
@@ -297,12 +298,12 @@ const StudentDashboard = () => {
                   Student-Teacher Ratio
                 </Typography>
 
-                {/* Three parts in a row */}
+                {/* flex row */}
                 <Box
                   display="flex"
                   style={{ paddingBottom: "0.5rem", paddingRight: "2rem" }}
                 >
-                  {/* Part 1 */}
+                  {/* total students */}
                   <Box
                     display="flex"
                     flexDirection="column"
@@ -326,7 +327,7 @@ const StudentDashboard = () => {
                       Students
                     </Typography>
                   </Box>
-                  {/* Part 2 */}
+                  {/* total teachers */}
                   <Box
                     display="flex"
                     flexDirection="column"
@@ -350,6 +351,7 @@ const StudentDashboard = () => {
                   </Box>
                 </Box>
 
+                {/* download icon */}
                 <Box position={"absolute"} bottom={"0.1rem"} right={"0.1rem"}>
                   <IconButton>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
@@ -370,7 +372,7 @@ const StudentDashboard = () => {
                 alignItems="center"
                 position={"relative"}
               >
-                {/* Text part */}
+                {/* left side */}
                 <Box
                   display="flex"
                   flexDirection="column"
@@ -378,7 +380,7 @@ const StudentDashboard = () => {
                   gap={2}
                   paddingLeft={1}
                 >
-                  {/* Number */}
+                  {/* total vacancy */}
                   <Typography
                     fontSize={30}
                     fontWeight="600"
@@ -389,7 +391,7 @@ const StudentDashboard = () => {
                     22
                   </Typography>
 
-                  {/* Vaccancy text */}
+                  {/* vacancy text */}
                   <Typography
                     fontSize={15}
                     fontWeight="500"
@@ -400,7 +402,7 @@ const StudentDashboard = () => {
                     Vacancy
                   </Typography>
 
-                  {/* Fulfilment text */}
+                  {/* fulfilment percentage */}
                   <Typography
                     fontSize={9}
                     fontWeight="400"
@@ -412,7 +414,7 @@ const StudentDashboard = () => {
                   </Typography>
                 </Box>
 
-                {/* Chart */}
+                {/* chart showing vacancy */}
                 <div
                   style={{
                     position: "relative",
@@ -422,10 +424,10 @@ const StudentDashboard = () => {
                     options={{
                       chart: {
                         type: "donut",
-                        width: "100%", // Ensure chart takes full width of container
-                        height: "100%", // Ensure chart takes full height of container
+                        width: "100%",
+                        height: "100%",
                         toolbar: {
-                          show: false, // Hide toolbar if not needed
+                          show: false,
                         },
                       },
                       dataLabels: {
@@ -434,23 +436,23 @@ const StudentDashboard = () => {
                       plotOptions: {
                         pie: {
                           donut: {
-                            size: "80%", // Decreased size
+                            size: "80%", // chart thickness
                             labels: {
-                              show: false, // Hide labels
+                              show: false,
                             },
                           },
                         },
                       },
                       legend: {
-                        show: false, // Hide legend and its default label
+                        show: false,
                       },
-                      colors: ["#04BE38", "#CDC9C9"], // Green for fulfilled, gray for empty
+                      colors: ["#04BE38", "#CDC9C9"],
                     }}
-                    series={[96, 4]} // Only one data point for the fulfilled percentage
+                    series={[96, 4]} // filled-empty percentage
                     type="donut"
                   />
 
-                  {/* Percentage text */}
+                  {/* percentage text in the middle of the chart */}
                   <div
                     style={{
                       position: "absolute",
@@ -466,6 +468,7 @@ const StudentDashboard = () => {
                   </div>
                 </div>
 
+                {/* download icon */}
                 <Box position={"absolute"} bottom={"0.1rem"} right={"0.1rem"}>
                   <IconButton>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
