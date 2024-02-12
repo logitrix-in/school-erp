@@ -149,7 +149,7 @@ const StudentDashboard = () => {
 
           {/* mid grid section */}
           <Grid container spacing={1} flex={2}>
-            {/* total students sections */}
+            {/* total students section */}
             <Grid item xs={6} style={{ width: 530, height: 235 }}>
               <Bbox
                 height={"11rem"}
@@ -483,42 +483,125 @@ const StudentDashboard = () => {
                 height={"11rem"}
                 bgcolor={"primary.light"}
                 borderRadius={1}
-                p={1}
+                p={2}
                 display="flex"
-                justifyContent="flex-start"
+                flexDirection="column"
+                justifyContent="space-between"
                 alignItems="stretch"
                 position={"relative"}
               >
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                  flex={1}
-                  gap={3}
+                {/* total defaulter in number */}
+                <Typography
+                  fontSize={30}
+                  fontWeight="600"
+                  color={"primary.dark"}
+                  align="left"
                 >
-                  <Box>
+                  168
+                </Typography>
+
+                {/* defaulter text */}
+                <Typography
+                  fontSize={15}
+                  fontWeight="300"
+                  color={"#3B98C4"}
+                  align="left"
+                  style={{ marginTop: "0.1rem" }}
+                >
+                  Defaulter
+                </Typography>
+
+                {/* defaulter percentage */}
+                <Typography
+                  fontSize={12}
+                  fontWeight="300"
+                  color={"#545454"}
+                  align="left"
+                >
+                  12.5% of total students
+                </Typography>
+
+                {/* flex-row */}
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  style={{
+                    paddingBottom: "0.5rem",
+                    paddingRight: "2rem",
+                    paddingTop: "0.5rem",
+                  }}
+                >
+                  {/* fee / penalty section */}
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="left"
+                    borderRight="1px solid black"
+                    paddingRight="0.5rem"
+                    paddingBottom="0.5rem"
+                  >
                     <Typography
-                      fontSize={"1.6rem"}
+                      fontSize={15}
+                      fontWeight="500"
                       color={"primary.dark"}
-                      fontWeight={600}
                     >
-                      {/* {charts.completed} */}
+                      152
                     </Typography>
-                    <Typography color={"primary.main"}>
-                      defaulter section
+                    <Typography
+                      fontSize={10}
+                      fontWeight="300"
+                      color={"primary.dark"}
+                    >
+                      Fee / Penalty
                     </Typography>
                   </Box>
-
-                  {/* <Icon
-                    icon={"teenyicons:tick-circle-solid"}
-                    color="#3B98C4"
-                    fontSize={"4rem"}
-                  /> */}
+                  {/* attendance section */}
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="left"
+                    borderRight="1px solid black"
+                    paddingRight="0.5rem"
+                  >
+                    <Typography
+                      fontSize={15}
+                      fontWeight="500"
+                      color={"primary.dark"}
+                    >
+                      68
+                    </Typography>
+                    <Typography
+                      fontSize={10}
+                      fontWeight="300"
+                      color={"primary.dark"}
+                    >
+                      Attendance
+                    </Typography>
+                  </Box>
+                  {/* discipline section */}
+                  <Box display="flex" flexDirection="column" alignItems="left">
+                    <Typography
+                      fontSize={15}
+                      fontWeight="500"
+                      color={"primary.dark"}
+                    >
+                      48
+                    </Typography>
+                    <Typography
+                      fontSize={10}
+                      fontWeight="300"
+                      color={"primary.dark"}
+                    >
+                      Discipline
+                    </Typography>
+                  </Box>
                 </Box>
-                <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                  {/* <IconButton onClick={() => download("onboarding_completed")}>
+
+                {/* download icon */}
+                <Box position={"absolute"} bottom={"0.1rem"} right={"0.1rem"}>
+                  <IconButton>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
-                  </IconButton> */}
+                  </IconButton>
                 </Box>
               </Bbox>
             </Grid>
