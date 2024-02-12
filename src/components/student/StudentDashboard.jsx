@@ -21,6 +21,7 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 import { ToastContainer, toast } from "react-toastify";
 import { Icon } from "@iconify/react";
+import Chart from "react-apexcharts";
 
 const StudentDashboard = () => {
   return (
@@ -322,7 +323,7 @@ const StudentDashboard = () => {
                       fontWeight="300"
                       color={"primary.dark"}
                     >
-                      Students.
+                      Students
                     </Typography>
                   </Box>
                   {/* Part 2 */}
@@ -365,40 +366,110 @@ const StudentDashboard = () => {
                 borderRadius={1}
                 p={1}
                 display="flex"
-                justifyContent="flex-start"
-                alignItems="stretch"
+                justifyContent="space-between"
+                alignItems="center"
                 position={"relative"}
               >
+                {/* Text part */}
                 <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                  flex={1}
-                  gap={3}
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="flex-start"
+                  gap={2}
+                  paddingLeft={1}
                 >
-                  <Box>
-                    <Typography
-                      fontSize={"1.6rem"}
-                      color={"secondary.dark"}
-                      fontWeight={600}
-                    >
-                      {/* {charts.in_review} */}
-                    </Typography>
-                    <Typography color={"secondary.main"}>
-                      vaccancy section
-                    </Typography>
-                  </Box>
+                  {/* Number */}
+                  <Typography
+                    fontSize={30}
+                    fontWeight="600"
+                    color={"primary.dark"}
+                    align="left"
+                    style={{ marginBottom: "-1rem" }}
+                  >
+                    22
+                  </Typography>
 
-                  {/* <Icon
-                    icon={"mdi:file-document-box-search"}
-                    color="#91431F"
-                    fontSize={"4rem"}
-                  /> */}
+                  {/* Vaccancy text */}
+                  <Typography
+                    fontSize={15}
+                    fontWeight="500"
+                    color={"#B34A19"}
+                    align="left"
+                    style={{ marginBottom: "-1rem" }}
+                  >
+                    Vacancy
+                  </Typography>
+
+                  {/* Fulfilment text */}
+                  <Typography
+                    fontSize={9}
+                    fontWeight="400"
+                    color={"#626262"}
+                    align="left"
+                    style={{ marginBottom: "1rem" }}
+                  >
+                    96 % Fulfillment
+                  </Typography>
                 </Box>
-                <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                  {/* <IconButton onClick={() => download("candidate_in_review")}>
+
+                {/* Chart */}
+                <div
+                  style={{
+                    position: "relative",
+                  }}
+                >
+                  <Chart
+                    options={{
+                      chart: {
+                        type: "donut",
+                        width: "100%", // Ensure chart takes full width of container
+                        height: "100%", // Ensure chart takes full height of container
+                        toolbar: {
+                          show: false, // Hide toolbar if not needed
+                        },
+                      },
+                      dataLabels: {
+                        enabled: false,
+                      },
+                      plotOptions: {
+                        pie: {
+                          donut: {
+                            size: "80%", // Decreased size
+                            labels: {
+                              show: false, // Hide labels
+                            },
+                          },
+                        },
+                      },
+                      legend: {
+                        show: false, // Hide legend and its default label
+                      },
+                      colors: ["#04BE38", "#CDC9C9"], // Green for fulfilled, gray for empty
+                    }}
+                    series={[96, 4]} // Only one data point for the fulfilled percentage
+                    type="donut"
+                  />
+
+                  {/* Percentage text */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "51%",
+                      transform: "translate(-50%, -50%)",
+                      fontSize: "18px",
+                      fontWeight: "500",
+                      color: "black",
+                    }}
+                  >
+                    96 %
+                  </div>
+                </div>
+
+                <Box position={"absolute"} bottom={"0.1rem"} right={"0.1rem"}>
+                  <IconButton>
                     <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
-                  </IconButton> */}
+                  </IconButton>
                 </Box>
               </Bbox>
             </Grid>
