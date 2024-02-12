@@ -322,7 +322,7 @@ const StudentDashboard = () => {
                       fontWeight="300"
                       color={"primary.dark"}
                     >
-                      Students
+                      Students.
                     </Typography>
                   </Box>
                   {/* Part 2 */}
