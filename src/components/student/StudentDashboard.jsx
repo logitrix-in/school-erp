@@ -610,7 +610,7 @@ const StudentDashboard = () => {
           {/* right chart section */}
           <Grid container spacing={1} flex={2}>
             {/* gender distribution section */}
-            <Grid item xs={8} style={{ width: 400, height: 300 }}>
+            <Grid item xs={8} style={{ width: 400 }}>
               <Bbox
                 height={"11rem"}
                 borderRadius={1}
@@ -686,7 +686,7 @@ const StudentDashboard = () => {
             </Grid>
 
             {/* cultural diversity section */}
-            <Grid item xs={8} style={{ width: 400, height: 200 }}>
+            <Grid item xs={8} style={{ width: 400 }}>
               <Bbox
                 height={"11rem"}
                 borderRadius={1}
