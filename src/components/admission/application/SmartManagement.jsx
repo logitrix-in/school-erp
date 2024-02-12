@@ -22,12 +22,12 @@ const SmartManagement = () => {
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            <Typography fontWeight={"700"} borderRadius={1} fontSize={'1.1rem'}>
+            <Typography fontWeight={"700"} borderRadius={1} fontSize={"1.1rem"}>
               Smart Management
             </Typography>
           </Box>
-          
-          <Divider/>
+
+          <Divider />
           <Box
             borderRadius={2}
             p={2}
@@ -42,7 +42,7 @@ const SmartManagement = () => {
             />
             <Button
               fullWidth
-              variant="contained"
+              variant="outlined"
               color="primary"
               onClick={() => setShowAutoResponse(true)}
             >
@@ -55,7 +55,7 @@ const SmartManagement = () => {
             />
             <Button
               fullWidth
-              variant="contained"
+              variant="outlined"
               color="primary"
               onClick={() => setShowMultipeApplication(true)}
             >
@@ -66,7 +66,7 @@ const SmartManagement = () => {
             <Engage open={showEngage} close={() => setShowEngage(false)} />
             <Button
               fullWidth
-              variant="contained"
+              variant="outlined"
               color="primary"
               onClick={() => setShowEngage(true)}
             >

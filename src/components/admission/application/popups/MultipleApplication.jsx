@@ -8,6 +8,7 @@ import {
   FormControlLabel,
   FormLabel,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Radio,
@@ -18,8 +19,44 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
+import api from "../../../../config/api";
+import { LoadingButton } from "@mui/lab";
+import { Icon } from "@iconify/react";
 
 const MultipleApplication = ({ close, open }) => {
+  const [applications, setApplications] = useState({
+    single_candidate_same_class: "Accept the last application",
+    single_application_multiple_class: "Accept All Applications",
+  });
+  const [loading, setLoading] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    api
+      .get("/admission/application/smart-management/mutiple-application/")
+      .then((res) => setApplications(res.data))
+      .catch((err) =>{} );
+  }, []);
+
+  useEffect(() => {
+    ;
+  }, [applications]);
+
+  function submit() {
+    setLoading(true);
+    api
+      .post(
+        "/admission/application/smart-management/mutiple-application/",
+        applications
+      )
+      .then((res) => {
+        ;
+        setLoading(false);
+        setIsSaved(true);
+      })
+      .catch((err) =>{} );
+  }
+
   return (
     <Dialog
       fullWidth
@@ -34,23 +71,51 @@ const MultipleApplication = ({ close, open }) => {
       disableEnforceFocus={true}
     >
       <Box overflow={"hidden"}>
-        <Typography
-          p={1}
-          py={1.5}
-          bgcolor={"primary.main"}
-          color={"white"}
-          fontSize={"1rem"}
-          textAlign={"center"}
-        >
-          Multiple Application
-        </Typography>
+        <Box display={"flex"} bgcolor={"primary.main"} alignItems={"center"}>
+          {isSaved && (
+            <Box ml={1} fontSize={'1.3rem'} display={'flex'} alignItems={'center'}>
+              <Icon
+                icon={"mdi:tick-circle"}
+                color="#3dea3d"
+              />
+            </Box>
+          )}
+
+          <Typography
+            p={1}
+            py={1.5}
+            flex={1}
+            color={"white"}
+            fontSize={"1rem"}
+            textAlign={"center"}
+          >
+            Multiple Application
+          </Typography>
+
+          <IconButton
+            aria-label="delete"
+            sx={{ mr: 1 }}
+            onClick={() => close()}
+          >
+            <Icon icon={"ep:close-bold"} color="white" fontSize={"1.3rem"} />
+          </IconButton>
+        </Box>
 
         <Box p={2}>
           <FormControl fullWidth>
             <FormLabel>
               Multiple Application from Single Candidate for same Class
             </FormLabel>
-            <RadioGroup defaultValue="Accept the last application">
+            <RadioGroup
+              value={applications.single_candidate_same_class}
+              onChange={(e, val) => {
+                setIsSaved(false)
+                setApplications((prev) => ({
+                  ...prev,
+                  single_candidate_same_class: val,
+                }));
+              }}
+            >
               <FormControlLabel
                 value="Accept the last application"
                 control={<Radio />}
@@ -73,21 +138,30 @@ const MultipleApplication = ({ close, open }) => {
             <FormLabel>
               Multiple Application from Single Candidate for multiple Class
             </FormLabel>
-            <RadioGroup defaultValue="Accept All Applications">
+            <RadioGroup
+              value={applications.single_application_multiple_class}
+              onChange={(e, val) => {
+                setIsSaved(false)
+                setApplications((prev) => ({
+                  ...prev,
+                  single_application_multiple_class: val,
+                }));
+              }}
+            >
               <FormControlLabel
                 value="Accept All Applications"
                 control={<Radio />}
                 label="Accept All Applications"
               />
               <FormControlLabel
-                value="Accept application for highest class"
+                value="Accept application for the highest class"
                 control={<Radio />}
-                label="Accept application for highest class"
+                label="Accept application for the highest class"
               />
               <FormControlLabel
-                value="Response Apply Offline Multiple Application"
+                value="Accept application for the lowest class"
                 control={<Radio />}
-                label="Response Apply Offline Multiple Application"
+                label="Accept application for the lowest class"
               />
               <FormControlLabel
                 value="Reject all applications"
@@ -96,8 +170,15 @@ const MultipleApplication = ({ close, open }) => {
               />
             </RadioGroup>
           </FormControl>
-          <Divider sx={{my:2}}/>
-          <Button fullWidth variant="contained">Apply</Button>
+          <Divider sx={{ my: 2 }} />
+          <LoadingButton
+            fullWidth
+            variant="contained"
+            onClick={() => submit()}
+            loading={loading}
+          >
+            Apply
+          </LoadingButton>
         </Box>
       </Box>
     </Dialog>

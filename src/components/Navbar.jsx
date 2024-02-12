@@ -15,6 +15,7 @@ import { config } from "../config";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
 import Quickbar from "./Quickbar";
+import api from "../config/api";
 
 const Navbar = () => {
   const user = useAuth();
@@ -23,6 +24,7 @@ const Navbar = () => {
     <Box
       ml={config.NAVBAR_WIDTH}
       flex={1}
+      height={"fit-content"}
       pt={1}
       px={3}
       sx={{
@@ -87,15 +89,11 @@ const Navbar = () => {
               variant="contained"
               size="small"
               onClick={() => {
-                axios
-                  .post(
-                    "https://api.sociolinq.com/login/logout/",
-                    {},
-                    {
-                      withCredentials: true,
-                    }
-                  )
-                  .finally((res) => {
+                api
+                  .delete("/login/")
+                  .then((res) => {})
+                  .catch()
+                  .finally(() => {
                     navigate("/login/");
                     user.setUser(null);
                   });

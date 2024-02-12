@@ -37,25 +37,31 @@ const Login = () => {
     setIsLoading(true);
     axios
       .post(
-        "https://api.sociolinq.com/login/",
+        "https://server.sociolinq.com/api/login/",
         {
           ...formData,
         },
         {
           withCredentials: true,
+          headers: {
+            "x-api-key": "a8518942-17ea-44a6-b4e1-a974189a9a90",
+          },
         }
       )
       .then((res) => {
-        context.setUser(res.data);
+        
+        context.setUser(res.data.user);
         naviagte("/dashboard/");
+        setIsLoading(false);
       })
-      .catch((err) =>
+      .catch((err) => {
         setError(
-          err.response.data.text
-            ? err.response.data.text
+          err.response.data.message
+            ? err.response.data.message
             : "Some Unknown Server Error ( " + err.response.status + " ) "
-        )
-      );
+        );
+        setIsLoading(false);
+      });
   };
 
   const handleChange = (event) => {
@@ -115,7 +121,6 @@ const Login = () => {
           >
             Sign In
           </LoadingButton>
-
 
           <Grid container>
             <Grid item xs>

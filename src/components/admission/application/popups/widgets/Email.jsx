@@ -13,20 +13,16 @@ import {
 import React, { useRef, useState } from "react";
 
 import { Editor } from "@tinymce/tinymce-react";
+import axios from "axios";
 
 const Email = () => {
   const [recipentTo, setRecipentTo] = useState("all");
 
   const editorRef = useRef(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
 
   return (
     <Box>
-      <Box display={'flex'} gap={2}>
+      <Box display={"flex"} gap={2}>
         <FormControl size="small">
           <InputLabel>Recipent</InputLabel>
           <Select label="Recipent" onChange={() => {}} defaultValue={30}>
@@ -41,7 +37,7 @@ const Email = () => {
           color="secondary"
           value={recipentTo}
           exclusive
-          sx={{mr:'auto'}}
+          sx={{ mr: "auto" }}
           onChange={(e, val) => val != null && setRecipentTo(val)}
         >
           <ToggleButton value="all">{"all(491)"}</ToggleButton>
@@ -66,7 +62,9 @@ const Email = () => {
           </Select>
         </FormControl>
 
-        <Button variant="contained" color="secondary">Templates</Button>
+        <Button variant="contained" color="secondary">
+          Templates
+        </Button>
       </Box>
       <Box height={20} />
       <TextField placeholder="Subject" fullWidth size="small" sx={{ mb: 2 }} />
@@ -85,6 +83,23 @@ const Email = () => {
               "bold italic backcolor | alignleft aligncenter " +
               "alignright alignjustify | bullist numlist outdent indent | " +
               "removeformat | image link | fullscreen |",
+            images_upload_handler: (blobInfo, progress) => {
+              const formData = new FormData();
+              formData.append("image", blobInfo.blob());
+              return new Promise((resolve, reject) => {
+                axios
+                  .post("https://cdn.sociolinq.com/upload/", formData)
+                  .then((res) => {
+                    resolve(res.data.link);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    reject(
+                      "Some error occured. Please contact Rownak Mazumder."
+                    );
+                  });
+              });
+            },
             content_style:
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px, overflow:scroll}",
           }}

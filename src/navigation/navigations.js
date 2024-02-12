@@ -1,7 +1,7 @@
 export const navigations = [
 
     {
-        name: 'dashboard',
+        name: 'Anaytics',
         path: 'dashboard/',
         icon: 'bxs:dashboard'
     },
@@ -23,13 +23,31 @@ export const navigations = [
             },
             {
                 name:'Test Center',
-                path: 'admission/testCenter/',
+                path: 'admission/test-center/',
                 icon: 'ic:round-place'
             },
             {
                 name:'Onboarding',
-                path: 'admission/Onboarding/',
+                path: 'admission/onboarding/',
                 icon: 'material-symbols:other-admission'
+            },
+            {
+                name:'Post Onboarding',
+                path: 'admission/post-onboarding/',
+                icon: 'material-symbols:other-admission'
+            },
+        ]
+    },
+    {
+        name:'Student',
+        path: 'student/',
+        icon: 'solar:library-bold-duotone',
+        dropdown: true,
+        subMenu: [
+            {
+                name:'Information',
+                path: 'student/information/',
+                icon: 'material-symbols:folder'
             },
         ]
     },
@@ -48,22 +66,27 @@ export const navigations = [
                 name:'menu 2',
                 path: 'library/menu2/',
                 icon: 'material-symbols:folder'
+            },
+            {
+                name:'menu 3',
+                path: 'library/menu2/',
+                icon: 'material-symbols:folder'
             }
         ]
     },
     {
         name:'Utilities',
-        path: 'Utilities/',
+        path: 'utilities/',
         icon: 'solar:document-bold'
     },
     {
         name:'Manage Access',
-        path: 'access_control/',
+        path: 'access-control/',
         icon: 'ic:baseline-manage-accounts'
     },
     {
         name:'Feedback',
-        path: 'Feedback/',
+        path: 'feedback/',
         icon: 'material-symbols:feedback'
     }
 ]
