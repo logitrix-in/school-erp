@@ -45,6 +45,7 @@ const StudentDashboard = () => {
         {/* divider */}
         <Divider />
 
+        {/* grid section */}
         <Box
           display={"flex"}
           gap={2}
