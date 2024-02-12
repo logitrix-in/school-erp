@@ -150,7 +150,7 @@ const StudentDashboard = () => {
           {/* mid grid section */}
           <Grid container spacing={1} flex={2}>
             {/* total students section */}
-            <Grid item xs={6} style={{ width: 530, height: 235 }}>
+            <Grid item xs={6} style={{ width: 530, height: 200 }}>
               <Bbox
                 height={"11rem"}
                 bgcolor={"primary.light"}
@@ -265,7 +265,7 @@ const StudentDashboard = () => {
             </Grid>
 
             {/* student-teacher ratio section */}
-            <Grid item xs={6} style={{ width: 530, height: 235 }}>
+            <Grid item xs={6} style={{ width: 530, height: 200 }}>
               <Bbox
                 height={"11rem"}
                 bgcolor={"secondary.light"}
@@ -361,7 +361,7 @@ const StudentDashboard = () => {
             </Grid>
 
             {/* vaccancy section */}
-            <Grid item xs={6} style={{ width: 530, height: 235 }}>
+            <Grid item xs={6} style={{ width: 530, height: 200 }}>
               <Bbox
                 height={"11rem"}
                 bgcolor={"secondary.light"}
@@ -478,7 +478,7 @@ const StudentDashboard = () => {
             </Grid>
 
             {/* defaulter section */}
-            <Grid item xs={6} style={{ width: 530, height: 235 }}>
+            <Grid item xs={6} style={{ width: 530, height: 200 }}>
               <Bbox
                 height={"11rem"}
                 bgcolor={"primary.light"}
@@ -607,58 +607,88 @@ const StudentDashboard = () => {
             </Grid>
           </Grid>
 
-          {/* right section */}
+          {/* right chart section */}
           <Grid container spacing={1} flex={2}>
             {/* gender distribution section */}
-            <Grid item xs={8} style={{ width: 400, height: 235 }}>
+            <Grid item xs={8} style={{ width: 400, height: 300 }}>
               <Bbox
-                height={"9rem"}
+                height={"11rem"}
                 borderRadius={1}
-                p={3}
-                px={10}
+                p={1}
+                px={1}
                 display="flex"
+                flexDirection="column"
                 justifyContent="flex-start"
                 alignItems="stretch"
                 position={"relative"}
               >
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                  flex={1}
-                  gap={3}
+                {/* Title above the chart */}
+                <Typography
+                  fontSize={16}
+                  fontWeight={600}
+                  color={"black"}
+                  style={{ marginBottom: "0.5rem", marginLeft: "1.5rem" }}
                 >
-                  <Box>
-                    <Typography
-                      fontSize={"1.6rem"}
-                      color={"primary.dark"}
-                      fontWeight={600}
-                    >
-                      {/* {charts.completed} */}
-                    </Typography>
-                    <Typography color={"primary.main"}>
-                      gender distribution section
-                    </Typography>
-                  </Box>
+                  Gender Distribution
+                </Typography>
 
-                  {/* <Icon
-                    icon={"teenyicons:tick-circle-solid"}
-                    color="#3B98C4"
-                    fontSize={"4rem"}
-                  /> */}
-                </Box>
-                <Box position={"absolute"} bottom={"0.2rem"} right={"0.5rem"}>
-                  {/* <IconButton onClick={() => download("onboarding_completed")}>
-                    <Icon icon={"ic:round-download"} fontSize={"1.4rem"} />
-                  </IconButton> */}
-                </Box>
+                {/* Chart */}
+                <Chart
+                  options={{
+                    chart: {
+                      type: "donut",
+                      toolbar: {
+                        show: false,
+                      },
+                    },
+                    dataLabels: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      pie: {
+                        donut: {
+                          size: "75%", // chart thickness
+                          labels: {
+                            show: false,
+                          },
+                        },
+                      },
+                    },
+                    legend: {
+                      show: true,
+                      position: "right", // positioning legend to the right
+                      offsetY: 0,
+                      offsetX: 0,
+                    },
+                    colors: ["#0072DB", "#C6CA00", "#FF6163"],
+                    labels: ["Male", "Female", "Others"],
+                  }}
+                  series={[800, 200, 266]} // Male, Female, Others
+                  type="donut"
+                  width="100%"
+                  height="100%"
+                />
+                {/* total number in the middle of the chart */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "55%",
+                    left: "33%",
+                    transform: "translate(-50%, -50%)",
+                    fontSize: "15px",
+                    fontWeight: "500",
+                    color: "black",
+                  }}
+                >
+                  1266 <br /> Total
+                </div>
               </Bbox>
             </Grid>
 
             {/* cultural diversity section */}
-            <Grid item xs={8} style={{ width: 400, height: 235 }}>
+            <Grid item xs={8} style={{ width: 400, height: 200 }}>
               <Bbox
-                height={"9rem"}
+                height={"11rem"}
                 borderRadius={1}
                 p={3}
                 px={10}
